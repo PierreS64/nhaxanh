@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Contract {
+  id                             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                       String         @db.Uuid
+  landlordId                     String         @db.Uuid
+  propertyId                     String         @db.Uuid
+  startDate                      DateTime
+  endDate                        DateTime
+  monthlyPrice                   Float
+  depositAmount                  Float
+  eSignatureUrl                  String?
+  status                         ContractStatus @default(PENDING)
+  createdAt                      DateTime       @default(now())
+  updatedAt                      DateTime       @default(now())
+  User_Contract_landlordIdToUser User           @relation("Contract_landlordIdToUser", fields: [landlordId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_contract_landlord")
+  Property                       Property       @relation(fields: [propertyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_contract_property")
+  User_Contract_tenantIdToUser   User           @relation("Contract_tenantIdToUser", fields: [tenantId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_contract_tenant")
+  Invoice                        Invoice[]
+}
+
+model Invoice {
+  id                String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  contractId        String        @db.Uuid
+  title             String        @db.VarChar(255)
+  rentAmount        Float
+  electricityAmount Float
+  waterAmount       Float
+  serviceAmount     Float
+  totalAmount       Float
+  issueDate         DateTime      @default(now())
+  dueDate           DateTime
+  status            InvoiceStatus @default(UNPAID)
+  paymentMethod     String?       @db.VarChar(50)
+  paidAt            DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @default(now())
+  Contract          Contract      @relation(fields: [contractId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_invoice_contract")
+}
+
+model MaintenanceRequest {
+  id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String            @db.Uuid
+  propertyId  String            @db.Uuid
+  title       String            @db.VarChar(255)
+  description String
+  imageUrl    String?
+  status      MaintenanceStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @default(now())
+  Property    Property          @relation(fields: [propertyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_maintenance_property")
+  User        User              @relation(fields: [tenantId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_maintenance_tenant")
+}
+
+model MeterReading {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  propertyId       String   @db.Uuid
+  month            Int
+  year             Int
+  electricityUsage Float
+  waterUsage       Float
+  meterImageUrl    String?
+  createdAt        DateTime @default(now())
+  Property         Property @relation(fields: [propertyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_meter_property")
+
+  @@unique([propertyId, month, year], map: "unique_property_month_year")
+}
+
+model Property {
+  id                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  landlordId         String               @db.Uuid
+  title              String               @db.VarChar(255)
+  description        String
+  type               PropertyType
+  status             PropertyStatus       @default(AVAILABLE)
+  price              Float
+  area               Float
+  depositAmount      Float
+  address            String
+  latitude           Float
+  longitude          Float
+  amenities          String[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now())
+  Contract           Contract[]
+  MaintenanceRequest MaintenanceRequest[]
+  MeterReading       MeterReading[]
+  User               User                 @relation(fields: [landlordId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_property_landlord")
+  PropertyImage      PropertyImage[]
+  Review             Review[]
+}
+
+model PropertyImage {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  propertyId      String   @db.Uuid
+  url             String
+  isVirtualStaged Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  Property        Property @relation(fields: [propertyId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_image_property")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model Review {
+  id                           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reviewerId                   String    @db.Uuid
+  revieweeId                   String    @db.Uuid
+  propertyId                   String?   @db.Uuid
+  rating                       Int
+  comment                      String?
+  createdAt                    DateTime  @default(now())
+  Property                     Property? @relation(fields: [propertyId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_review_property")
+  User_Review_revieweeIdToUser User      @relation("Review_revieweeIdToUser", fields: [revieweeId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_review_reviewee")
+  User_Review_reviewerIdToUser User      @relation("Review_reviewerIdToUser", fields: [reviewerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_review_reviewer")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model TenantProfile {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @unique @db.Uuid
+  bio         String?
+  budgetMin   Float?
+  budgetMax   Float?
+  sleepTime   String?  @db.VarChar(50)
+  cleanliness Int?
+  hasPet      Boolean  @default(false)
+  isSmoker    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_tenant_user")
+}
+
+model User {
+  id                                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                              String               @unique @db.VarChar(255)
+  password                           String               @db.VarChar(255)
+  fullName                           String               @db.VarChar(255)
+  phone                              String?              @unique @db.VarChar(20)
+  avatarUrl                          String?
+  role                               Role                 @default(TENANT)
+  isKycVerified                      Boolean              @default(false)
+  createdAt                          DateTime             @default(now())
+  updatedAt                          DateTime             @default(now())
+  Contract_Contract_landlordIdToUser Contract[]           @relation("Contract_landlordIdToUser")
+  Contract_Contract_tenantIdToUser   Contract[]           @relation("Contract_tenantIdToUser")
+  MaintenanceRequest                 MaintenanceRequest[]
+  Property                           Property[]
+  Review_Review_revieweeIdToUser     Review[]             @relation("Review_revieweeIdToUser")
+  Review_Review_reviewerIdToUser     Review[]             @relation("Review_reviewerIdToUser")
+  TenantProfile                      TenantProfile?
+}
+
+enum ContractStatus {
+  PENDING
+  ACTIVE
+  EXPIRED
+  TERMINATED
+}
+
+enum InvoiceStatus {
+  UNPAID
+  PAID
+  OVERDUE
+}
+
+enum MaintenanceStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum PropertyStatus {
+  AVAILABLE
+  RENTED
+  MAINTENANCE
+}
+
+enum PropertyType {
+  ROOM
+  MINI_APARTMENT
+  WHOLE_HOUSE
+  DORMITORY
+}
+
+enum Role {
+  TENANT
+  LANDLORD
+  ADMIN
+}
