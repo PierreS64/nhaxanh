@@ -62,12 +62,22 @@ let AuthService = class AuthService {
         if (existingUser) {
             throw new common_1.BadRequestException('Email already in use');
         }
+        if (registerDto.phone) {
+            const existingPhone = await this.prisma.user.findUnique({
+                where: { phone: registerDto.phone }
+            });
+            if (existingPhone) {
+                throw new common_1.BadRequestException('Phone number already in use');
+            }
+        }
         const hashedPassword = await bcrypt.hash(registerDto.password, 10);
         const user = await this.prisma.user.create({
             data: {
                 email: registerDto.email,
                 password: hashedPassword,
                 fullName: registerDto.fullName,
+                phone: registerDto.phone,
+                avatarUrl: registerDto.avatarUrl,
                 role: registerDto.role || client_1.Role.TENANT,
             }
         });

@@ -16,6 +16,8 @@ class RegisterDto {
     email;
     password;
     fullName;
+    phone;
+    avatarUrl;
     role;
 }
 exports.RegisterDto = RegisterDto;
@@ -32,6 +34,16 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "fullName", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "phone", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "avatarUrl", void 0);
 __decorate([
     (0, class_validator_1.IsEnum)(client_1.Role),
     (0, class_validator_1.IsOptional)(),
