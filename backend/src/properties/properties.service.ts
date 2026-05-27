@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
+import { PropertyType } from '@prisma/client';
 
 @Injectable()
 export class PropertiesService {
@@ -9,16 +10,32 @@ export class PropertiesService {
 
   async create(createPropertyDto: CreatePropertyDto) {
     return this.prisma.property.create({
-      data: createPropertyDto as any, // casting as any until schema is pulled to avoid ts errors
+      data: {
+        landlordId: createPropertyDto.landlordId,
+        title: createPropertyDto.title,
+        description: createPropertyDto.description || '',
+        address: createPropertyDto.address,
+        type: createPropertyDto.type,
+        price: createPropertyDto.price,
+        area: createPropertyDto.area,
+        depositAmount: createPropertyDto.depositAmount,
+        latitude: createPropertyDto.latitude,
+        longitude: createPropertyDto.longitude,
+        amenities: createPropertyDto.amenities || [],
+      },
     });
   }
 
   async findAll() {
-    return this.prisma.property.findMany({});
+    return this.prisma.property.findMany({
+      include: {
+        User: true, // Based on relation map 'User' -> 'landlordId'
+      }
+    });
   }
 
   async findOne(id: string) {
-    const property = await (this.prisma.property as any).findUnique({
+    const property = await this.prisma.property.findUnique({
       where: { id },
     });
 
@@ -31,7 +48,7 @@ export class PropertiesService {
   async update(id: string, updatePropertyDto: UpdatePropertyDto) {
     await this.findOne(id);
     
-    return (this.prisma.property as any).update({
+    return this.prisma.property.update({
       where: { id },
       data: updatePropertyDto,
     });
@@ -40,7 +57,7 @@ export class PropertiesService {
   async remove(id: string) {
     await this.findOne(id);
 
-    return (this.prisma.property as any).delete({
+    return this.prisma.property.delete({
       where: { id },
     });
   }

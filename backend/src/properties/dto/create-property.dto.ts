@@ -5,15 +5,10 @@ import {
   IsUUID, 
   IsNotEmpty, 
   Min, 
-  IsOptional 
+  IsOptional,
+  IsArray
 } from 'class-validator';
-
-export enum PropertyType {
-  ROOM = 'ROOM',
-  MINI_APARTMENT = 'MINI_APARTMENT',
-  WHOLE_HOUSE = 'WHOLE_HOUSE',
-  DORMITORY = 'DORMITORY',
-}
+import { PropertyType } from '@prisma/client';
 
 export class CreatePropertyDto {
   @IsUUID()
@@ -55,4 +50,9 @@ export class CreatePropertyDto {
   @IsNumber()
   @IsNotEmpty()
   longitude: number;
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  amenities?: string[];
 }
