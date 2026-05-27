@@ -1,16 +1,25 @@
 import { 
-  Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe 
+  Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGuards 
 } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { Role } from '@prisma/client';
 
 @Controller('properties')
 export class PropertiesController {
   constructor(private readonly propertiesService: PropertiesService) {}
 
   @Post()
-  create(@Body() createPropertyDto: CreatePropertyDto) {
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.LANDLORD, Role.ADMIN)
+  create(@Body() createPropertyDto: CreatePropertyDto, @CurrentUser() user: any) {
+    // Automatically attach landlordId from the JWT payload
+    createPropertyDto.landlordId = user.id;
     return this.propertiesService.create(createPropertyDto);
   }
 
@@ -25,6 +34,8 @@ export class PropertiesController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.LANDLORD, Role.ADMIN)
   update(
     @Param('id', ParseUUIDPipe) id: string, 
     @Body() updatePropertyDto: UpdatePropertyDto
@@ -33,6 +44,8 @@ export class PropertiesController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.LANDLORD, Role.ADMIN)
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.propertiesService.remove(id);
   }

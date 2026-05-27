@@ -11,7 +11,7 @@ export class PropertiesService {
   async create(createPropertyDto: CreatePropertyDto) {
     return this.prisma.property.create({
       data: {
-        landlordId: createPropertyDto.landlordId,
+        landlordId: createPropertyDto.landlordId!,
         title: createPropertyDto.title,
         description: createPropertyDto.description || '',
         address: createPropertyDto.address,

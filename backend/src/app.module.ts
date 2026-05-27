@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
@@ -10,9 +11,22 @@ import { ChatbotsModule } from './chatbots/chatbots.module';
 import { OcrModule } from './ocr/ocr.module';
 import { UploadModule } from './upload/upload.module';
 import { ChatsModule } from './chats/chats.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [PrismaModule, PropertiesModule, UsersModule, ContractsModule, InvoicesModule, ChatbotsModule, OcrModule, UploadModule, ChatsModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule, 
+    PropertiesModule, 
+    UsersModule, 
+    ContractsModule, 
+    InvoicesModule, 
+    ChatbotsModule, 
+    OcrModule, 
+    UploadModule, 
+    ChatsModule, 
+    AuthModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

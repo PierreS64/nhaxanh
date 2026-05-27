@@ -1,6 +1,6 @@
 import { PropertyType } from '@prisma/client';
 export declare class CreatePropertyDto {
-    landlordId: string;
+    landlordId?: string;
     title: string;
     description?: string;
     address: string;

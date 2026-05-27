@@ -4,7 +4,7 @@ import { UpdatePropertyDto } from './dto/update-property.dto';
 export declare class PropertiesController {
     private readonly propertiesService;
     constructor(propertiesService: PropertiesService);
-    create(createPropertyDto: CreatePropertyDto): Promise<{
+    create(createPropertyDto: CreatePropertyDto, user: any): Promise<{
         id: string;
         landlordId: string;
         depositAmount: number;

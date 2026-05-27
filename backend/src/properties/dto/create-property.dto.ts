@@ -12,8 +12,8 @@ import { PropertyType } from '@prisma/client';
 
 export class CreatePropertyDto {
   @IsUUID()
-  @IsNotEmpty()
-  landlordId: string;
+  @IsOptional()
+  landlordId?: string;
 
   @IsString()
   @IsNotEmpty()

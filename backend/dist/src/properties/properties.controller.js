@@ -17,12 +17,18 @@ const common_1 = require("@nestjs/common");
 const properties_service_1 = require("./properties.service");
 const create_property_dto_1 = require("./dto/create-property.dto");
 const update_property_dto_1 = require("./dto/update-property.dto");
+const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
+const roles_guard_1 = require("../auth/guards/roles.guard");
+const roles_decorator_1 = require("../auth/decorators/roles.decorator");
+const current_user_decorator_1 = require("../auth/decorators/current-user.decorator");
+const client_1 = require("@prisma/client");
 let PropertiesController = class PropertiesController {
     propertiesService;
     constructor(propertiesService) {
         this.propertiesService = propertiesService;
     }
-    create(createPropertyDto) {
+    create(createPropertyDto, user) {
+        createPropertyDto.landlordId = user.id;
         return this.propertiesService.create(createPropertyDto);
     }
     findAll() {
@@ -41,9 +47,12 @@ let PropertiesController = class PropertiesController {
 exports.PropertiesController = PropertiesController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.LANDLORD, client_1.Role.ADMIN),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, current_user_decorator_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_property_dto_1.CreatePropertyDto]),
+    __metadata("design:paramtypes", [create_property_dto_1.CreatePropertyDto, Object]),
     __metadata("design:returntype", void 0)
 ], PropertiesController.prototype, "create", null);
 __decorate([
@@ -61,6 +70,8 @@ __decorate([
 ], PropertiesController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.LANDLORD, client_1.Role.ADMIN),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -69,6 +80,8 @@ __decorate([
 ], PropertiesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
+    (0, roles_decorator_1.Roles)(client_1.Role.LANDLORD, client_1.Role.ADMIN),
     __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
