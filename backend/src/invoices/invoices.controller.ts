@@ -16,33 +16,33 @@ export class InvoicesController {
   @Roles(Role.LANDLORD, Role.ADMIN)
   @Post()
   create(@Body() createInvoiceDto: CreateInvoiceDto, @CurrentUser() user: any) {
-    return this.invoicesService.create(createInvoiceDto, user.userId, user.role);
+    return this.invoicesService.create(createInvoiceDto, user.id, user.role);
   }
 
   @Get()
   findAll(@CurrentUser() user: any) {
-    return this.invoicesService.findAll(user.userId, user.role);
+    return this.invoicesService.findAll(user.id, user.role);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string, @CurrentUser() user: any) {
-    return this.invoicesService.findOne(id, user.userId, user.role);
+    return this.invoicesService.findOne(id, user.id, user.role);
   }
 
   @Roles(Role.LANDLORD, Role.ADMIN)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateInvoiceDto: UpdateInvoiceDto, @CurrentUser() user: any) {
-    return this.invoicesService.update(id, updateInvoiceDto, user.userId, user.role);
+    return this.invoicesService.update(id, updateInvoiceDto, user.id, user.role);
   }
 
   @Roles(Role.LANDLORD, Role.ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string, @CurrentUser() user: any) {
-    return this.invoicesService.remove(id, user.userId, user.role);
+    return this.invoicesService.remove(id, user.id, user.role);
   }
 
   @Patch(':id/pay')
   payInvoice(@Param('id') id: string, @Body('paymentMethod') paymentMethod: string, @CurrentUser() user: any) {
-    return this.invoicesService.payInvoice(id, paymentMethod, user.userId, user.role);
+    return this.invoicesService.payInvoice(id, paymentMethod, user.id, user.role);
   }
 }

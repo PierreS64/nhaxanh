@@ -16,28 +16,28 @@ export class ContractsController {
   @Roles(Role.LANDLORD, Role.ADMIN)
   @Post()
   create(@Body() createContractDto: CreateContractDto, @CurrentUser() user: any) {
-    return this.contractsService.create(createContractDto, user.userId);
+    return this.contractsService.create(createContractDto, user);
   }
 
   @Get()
   findAll(@CurrentUser() user: any) {
-    return this.contractsService.findAll(user.userId, user.role);
+    return this.contractsService.findAll(user.id, user.role);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string, @CurrentUser() user: any) {
-    return this.contractsService.findOne(id, user.userId, user.role);
+    return this.contractsService.findOne(id, user.id, user.role);
   }
 
   @Roles(Role.LANDLORD, Role.ADMIN)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateContractDto: UpdateContractDto, @CurrentUser() user: any) {
-    return this.contractsService.update(id, updateContractDto, user.userId, user.role);
+    return this.contractsService.update(id, updateContractDto, user.id, user.role);
   }
 
   @Roles(Role.LANDLORD, Role.ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string, @CurrentUser() user: any) {
-    return this.contractsService.remove(id, user.userId, user.role);
+    return this.contractsService.remove(id, user.id, user.role);
   }
 }
