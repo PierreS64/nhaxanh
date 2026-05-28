@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhà Xanh - Tìm phòng trọ, căn hộ cho thuê dễ dàng, an toàn</title>
+  <meta name="description" content="Nhà Xanh là hệ thống tìm kiếm phòng trọ, nhà nguyên căn, căn hộ, ký túc xá uy tín hàng đầu Việt Nam. Giúp kết nối chủ trọ và người thuê nhanh chóng, an toàn.">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header id="app-header">
+    <div class="container header-container">
+      <a href="#" class="logo" id="logo-btn" aria-label="Nhà Xanh Logo">
+        <i class="fa-solid fa-house-chimney-window"></i>
+        <span>NHÀ XANH</span>
+      </a>
+      
+      <nav class="nav-menu" aria-label="Main Navigation">
+        <a href="#" class="nav-link active" data-view="home">Trang chủ</a>
+        <a href="#" class="nav-link" data-view="home" data-filter-type="phong-tro">Phòng trọ</a>
+        <a href="#" class="nav-link" data-view="home" data-filter-type="can-ho">Căn hộ</a>
+        <a href="#" class="nav-link" data-view="home" data-filter-type="ky-tuc-xa">Ký túc xá</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- Guest Actions -->
+        <div id="guest-actions" class="flex align-center" style="gap: 0.75rem;">
+          <button class="btn btn-outline btn-sm" id="nav-login-btn">Đăng nhập</button>
+          <button class="btn btn-primary btn-sm" id="nav-register-btn">Đăng ký</button>
+        </div>
+
+        <!-- Logged In User Actions -->
+        <div id="user-actions" class="flex align-center" style="gap: 1rem; display: none;">
+          <!-- Show for Landlord (Chủ nhà) role only -->
+          <button class="btn btn-primary btn-sm" id="nav-post-btn" style="display: none;">
+            <i class="fa-solid fa-plus"></i> Đăng tin
+          </button>
+          
+          <div class="user-menu" id="user-menu-trigger" aria-haspopup="true" aria-expanded="false">
+            <div class="user-avatar" id="avatar-letters">US</div>
+            <span class="user-name" id="display-name">Người dùng</span>
+            <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem; color: var(--text-muted);"></i>
+            
+            <div class="user-dropdown" id="user-dropdown-menu">
+              <a href="#" class="dropdown-item" id="menu-profile-btn">
+                <i class="fa-solid fa-user-gear"></i> Hồ sơ của bạn
+              </a>
+              <a href="#" class="dropdown-item" id="menu-dashboard-btn" style="display: none;">
+                <i class="fa-solid fa-table-columns"></i> Quản lý phòng
+              </a>
+              <a href="#" class="dropdown-item" id="menu-logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main>
+    
+    <!-- ==================== VIEW 1: HOME PAGE ==================== -->
+    <section id="view-home" class="view-section active">
+      <!-- Hero Banner -->
+      <div class="hero" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80');">
+        <div class="container">
+          <div class="hero-content">
+            <h1>Tìm phòng trọ <span>dễ dàng</span></h1>
+            <p>Hàng nghìn tin đăng phòng trọ, nhà nguyên căn, căn hộ uy tín trên toàn quốc. Tìm không gian sống lý tưởng của bạn - Dễ dàng, An toàn.</p>
+            <button class="btn btn-secondary" id="hero-explore-btn">Khám phá ngay</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search & Lọc Widget -->
+      <div class="container search-widget-container">
+        <div class="search-widget">
+          <div class="search-tabs">
+            <button class="search-tab-btn active" data-type="all">Tất cả</button>
+            <button class="search-tab-btn" data-type="phong-tro">Phòng trọ</button>
+            <button class="search-tab-btn" data-type="nha-nguyen-can">Nhà nguyên căn</button>
+            <button class="search-tab-btn" data-type="can-ho">Căn hộ</button>
+            <button class="search-tab-btn" data-type="ky-tuc-xa">Ký túc xá</button>
+          </div>
+          
+          <form class="search-form" id="home-search-form" onsubmit="event.preventDefault();">
+            <div class="search-group">
+              <label for="search-location"><i class="fa-solid fa-location-dot"></i> Địa điểm</label>
+              <select id="search-location">
+                <option value="all">Tất cả tỉnh thành</option>
+                <option value="Hà Nội">Hà Nội</option>
+                <option value="TP.HCM">TP.HCM</option>
+                <option value="Đà Nẵng">Đà Nẵng</option>
+                <option value="Hải Phòng">Hải Phòng</option>
+              </select>
+            </div>
+            
+            <div class="search-group">
+              <label for="search-price"><i class="fa-solid fa-tags"></i> Khoảng giá</label>
+              <select id="search-price">
+                <option value="all">Tất cả mức giá</option>
+                <option value="under-3m">Dưới 3 triệu</option>
+                <option value="3m-7m">3 - 7 triệu</option>
+                <option value="over-7m">Trên 7 triệu</option>
+              </select>
+            </div>
+
+            <div class="search-group">
+              <label for="search-keyword"><i class="fa-solid fa-magnifying-glass"></i> Từ khóa</label>
+              <input type="text" id="search-keyword" placeholder="Nhập tên đường, trường đại học...">
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="search-submit-btn">
+              <i class="fa-solid fa-magnifying-glass"></i> Tìm kiếm
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Popular Cities Section -->
+      <div class="container section-padding" style="padding-top: 1rem;">
+        <h2 class="section-title">Các thành phố phổ biến</h2>
+        <div class="cities-grid">
+          <div class="city-card" data-city="Hà Nội">
+            <img src="https://images.unsplash.com/photo-1509060464153-44667396260f?auto=format&fit=crop&w=400&q=80" alt="Hà Nội">
+            <div class="city-info">
+              <h3>Hà Nội</h3>
+            </div>
+          </div>
+          <div class="city-card" data-city="TP.HCM">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=80" alt="Hồ Chí Minh">
+            <div class="city-info">
+              <h3>Hồ Chí Minh</h3>
+            </div>
+          </div>
+          <div class="city-card" data-city="Đà Nẵng">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=400&q=80" alt="Đà Nẵng" style="filter: hue-rotate(45deg);">
+            <div class="city-info">
+              <h3>Đà Nẵng</h3>
+            </div>
+          </div>
+          <div class="city-card" data-city="Hải Phòng">
+            <img src="https://images.unsplash.com/photo-1509060464153-44667396260f?auto=format&fit=crop&w=400&q=80" alt="Hải Phòng" style="filter: saturate(1.5);">
+            <div class="city-info">
+              <h3>Hải Phòng</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Latest Properties Listings -->
+      <div class="container section-padding" style="padding-top: 0;">
+        <div class="listings-header">
+          <h2 class="section-title" id="listings-section-title">Tin đăng mới nhất</h2>
+          <span class="text-muted" id="listings-count">6 kết quả được tìm thấy</span>
+        </div>
+        
+        <div class="listings-grid" id="home-listings-grid">
+          <!-- Property Cards will be rendered dynamically here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: PROPERTY DETAILS PAGE ==================== -->
+    <section id="view-detail" class="view-section">
+      <div class="container" style="padding-top: 2rem;">
+        <!-- Breadcrumbs -->
+        <div class="dashboard-breadcrumbs">
+          <a href="#" class="back-home-link">Trang chủ</a> &gt; 
+          <span id="detail-breadcrumb-type">Phòng trọ</span> &gt; 
+          <span id="detail-breadcrumb-name">Chi tiết phòng</span>
+        </div>
+
+        <div class="detail-layout">
+          <!-- Left Main Area -->
+          <div class="detail-main">
+            <!-- Gallery -->
+            <div class="detail-gallery">
+              <div class="main-image-container">
+                <img src="" id="detail-main-img" class="main-image" alt="Hình ảnh chính của phòng">
+              </div>
+              <div class="thumbnails-grid" id="detail-thumbnails">
+                <!-- Thumbnails will be injected here -->
+              </div>
+            </div>
+
+            <!-- Title & Address -->
+            <div class="detail-title-section">
+              <h1 id="detail-title">Căn hộ mini Bình Thạnh, view đẹp</h1>
+              <div class="detail-address">
+                <i class="fa-solid fa-location-dot"></i>
+                <span id="detail-address-text">123 Điện Biên Phủ, Phường 25, Bình Thạnh, TP.HCM</span>
+              </div>
+            </div>
+
+            <!-- Specs Grid -->
+            <div class="specs-grid">
+              <div class="spec-card">
+                <div class="spec-icon"><i class="fa-solid fa-ruler-combined"></i></div>
+                <div class="spec-info">
+                  <label>Diện tích</label>
+                  <span id="detail-spec-area">40 m²</span>
+                </div>
+              </div>
+              
+              <div class="spec-card">
+                <div class="spec-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div class="spec-info">
+                  <label>Giá điện</label>
+                  <span id="detail-spec-electricity">Miễn phí</span>
+                </div>
+              </div>
+
+              <div class="spec-card">
+                <div class="spec-icon"><i class="fa-solid fa-droplet"></i></div>
+                <div class="spec-info">
+                  <label>Giá nước</label>
+                  <span id="detail-spec-water">Miễn phí</span>
+                </div>
+              </div>
+
+              <div class="spec-card">
+                <div class="spec-icon"><i class="fa-solid fa-wifi"></i></div>
+                <div class="spec-info">
+                  <label>Wifi</label>
+                  <span id="detail-spec-wifi">Miễn phí</span>
+                </div>
+              </div>
+
+              <div class="spec-card">
+                <div class="spec-icon"><i class="fa-solid fa-hand-holding-hand"></i></div>
+                <div class="spec-info">
+                  <label>Dịch vụ</label>
+                  <span id="detail-spec-service">Miễn phí</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Introduction -->
+            <div class="detail-section">
+              <h3 class="detail-section-title">Giới thiệu</h3>
+              <p class="detail-desc" id="detail-description">
+                Căn hộ mini thiết kế hiện đại, thoáng mát, view Landmark 81 cực chill.
+              </p>
+            </div>
+
+            <!-- Target Tenants -->
+            <div class="detail-section">
+              <h3 class="detail-section-title">Đối tượng</h3>
+              <div class="checklist-grid" id="detail-targets">
+                <!-- Checkmarks will be injected here -->
+              </div>
+            </div>
+
+            <!-- Amenities -->
+            <div class="detail-section">
+              <h3 class="detail-section-title">Tiện nghi</h3>
+              <div class="checklist-grid" id="detail-amenities">
+                <!-- Checkmarks will be injected here -->
+              </div>
+            </div>
+
+            <!-- Environment -->
+            <div class="detail-section">
+              <h3 class="detail-section-title">Môi trường xung quanh</h3>
+              <div class="flex justify-between align-center" style="gap: 2rem; flex-wrap: wrap;">
+                <div class="checklist-grid" id="detail-environments" style="flex: 1; min-width: 250px;">
+                  <!-- Checkmarks will be injected here -->
+                </div>
+                
+                <!-- Map Mockup -->
+                <div style="flex: 1; min-width: 280px;">
+                  <div class="map-container">
+                    <div class="map-placeholder">
+                      <div class="map-pin"><i class="fa-solid fa-location-dot"></i></div>
+                      <span style="font-weight: 700; font-size: 0.95rem;" id="detail-map-label">Bình Thạnh</span>
+                    </div>
+                    <div class="map-zoom">
+                      <button class="zoom-btn" onclick="return false;">+</button>
+                      <button class="zoom-btn" onclick="return false;">-</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Sidebar (Contact Card) -->
+          <div class="detail-sidebar">
+            <div class="contact-card">
+              <div class="contact-price-row">
+                <span class="contact-price-label">Giá thuê</span>
+                <span class="contact-price" id="detail-price">6.000.000đ/tháng</span>
+              </div>
+              
+              <div class="landlord-info">
+                <div class="landlord-avatar" id="detail-landlord-avatar">B</div>
+                <div class="landlord-details">
+                  <h4 id="detail-landlord-name">Trần Thị B</h4>
+                  <p id="detail-landlord-phone">0909987654</p>
+                </div>
+              </div>
+              
+              <div class="contact-actions">
+                <a href="#" class="btn btn-secondary" id="detail-call-btn">
+                  <i class="fa-solid fa-phone"></i> <span id="detail-call-text">Gọi 0909987654</span>
+                </a>
+                <a href="#" class="btn btn-primary" id="detail-zalo-btn" style="background-color: var(--tertiary);">
+                  <i class="fa-solid fa-comment-dots"></i> Nhắn Zalo
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: AUTHENTICATION PAGE (LOGIN/REGISTER) ==================== -->
+    <section id="view-auth" class="view-section">
+      <div class="auth-page-bg">
+        <div class="auth-card">
+          <!-- Auth Logo / Header -->
+          <div class="auth-header">
+            <h2>Nhà Xanh</h2>
+            <p id="auth-subtitle">Bắt đầu hành trình tìm kiếm không gian sống lý tưởng.</p>
+          </div>
+
+          <!-- Auth Tab controls -->
+          <div class="auth-tabs">
+            <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Đăng nhập</div>
+            <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Đăng ký</div>
+          </div>
+
+          <!-- Form Đăng nhập -->
+          <form id="auth-login-form" onsubmit="handleAuthSubmit(event, 'login')">
+            <div class="form-group">
+              <label for="login-phone">Số điện thoại</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-phone prefix-icon"></i>
+                <input type="tel" id="login-phone" placeholder="090 123 4567" required pattern="[0-9]{10,11}">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">Mật khẩu</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock prefix-icon"></i>
+                <input type="password" id="login-password" placeholder="••••••••" required>
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('login-password')">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-options">
+              <label class="checkbox-label">
+                <input type="checkbox" id="login-remember">
+                <span>Ghi nhớ đăng nhập</span>
+              </label>
+              <a href="#" class="forgot-pass" onclick="alert('Tính năng này sẽ sớm được hỗ trợ!'); return false;">Quên mật khẩu?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary auth-submit-btn">
+              Đăng nhập <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </form>
+
+          <!-- Form Đăng ký -->
+          <form id="auth-register-form" onsubmit="handleAuthSubmit(event, 'register')" style="display: none;">
+            <div class="form-group">
+              <label for="reg-name">Họ và Tên</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-user prefix-icon"></i>
+                <input type="text" id="reg-name" placeholder="Nguyễn Văn A" required minlength="2">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-phone">Số điện thoại</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-phone prefix-icon"></i>
+                <input type="tel" id="reg-phone" placeholder="090 123 4567" required pattern="[0-9]{10,11}">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="reg-password">Mật khẩu</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock prefix-icon"></i>
+                <input type="password" id="reg-password" placeholder="••••••••" required minlength="6">
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('reg-password')">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Vai trò</label>
+              <div class="role-selector-grid">
+                <button type="button" class="role-btn active" id="role-tenant" onclick="selectRole('tenant')">
+                  <i class="fa-solid fa-map-pin"></i>
+                  <span>Người thuê</span>
+                </button>
+                <button type="button" class="role-btn" id="role-landlord" onclick="selectRole('landlord')">
+                  <i class="fa-solid fa-house-chimney-user"></i>
+                  <span>Chủ nhà</span>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary auth-submit-btn">
+              Đăng ký <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </form>
+
+          <!-- Social login divider and buttons -->
+          <div class="social-auth">
+            <span class="social-title" id="social-divider-text">Hoặc đăng nhập với</span>
+            <div class="social-buttons">
+              <button class="social-btn google" onclick="handleSocialAuth('Google'); return false;">
+                <i class="fa-brands fa-google"></i> Google
+              </button>
+              <button class="social-btn facebook" onclick="handleSocialAuth('Facebook'); return false;">
+                <i class="fa-brands fa-facebook"></i> Facebook
+              </button>
+            </div>
+          </div>
+
+          <!-- Toggle view link -->
+          <div class="auth-footer">
+            <span id="auth-footer-text">Chưa có tài khoản?</span>
+            <a href="#" id="auth-toggle-link" onclick="toggleAuthMode(); return false;">Đăng ký ngay</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 4: LANDLORD DASHBOARD ==================== -->
+    <section id="view-dashboard" class="view-section">
+      <div class="container" style="padding-top: 2rem;">
+        <!-- Breadcrumbs -->
+        <div class="dashboard-breadcrumbs">
+          <a href="#" class="back-home-link">Trang chủ</a> &gt; 
+          <a href="#" onclick="switchView('dashboard'); return false;">Quản lý phòng trọ</a> &gt; 
+          <span>Danh sách phòng</span>
+        </div>
+
+        <div class="dashboard-layout">
+          <div class="dashboard-title-row">
+            <h1>Quản lý Bất động sản Cho thuê</h1>
+            <button class="btn btn-primary" id="dashboard-add-btn">
+              <i class="fa-solid fa-plus"></i> Thêm Phòng Mới
+            </button>
+          </div>
+
+          <div class="dashboard-controls">
+            <div class="dashboard-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="dashboard-search-input" placeholder="Tìm kiếm phòng theo tên, địa chỉ...">
+            </div>
+            
+            <div class="flex align-center" style="gap: 0.75rem;">
+              <span class="text-muted" style="font-weight: 700; font-size: 0.85rem;">LỌC TRẠNG THÁI:</span>
+              <select id="dashboard-filter-status" style="border: 1.5px solid var(--border); padding: 0.6rem 1rem; border-radius: var(--radius-md); font-weight: 600; cursor: pointer;">
+                <option value="all">Tất cả phòng</option>
+                <option value="available">Còn trống</option>
+                <option value="rented">Đã cho thuê</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div class="table-wrapper">
+            <table class="dashboard-table" id="dashboard-properties-table">
+              <thead>
+                <tr>
+                  <th>Tên Phòng</th>
+                  <th>Loại hình</th>
+                  <th>Giá Thuê</th>
+                  <th>Diện tích</th>
+                  <th>Địa chỉ</th>
+                  <th>Trạng thái</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="dashboard-table-body">
+                <!-- Dynamic rows will be injected here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 5: ADD/EDIT PROPERTY FORM ==================== -->
+    <section id="view-form" class="view-section">
+      <div class="container" style="padding-top: 2rem;">
+        <div class="dashboard-breadcrumbs">
+          <a href="#" class="back-home-link">Trang chủ</a> &gt; 
+          <a href="#" onclick="switchView('dashboard'); return false;">Quản lý phòng trọ</a> &gt; 
+          <span id="form-breadcrumb-title">Thêm phòng mới</span>
+        </div>
+
+        <div class="form-card">
+          <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 2rem;" id="form-page-title">Thêm phòng mới</h2>
+
+          <!-- Form Progress Stepper -->
+          <div class="form-stepper">
+            <div class="step-node active" data-step="1">
+              <div class="step-circle">1</div>
+              <div class="step-label">Thông tin chung</div>
+            </div>
+            <div class="step-node" data-step="2">
+              <div class="step-circle">2</div>
+              <div class="step-label">Địa chỉ</div>
+            </div>
+            <div class="step-node" data-step="3">
+              <div class="step-circle">3</div>
+              <div class="step-label">Hình ảnh</div>
+            </div>
+            <div class="step-node" data-step="4">
+              <div class="step-circle">4</div>
+              <div class="step-label">Tiện ích</div>
+            </div>
+          </div>
+
+          <!-- Dynamic Form -->
+          <form id="property-entry-form" onsubmit="handleFormSubmit(event)">
+            <input type="hidden" id="form-property-id" value="">
+            
+            <!-- STEP 1: THÔNG TIN CHUNG -->
+            <div class="form-section active" id="form-step-section-1">
+              <h3 class="form-section-title">Thông tin cơ bản</h3>
+              
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="form-title">Tên phòng *</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="form-title" placeholder="Nhập tên phòng nổi bật, thu hút khách hàng" required style="padding-left: 1rem;">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-type">Loại hình *</label>
+                  <div class="input-wrapper">
+                    <select id="form-type" required style="padding-left: 1rem;">
+                      <option value="">Chọn loại phòng</option>
+                      <option value="phong-tro">Phòng trọ</option>
+                      <option value="nha-nguyen-can">Nhà nguyên căn</option>
+                      <option value="can-ho">Căn hộ</option>
+                      <option value="ky-tuc-xa">Ký túc xá</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-grid-2" style="margin-top: 1rem;">
+                <div class="form-group">
+                  <label for="form-price">Giá thuê (VND/tháng) *</label>
+                  <div class="input-wrapper">
+                    <input type="number" id="form-price" placeholder="Ví dụ: 3500000" required style="padding-left: 1rem;">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-area">Diện tích (m²) *</label>
+                  <div class="input-wrapper">
+                    <input type="number" id="form-area" placeholder="Ví dụ: 25" required style="padding-left: 1rem;">
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="form-section-title" style="margin-top: 2rem;">Chi phí dịch vụ (VND)</h3>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="form-electricity">Giá điện (mỗi kW) - Nhập 0 nếu miễn phí</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="form-electricity" placeholder="Ví dụ: 3500 hoặc Miễn phí" style="padding-left: 1rem;">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-water">Giá nước (mỗi tháng) - Nhập 0 nếu miễn phí</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="form-water" placeholder="Ví dụ: 100000 hoặc Miễn phí" style="padding-left: 1rem;">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-grid-2" style="margin-top: 1rem;">
+                <div class="form-group">
+                  <label for="form-wifi">Tiền Wifi (mỗi tháng) - Nhập 0 nếu miễn phí</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="form-wifi" placeholder="Ví dụ: 50000 hoặc Miễn phí" style="padding-left: 1rem;">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-service">Phí dịch vụ khác (tháng) - Nhập 0 nếu miễn phí</label>
+                  <div class="input-wrapper">
+                    <input type="text" id="form-service" placeholder="Ví dụ: 150000 hoặc Miễn phí" style="padding-left: 1rem;">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 2: ĐỊA CHỈ CHI TIẾT -->
+            <div class="form-section" id="form-step-section-2">
+              <h3 class="form-section-title">Vị trí bất động sản</h3>
+              
+              <div class="form-grid-3">
+                <div class="form-group">
+                  <label for="form-city">Tỉnh / Thành phố *</label>
+                  <div class="input-wrapper">
+                    <select id="form-city" required style="padding-left: 1rem;">
+                      <option value="">Chọn Tỉnh/Thành</option>
+                      <option value="Hà Nội">Hà Nội</option>
+                      <option value="TP.HCM">TP.HCM</option>
+                      <option value="Đà Nẵng">Đà Nẵng</option>
+                      <option value="Hải Phòng">Hải Phòng</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-district">Quận / Huyện *</label>
+                  <div class="input-wrapper">
+                    <select id="form-district" required style="padding-left: 1rem;">
+                      <option value="">Chọn Quận/Huyện</option>
+                      <!-- Will be populated dynamically based on city selection -->
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="form-ward">Phường / Xã *</label>
+                  <div class="input-wrapper">
+                    <select id="form-ward" required style="padding-left: 1rem;">
+                      <option value="">Chọn Phường/Xã</option>
+                      <!-- Will be populated dynamically based on district selection -->
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top: 1rem;">
+                <label for="form-street">Số nhà, Tên đường... *</label>
+                <div class="input-wrapper">
+                  <input type="text" id="form-street" placeholder="Ví dụ: 12 Trần Đại Nghĩa" required style="padding-left: 1rem;">
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 3: HÌNH ẢNH PHÒNG -->
+            <div class="form-section" id="form-step-section-3">
+              <h3 class="form-section-title">Hình ảnh mô tả căn phòng</h3>
+              
+              <div class="upload-zone" id="form-upload-zone">
+                <i class="fa-solid fa-camera"></i>
+                <h4>Kéo thả ảnh vào đây</h4>
+                <p>hoặc bấm để chọn (Hỗ trợ định dạng JPG, PNG - Tối đa 5MB)</p>
+                <input type="file" id="form-file-input" style="display: none;" multiple accept="image/*">
+              </div>
+
+              <div class="upload-previews" id="form-previews-container">
+                <!-- Dynamic image previews will show here -->
+                <div class="add-more-img-btn" id="form-add-more-img">
+                  <i class="fa-solid fa-plus"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 4: TIỆN ÍCH, MÔ TẢ & TRẠNG THÁI -->
+            <div class="form-section" id="form-step-section-4">
+              <h3 class="form-section-title">Tiện ích & Môi trường</h3>
+              
+              <div class="form-group" style="margin-bottom: 2rem;">
+                <label style="margin-bottom: 0.75rem;">Chọn các tiện nghi có sẵn:</label>
+                <div class="utilities-selection-grid" id="form-amenities-selection">
+                  <div class="utility-select-card" data-utility="Gác lửng"><i class="fa-solid fa-stairs"></i><span>Gác lửng</span></div>
+                  <div class="utility-select-card" data-utility="Wifi"><i class="fa-solid fa-wifi"></i><span>Wifi</span></div>
+                  <div class="utility-select-card" data-utility="Vệ sinh trong"><i class="fa-solid fa-bath"></i><span>Vệ sinh trong</span></div>
+                  <div class="utility-select-card" data-utility="Kệ bếp"><i class="fa-solid fa-kitchen-set"></i><span>Kệ bếp</span></div>
+                  <div class="utility-select-card" data-utility="Điều hòa"><i class="fa-solid fa-snowflake"></i><span>Điều hòa</span></div>
+                  <div class="utility-select-card" data-utility="Tủ lạnh"><i class="fa-solid fa-refrigerator"></i><span>Tủ lạnh</span></div>
+                  <div class="utility-select-card" data-utility="Giường nệm"><i class="fa-solid fa-bed"></i><span>Giường nệm</span></div>
+                  <div class="utility-select-card" data-utility="Tủ áo quần"><i class="fa-solid fa-box-archive"></i><span>Tủ áo quần</span></div>
+                  <div class="utility-select-card" data-utility="Ban công/sân thượng"><i class="fa-solid fa-house-laptop"></i><span>Ban công</span></div>
+                  <div class="utility-select-card" data-utility="Thang máy"><i class="fa-solid fa-elevator"></i><span>Thang máy</span></div>
+                  <div class="utility-select-card" data-utility="Bãi để xe riêng"><i class="fa-solid fa-motorcycle"></i><span>Bãi để xe</span></div>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label style="margin-bottom: 0.75rem;">Đối tượng phù hợp:</label>
+                  <div class="flex" style="gap: 1.5rem; flex-wrap: wrap;">
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="form-target" value="Gia đình trẻ" checked> <span>Gia đình trẻ</span>
+                    </label>
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="form-target" value="Người đi làm" checked> <span>Người đi làm</span>
+                    </label>
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="form-target" value="Sinh viên"> <span>Sinh viên</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label style="margin-bottom: 0.75rem;">Môi trường xung quanh:</label>
+                  <div class="flex" style="gap: 1.5rem; flex-wrap: wrap;">
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="form-env" value="Gần Landmark 81" checked> <span>Gần Landmark 81</span>
+                    </label>
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="form-env" value="Gần ĐH Hutech" checked> <span>Gần ĐH Hutech</span>
+                    </label>
+                    <label class="checkbox-label">
+                      <input type="checkbox" name="form-env" value="Gần chợ / Siêu thị"> <span>Gần chợ / Siêu thị</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <h3 class="form-section-title" style="margin-top: 2rem;">Mô tả chi tiết & Trạng thái</h3>
+              <div class="form-group">
+                <label for="form-desc">Mô tả phòng mới và tiện ích *</label>
+                <textarea id="form-desc" class="form-textarea" placeholder="Viết mô tả cụ thể về căn phòng (VD: Phòng rộng, nhiều ánh sáng tự nhiên, giờ giấc tự do, không chung chủ...)" required></textarea>
+              </div>
+
+              <div class="form-group" style="max-width: 300px; margin-top: 1rem;">
+                <label for="form-status">Trạng thái phòng</label>
+                <div class="input-wrapper">
+                  <select id="form-status" style="padding-left: 1rem;">
+                    <option value="available">Còn trống</option>
+                    <option value="rented">Đã cho thuê</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Steps navigation controls -->
+            <div class="form-actions-row">
+              <button type="button" class="btn btn-outline" id="form-prev-btn" style="visibility: hidden;">Quay lại</button>
+              <button type="button" class="btn btn-outline" id="form-cancel-btn" style="margin-right: auto; margin-left: 1.5rem;">Hủy</button>
+              <button type="button" class="btn btn-primary" id="form-next-btn">Tiếp tục</button>
+              <button type="submit" class="btn btn-secondary" id="form-submit-btn" style="display: none;">Lưu Dữ Liệu</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODAL 1: PROFILE MANAGEMENT ==================== -->
+  <div class="modal-overlay" id="modal-profile">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-address-card"></i> Hồ sơ của bạn</h3>
+        <button class="modal-close-btn" onclick="closeProfileModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="profile-edit-form" onsubmit="saveProfileChanges(event)">
+          <div class="form-group">
+            <label>Số điện thoại (Tài khoản)</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-phone prefix-icon"></i>
+              <input type="text" id="profile-phone" readonly style="background-color: var(--bg-surface-low); color: var(--text-muted);">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="profile-name">Họ và Tên</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-user prefix-icon"></i>
+              <input type="text" id="profile-name" required minlength="2">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-password">Mật khẩu mới (Bỏ trống nếu giữ nguyên)</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-lock prefix-icon"></i>
+              <input type="password" id="profile-password" placeholder="Nhập mật khẩu mới">
+              <button type="button" class="toggle-password" onclick="togglePasswordVisibility('profile-password')">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Vai trò</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-user-tag prefix-icon"></i>
+              <input type="text" id="profile-role" readonly style="background-color: var(--bg-surface-low); color: var(--text-muted);">
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary" style="flex: 1;">Lưu thay đổi</button>
+            <button type="button" class="btn btn-secondary" id="profile-logout-btn" style="flex: 1;">Đăng xuất</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Footer -->
+  <footer id="app-footer">
+    <div class="container footer-grid">
+      <!-- About -->
+      <div class="footer-col">
+        <a href="#" class="footer-logo">
+          <i class="fa-solid fa-house-chimney-window"></i>
+          <span>NHÀ XANH</span>
+        </a>
+        <p class="footer-desc">
+          Hệ thống tìm kiếm phòng trọ, nhà ở, căn hộ cho thuê hàng đầu Việt Nam. Kết nối nhanh chóng, an toàn giữa chủ nhà và người thuê.
+        </p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="social-icon-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" class="social-icon-btn" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" class="social-icon-btn" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <!-- Links Column 1: System -->
+      <div class="footer-col">
+        <h4>Hệ thống</h4>
+        <div class="footer-links">
+          <a href="#" onclick="alert('Vui lòng đăng ký/đăng nhập tài khoản Chủ nhà để sử dụng tính năng này!'); return false;">Dành cho chủ trọ</a>
+          <a href="#" onclick="alert('Tính năng Blog đang được cập nhật!'); return false;">Blog tin tức</a>
+          <a href="#" onclick="alert('Vui lòng đăng nhập tài khoản Chủ nhà để đăng tin!'); return false;">Hướng dẫn đăng tin</a>
+          <a href="#" onclick="alert('Trung tâm hỗ trợ đang chuẩn bị ra mắt!'); return false;">Liên hệ hỗ trợ</a>
+        </div>
+      </div>
+
+      <!-- Links Column 2: Info -->
+      <div class="footer-col">
+        <h4>Thông tin</h4>
+        <div class="footer-links">
+          <a href="#" onclick="alert('Điều khoản hoạt động sẽ sớm được cập nhật!'); return false;">Điều khoản & Cam kết</a>
+          <a href="#" onclick="alert('Quy chế hoạt động đang soạn thảo!'); return false;">Quy chế hoạt động</a>
+          <a href="#" onclick="alert('Chính sách bảo mật đang soạn thảo!'); return false;">Chính sách bảo mật</a>
+          <a href="#" onclick="alert('Chính sách giải quyết khiếu nại!'); return false;">Giải quyết khiếu nại</a>
+        </div>
+      </div>
+
+      <!-- Links Column 3: Contact -->
+      <div class="footer-col">
+        <h4>Liên hệ</h4>
+        <div class="footer-links" style="gap: 1.25rem;">
+          <div class="footer-contact-item">
+            <i class="fa-solid fa-phone"></i>
+            <span>0396340364</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="fa-solid fa-envelope"></i>
+            <span>info@nhaxanh.com</span>
+          </div>
+          <div class="footer-contact-item">
+            <i class="fa-solid fa-map-pin"></i>
+            <span>84C P. Nguyễn Thanh Bình, Hà Đông, Hà Nội</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Nhà Xanh Vietnam. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- App Script -->
+  <script src="index.js"></script>
+</body>
+</html>

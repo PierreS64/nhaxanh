@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhà Xanh - Dashboard Quản lý Dịch vụ Thuê Nhà</title>
+  <meta name="description" content="Hệ thống Dashboard Admin và Quản lý Nhà Xanh - CRUD người dùng, phòng trọ, hợp đồng, hóa đơn, và báo cáo sự cố.">
+  
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body class="dark-theme">
+
+  <!-- ==================== AUTHENTICATION WRAPPER ==================== -->
+  <div id="auth-portal" class="auth-wrapper flex align-center justify-center">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div class="brand-logo">
+          <i class="fa-solid fa-house-chimney-window"></i>
+          <span>NHÀ XANH</span>
+        </div>
+        <h2>Hệ thống Quản trị</h2>
+        <p>Đăng nhập để quản lý và vận hành hệ thống Nhà Xanh</p>
+      </div>
+
+      <div class="tab-buttons flex">
+        <button id="tab-login-btn" class="tab-btn active">Đăng nhập</button>
+        <button id="tab-register-btn" class="tab-btn">Đăng ký</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form active-form">
+        <div class="form-group">
+          <label for="login-email"><i class="fa-solid fa-envelope"></i> Email</label>
+          <input type="email" id="login-email" required placeholder="admin@nhaxanh.vn">
+        </div>
+        <div class="form-group">
+          <label for="login-password"><i class="fa-solid fa-lock"></i> Mật khẩu</label>
+          <input type="password" id="login-password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          Đăng nhập <i class="fa-solid fa-right-to-bracket"></i>
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="register-form" class="auth-form">
+        <div class="form-group">
+          <label for="reg-fullName"><i class="fa-solid fa-user"></i> Họ và Tên</label>
+          <input type="text" id="reg-fullName" required placeholder="Nguyễn Văn A">
+        </div>
+        <div class="form-group">
+          <label for="reg-email"><i class="fa-solid fa-envelope"></i> Email</label>
+          <input type="email" id="reg-email" required placeholder="user@gmail.com">
+        </div>
+        <div class="form-group">
+          <label for="reg-phone"><i class="fa-solid fa-phone"></i> Số điện thoại</label>
+          <input type="tel" id="reg-phone" placeholder="0987654321">
+        </div>
+        <div class="form-group">
+          <label for="reg-password"><i class="fa-solid fa-lock"></i> Mật khẩu</label>
+          <input type="password" id="reg-password" required placeholder="••••••••">
+        </div>
+        <div class="form-group">
+          <label for="reg-role"><i class="fa-solid fa-user-tag"></i> Vai trò</label>
+          <select id="reg-role">
+            <option value="TENANT">Người đi thuê (Tenant)</option>
+            <option value="LANDLORD">Chủ nhà (Landlord)</option>
+            <option value="ADMIN">Quản trị viên (Admin)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">
+          Tạo tài khoản <i class="fa-solid fa-user-plus"></i>
+        </button>
+      </form>
+      
+      <div id="auth-alert" class="alert alert-danger" style="display: none;"></div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN DASHBOARD LAYOUT ==================== -->
+  <div id="app-layout" class="app-container" style="display: none;">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <i class="fa-solid fa-house-chimney-window"></i>
+        <span>NHÀ XANH</span>
+      </div>
+      
+      <div class="user-profile-summary">
+        <div class="avatar" id="sidebar-avatar">A</div>
+        <div class="info">
+          <h4 id="sidebar-username">Admin User</h4>
+          <span id="sidebar-role" class="badge badge-admin">ADMIN</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-item active" data-target="page-dashboard">
+          <i class="fa-solid fa-chart-pie"></i> <span>Tổng quan</span>
+        </a>
+        <a href="#users" class="nav-item" data-target="page-users">
+          <i class="fa-solid fa-users"></i> <span>Người dùng (Users)</span>
+        </a>
+        <a href="#rooms" class="nav-item" data-target="page-rooms">
+          <i class="fa-solid fa-door-open"></i> <span>Phòng trọ (Rooms)</span>
+        </a>
+        <a href="#contracts" class="nav-item" data-target="page-contracts">
+          <i class="fa-solid fa-file-contract"></i> <span>Hợp đồng (Contracts)</span>
+        </a>
+        <a href="#invoices" class="nav-item" data-target="page-invoices">
+          <i class="fa-solid fa-file-invoice-dollar"></i> <span>Hóa đơn (Invoices)</span>
+        </a>
+        <a href="#maintenance" class="nav-item" data-target="page-maintenance">
+          <i class="fa-solid fa-screwdriver-wrench"></i> <span>Sự cố (Maintenance)</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="logout-btn" class="btn btn-danger-outline btn-block">
+          <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+        </button>
+      </div>
+    </aside>
+
+    <!-- CONTENT WRAPPER -->
+    <main class="main-content">
+      <!-- HEADER -->
+      <header class="content-header flex justify-between align-center">
+        <div class="header-title-area">
+          <h1 id="current-page-title">Tổng quan hệ thống</h1>
+          <p id="current-page-subtitle">Dữ liệu phân tích hoạt động thuê nhà Nhà Xanh</p>
+        </div>
+        <div class="header-actions flex align-center">
+          <div class="api-status flex align-center">
+            <span class="status-indicator online"></span>
+            <span>API: Connected (Port 3000)</span>
+          </div>
+          <button id="refresh-data-btn" class="btn btn-outline-primary btn-circle" title="Làm mới dữ liệu">
+            <i class="fa-solid fa-rotate"></i>
+          </button>
+        </div>
+      </header>
+
+      <div class="page-container">
+        
+        <!-- ==================== PAGE: DASHBOARD ==================== -->
+        <section id="page-dashboard" class="page-section active">
+          <!-- Analytics Stats Grid -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon icon-users">
+                <i class="fa-solid fa-users"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Người dùng</h3>
+                <p class="stat-value" id="stat-users">0</p>
+              </div>
+              <div class="stat-trend trend-up">
+                <i class="fa-solid fa-users-gear"></i> Tài khoản hệ thống
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon icon-rooms">
+                <i class="fa-solid fa-door-open"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Phòng trọ</h3>
+                <p class="stat-value" id="stat-rooms">0</p>
+              </div>
+              <div class="stat-trend" id="stat-rooms-detail">
+                0 trống | 0 đã thuê
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon icon-contracts">
+                <i class="fa-solid fa-file-contract"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Hợp đồng</h3>
+                <p class="stat-value" id="stat-contracts">0</p>
+              </div>
+              <div class="stat-trend" id="stat-contracts-detail">
+                0 Đang hiệu lực
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon icon-invoices">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Chưa thanh toán</h3>
+                <p class="stat-value" id="stat-invoices">0</p>
+              </div>
+              <div class="stat-trend trend-down" id="stat-invoices-detail">
+                Tổng nợ: 0đ
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon icon-maintenance">
+                <i class="fa-solid fa-screwdriver-wrench"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Yêu cầu sửa chữa</h3>
+                <p class="stat-value" id="stat-maintenance">0</p>
+              </div>
+              <div class="stat-trend trend-warn" id="stat-maintenance-detail">
+                0 yêu cầu mới
+              </div>
+            </div>
+          </div>
+
+          <!-- Charts and Activity Area -->
+          <div class="dashboard-grid">
+            <div class="dashboard-panel panel-main">
+              <h3>Phân bố loại hình phòng</h3>
+              <div class="room-distribution-container">
+                <div class="progress-bar-group">
+                  <div class="flex justify-between font-sm">
+                    <span>Phòng đơn (ROOM)</span>
+                    <span id="dist-room-percent">0% (0)</span>
+                  </div>
+                  <div class="progress-bar"><div class="progress-fill bg-blue" id="dist-room-bar" style="width: 0%"></div></div>
+                </div>
+
+                <div class="progress-bar-group">
+                  <div class="flex justify-between font-sm">
+                    <span>Chung cư mini (MINI_APARTMENT)</span>
+                    <span id="dist-mini-percent">0% (0)</span>
+                  </div>
+                  <div class="progress-bar"><div class="progress-fill bg-purple" id="dist-mini-bar" style="width: 0%"></div></div>
+                </div>
+
+                <div class="progress-bar-group">
+                  <div class="flex justify-between font-sm">
+                    <span>Nhà nguyên căn (WHOLE_HOUSE)</span>
+                    <span id="dist-house-percent">0% (0)</span>
+                  </div>
+                  <div class="progress-bar"><div class="progress-fill bg-emerald" id="dist-house-bar" style="width: 0%"></div></div>
+                </div>
+
+                <div class="progress-bar-group">
+                  <div class="flex justify-between font-sm">
+                    <span>Kí túc xá (DORMITORY)</span>
+                    <span id="dist-dorm-percent">0% (0)</span>
+                  </div>
+                  <div class="progress-bar"><div class="progress-fill bg-amber" id="dist-dorm-bar" style="width: 0%"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="dashboard-panel panel-side">
+              <h3>Trạng thái hệ thống</h3>
+              <ul class="system-status-list">
+                <li class="flex align-center justify-between">
+                  <span>Vai trò hiện tại:</span>
+                  <strong id="dash-curr-role">Loading...</strong>
+                </li>
+                <li class="flex align-center justify-between">
+                  <span>User ID:</span>
+                  <span class="font-mono font-xs" id="dash-curr-id" style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">-</span>
+                </li>
+                <li class="flex align-center justify-between">
+                  <span>Trạng thái KYC:</span>
+                  <span class="badge badge-success" id="dash-curr-kyc">Đã xác minh</span>
+                </li>
+                <li class="flex align-center justify-between">
+                  <span>Cơ sở dữ liệu:</span>
+                  <span class="badge badge-primary">Prisma / PostgreSQL</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== PAGE: USERS ==================== -->
+        <section id="page-users" class="page-section">
+          <div class="action-bar flex justify-between align-center">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="search-users-input" placeholder="Tìm kiếm người dùng...">
+            </div>
+            <button id="add-user-btn" class="btn btn-primary">
+              <i class="fa-solid fa-plus"></i> Thêm người dùng
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table id="users-table">
+              <thead>
+                <tr>
+                  <th>Họ và Tên</th>
+                  <th>Email</th>
+                  <th>Số điện thoại</th>
+                  <th>Vai trò</th>
+                  <th>Trạng thái KYC</th>
+                  <th>Ngày tạo</th>
+                  <th style="width: 120px;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body">
+                <!-- User rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================== PAGE: ROOMS ==================== -->
+        <section id="page-rooms" class="page-section">
+          <div class="action-bar flex justify-between align-center">
+            <div class="filters-group flex">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-rooms-input" placeholder="Tìm kiếm phòng...">
+              </div>
+              <select id="filter-room-type">
+                <option value="ALL">Tất cả loại phòng</option>
+                <option value="ROOM">Phòng đơn</option>
+                <option value="MINI_APARTMENT">Chung cư mini</option>
+                <option value="WHOLE_HOUSE">Nhà nguyên căn</option>
+                <option value="DORMITORY">Ký túc xá</option>
+              </select>
+              <select id="filter-room-status">
+                <option value="ALL">Tất cả trạng thái</option>
+                <option value="AVAILABLE">Còn trống (Available)</option>
+                <option value="RENTED">Đã thuê (Rented)</option>
+                <option value="MAINTENANCE">Đang bảo trì (Maintenance)</option>
+              </select>
+            </div>
+            <button id="add-room-btn" class="btn btn-primary">
+              <i class="fa-solid fa-plus"></i> Thêm phòng mới
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table id="rooms-table">
+              <thead>
+                <tr>
+                  <th>Tiêu đề phòng</th>
+                  <th>Địa chỉ</th>
+                  <th>Loại phòng</th>
+                  <th>Giá thuê (tháng)</th>
+                  <th>Diện tích</th>
+                  <th>Tiền cọc</th>
+                  <th>Trạng thái</th>
+                  <th style="width: 120px;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="rooms-table-body">
+                <!-- Room rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================== PAGE: CONTRACTS ==================== -->
+        <section id="page-contracts" class="page-section">
+          <div class="action-bar flex justify-between align-center">
+            <div class="filters-group flex">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-contracts-input" placeholder="Tìm hợp đồng...">
+              </div>
+            </div>
+            <button id="add-contract-btn" class="btn btn-primary">
+              <i class="fa-solid fa-plus"></i> Lập hợp đồng mới
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table id="contracts-table">
+              <thead>
+                <tr>
+                  <th>Mã HĐ</th>
+                  <th>Phòng</th>
+                  <th>Người thuê</th>
+                  <th>Ngày bắt đầu</th>
+                  <th>Ngày kết thúc</th>
+                  <th>Giá thuê</th>
+                  <th>Tiền cọc</th>
+                  <th>Trạng thái</th>
+                  <th style="width: 120px;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="contracts-table-body">
+                <!-- Contract rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================== PAGE: INVOICES ==================== -->
+        <section id="page-invoices" class="page-section">
+          <div class="action-bar flex justify-between align-center">
+            <div class="filters-group flex">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-invoices-input" placeholder="Tìm hóa đơn...">
+              </div>
+            </div>
+            <button id="add-invoice-btn" class="btn btn-primary">
+              <i class="fa-solid fa-plus"></i> Tạo hóa đơn mới
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table id="invoices-table">
+              <thead>
+                <tr>
+                  <th>Mã HĐ</th>
+                  <th>Tên Hóa đơn</th>
+                  <th>Tiền nhà</th>
+                  <th>Điện</th>
+                  <th>Nước</th>
+                  <th>Dịch vụ</th>
+                  <th>Tổng cộng</th>
+                  <th>Hạn thanh toán</th>
+                  <th>Trạng thái</th>
+                  <th style="width: 180px;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="invoices-table-body">
+                <!-- Invoice rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================== PAGE: MAINTENANCE ==================== -->
+        <section id="page-maintenance" class="page-section">
+          <div class="action-bar flex justify-between align-center">
+            <div class="filters-group flex">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-maintenance-input" placeholder="Tìm sự cố...">
+              </div>
+            </div>
+            <button id="add-maintenance-btn" class="btn btn-primary">
+              <i class="fa-solid fa-plus"></i> Báo sự cố mới
+            </button>
+          </div>
+
+          <div class="table-container">
+            <table id="maintenance-table">
+              <thead>
+                <tr>
+                  <th>Mã yêu cầu</th>
+                  <th>Tên Sự cố</th>
+                  <th>Phòng báo cáo</th>
+                  <th>Mô tả</th>
+                  <th>Trạng thái sửa</th>
+                  <th>Ngày báo cáo</th>
+                  <th style="width: 180px;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="maintenance-table-body">
+                <!-- Maintenance rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== MODALS ==================== -->
+  
+  <!-- USER MODAL (Add/Edit) -->
+  <div id="modal-user" class="modal-overlay flex align-center justify-center">
+    <div class="modal-card">
+      <div class="modal-header flex justify-between align-center">
+        <h3 id="user-modal-title">Thêm người dùng mới</h3>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="user-form" class="modal-form">
+        <input type="hidden" id="user-id-hidden">
+        
+        <div class="form-group">
+          <label for="user-fullName">Họ và Tên</label>
+          <input type="text" id="user-fullName" required placeholder="Lê Văn B">
+        </div>
+        
+        <div class="form-row flex">
+          <div class="form-group flex-1">
+            <label for="user-email">Email</label>
+            <input type="email" id="user-email" required placeholder="levanb@gmail.com">
+          </div>
+          <div class="form-group flex-1" id="user-password-container">
+            <label for="user-password">Mật khẩu</label>
+            <input type="password" id="user-password" placeholder="Mật khẩu tài khoản">
+          </div>
+        </div>
+        
+        <div class="form-row flex">
+          <div class="form-group flex-1">
+            <label for="user-phone">Số điện thoại</label>
+            <input type="tel" id="user-phone" placeholder="0966778899">
+          </div>
+          <div class="form-group flex-1">
+            <label for="user-role">Vai trò</label>
+            <select id="user-role">
+              <option value="TENANT">TENANT - Khách thuê</option>
+              <option value="LANDLORD">LANDLORD - Chủ nhà</option>
+              <option value="ADMIN">ADMIN - Quản trị viên</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group flex align-center" style="gap: 0.5rem; margin-top: 1rem;">
+          <input type="checkbox" id="user-kyc" style="width: auto;">
+          <label for="user-kyc" style="margin-bottom: 0; cursor: pointer;">Đã xác minh KYC danh tính</label>
+        </div>
+
+        <div class="modal-footer flex justify-end">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ROOM MODAL (Add/Edit) -->
+  <div id="modal-room" class="modal-overlay flex align-center justify-center">
+    <div class="modal-card modal-large">
+      <div class="modal-header flex justify-between align-center">
+        <h3 id="room-modal-title">Thêm phòng mới</h3>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="room-form" class="modal-form">
+        <input type="hidden" id="room-id-hidden">
+        
+        <div class="form-group">
+          <label for="room-title">Tên / Tiêu đề tin đăng phòng</label>
+          <input type="text" id="room-title" required placeholder="Phòng trọ studio ban công, giờ giấc tự do">
+        </div>
+        
+        <div class="form-group">
+          <label for="room-description">Mô tả phòng</label>
+          <textarea id="room-description" rows="3" placeholder="Nhập thông tin mô tả chi tiết phòng..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="room-address">Địa chỉ phòng</label>
+          <input type="text" id="room-address" required placeholder="Số 15 ngõ 4 Cầu Giấy, Hà Nội">
+        </div>
+
+        <div class="form-row flex">
+          <div class="form-group flex-1">
+            <label for="room-type">Loại phòng</label>
+            <select id="room-type">
+              <option value="ROOM">ROOM - Phòng đơn</option>
+              <option value="MINI_APARTMENT">MINI_APARTMENT - Chung cư mini</option>
+              <option value="WHOLE_HOUSE">WHOLE_HOUSE - Nhà nguyên căn</option>
+              <option value="DORMITORY">DORMITORY - Ký túc xá</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label for="room-status">Trạng thái phòng</label>
+            <select id="room-status">
+              <option value="AVAILABLE">AVAILABLE - Còn trống</option>
+              <option value="RENTED">RENTED - Đã cho thuê</option>
+              <option value="MAINTENANCE">MAINTENANCE - Đang sửa chữa</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row flex">
+          <div class="form-group flex-1">
+            <label for="room-price">Giá thuê (VND/tháng)</label>
+            <input type="number" id="room-price" required min="0" placeholder="3500000">
+          </div>
+          <div class="form-group flex-1">
+            <label for="room-deposit">Tiền cọc (VND)</label>
+            <input type="number" id="room-deposit" required min="0" placeholder="3500000">
+          </div>
+          <div class="form-group flex-1">
+            <label for="room-area">Diện tích (m²)</label>
+            <input type="number" id="room-area" required min="1" placeholder="25">
+          </div>
+        </div>
+
+        <div class="form-row flex">
+          <div class="form-group flex-1">
+            <label for="room-lat">Vĩ độ (Latitude)</label>
+            <input type="number" id="room-lat" step="any" required placeholder="21.0285">
+          </div>
+          <div class="form-group flex-1">
+            <label for="room-lng">Kinh độ (Longitude)</label>
+            <input type="number" id="room-lng" step="any" required placeholder="105.8542">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Tiện ích phòng (ngăn cách bằng dấu phẩy)</label>
+          <input type="text" id="room-amenities" placeholder="Điều hòa, Tủ lạnh, Máy giặt, Bếp ga, Giường nệm">
+        </div>
+
+        <div class="modal-footer flex justify-end">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu phòng</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CONTRACT MODAL (Add/Edit) -->
+  <div id="modal-contract" class="modal-overlay flex align-center justify-center">
+    <div class="modal-card">
+      <div class="modal-header flex justify-between align-center">
+        <h3 id="contract-modal-title">Lập hợp đồng mới</h3>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="contract-form" class="modal-form">
+        <input type="hidden" id="contract-id-hidden">
+        
+        <div class="form-group">
+          <label for="contract-tenantId">Người thuê (Tenant UUID)</label>
+          <select id="contract-tenantId" required>
+            <!-- Injected from active tenants list -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="contract-propertyId">Phòng trọ (Property UUID)</label>
+          <select id="contract-propertyId" required>
+            <!-- Injected from active properties list -->
+          </select>
+        </div>
+
+        <div class="form-row flex">
+          <div class="form-group flex-1">
+            <label for="contract-startDate">Ngày bắt đầu</label>
+            <input type="date" id="contract-startDate" required>
+          </div>
+          <div class="form-group flex-1">
+            <label for="contract-endDate">Ngày kết thúc</label>
+            <input type="date" id="contract-endDate" required>
+          </div>
+        </div>
+
+        <div class="form-row flex">
+          <div class="form-group flex-1">
+            <label for="contract-price">Giá thuê hàng tháng (VND)</label>
+            <input type="number" id="contract-price" required min="0" placeholder="3500000">
+          </div>
+          <div class="form-group flex-1">
+            <label for="contract-deposit">Số tiền đặt cọc (VND)</label>
+            <input type="number" id="contract-deposit" required min="0" placeholder="3500000">
+          </div>
+        </div>
+
+        <div class="form-group" id="contract-status-container" style="display: none;">
+          <label for="contract-status">Trạng thái hợp đồng</label>
+          <select id="contract-status">
+            <option value="PENDING">PENDING - Đang chờ ký</option>
+            <option value="ACTIVE">ACTIVE - Đang hoạt động</option>
+            <option value="EXPIRED">EXPIRED - Hết hạn</option>
+            <option value="TERMINATED">TERMINATED - Bị hủy</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="contract-esign">Liên kết Chữ ký điện tử (e-Signature URL)</label>
+          <input type="url" id="contract-esign" placeholder="https://docusign.com/verify/sig-abc">
+        </div>
+
+        <div class="modal-footer flex justify-end">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Hủy</button>
+          <button type="submit" class="btn btn-primary">Tạo hợp đồng</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- INVOICE MODAL (Add/Edit) -->
+  <div id="modal-invoice" class="modal-overlay flex align-center justify-center">
+    <div class="modal-card">
+      <div class="modal-header flex justify-between align-center">
+        <h3 id="invoice-modal-title">Tạo hóa đơn mới</h3>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="invoice-form" class="modal-form">
+        <input type="hidden" id="invoice-id-hidden">
+        
+        <div class="form-group">
+          <label for="invoice-contractId">Mã Hợp đồng áp dụng (Contract UUID)</label>
+          <select id="invoice-contractId" required>
+            <!-- Injected from active contracts -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="invoice-title">Tên / Tiêu đề hóa đơn</label>
+          <input type="text" id="invoice-title" required placeholder="Hóa đơn tiền nhà + dịch vụ tháng 05/2026">
+        </div>
+
+        <div class="form-row flex">
+          <div class="form-group flex-1">
+            <label for="invoice-rent">Tiền phòng (VND)</label>
+            <input type="number" id="invoice-rent" required min="0" placeholder="3500000">
+          </div>
+          <div class="form-group flex-1">
+            <label for="invoice-electricity">Tiền điện (VND)</label>
+            <input type="number" id="invoice-electricity" required min="0" placeholder="150000">
+          </div>
+        </div>
+
+        <div class="form-row flex">
+          <div class="form-group flex-1">
+            <label for="invoice-water">Tiền nước (VND)</label>
+            <input type="number" id="invoice-water" required min="0" placeholder="80000">
+          </div>
+          <div class="form-group flex-1">
+            <label for="invoice-service">Tiền dịch vụ chung (VND)</label>
+            <input type="number" id="invoice-service" required min="0" placeholder="50000">
+          </div>
+        </div>
+
+        <div class="form-row flex">
+          <div class="form-group flex-1">
+            <label for="invoice-dueDate">Hạn thanh toán</label>
+            <input type="date" id="invoice-dueDate" required>
+          </div>
+          <div class="form-group flex-1">
+            <label for="invoice-total">Tổng tiền hóa đơn (VND)</label>
+            <input type="number" id="invoice-total" readonly style="background-color: var(--card-bg-light); border-color: var(--border-color); color: var(--accent-cyan); font-weight: bold;">
+          </div>
+        </div>
+
+        <div class="form-group" id="invoice-status-container" style="display: none;">
+          <label for="invoice-status">Trạng thái thanh toán</label>
+          <select id="invoice-status">
+            <option value="UNPAID">UNPAID - Chưa thanh toán</option>
+            <option value="PAID">PAID - Đã thanh toán</option>
+            <option value="OVERDUE">OVERDUE - Quá hạn nợ</option>
+          </select>
+        </div>
+
+        <div class="modal-footer flex justify-end">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Hủy</button>
+          <button type="submit" class="btn btn-primary">Tạo hóa đơn</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PAY INVOICE MODAL -->
+  <div id="modal-pay-invoice" class="modal-overlay flex align-center justify-center">
+    <div class="modal-card">
+      <div class="modal-header flex justify-between align-center">
+        <h3>Thanh toán hóa đơn</h3>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="pay-invoice-form" class="modal-form">
+        <input type="hidden" id="pay-invoice-id">
+        <div class="form-group">
+          <label>Mã hóa đơn</label>
+          <input type="text" id="pay-invoice-code" readonly class="font-mono">
+        </div>
+        <div class="form-group">
+          <label>Số tiền cần thanh toán</label>
+          <div id="pay-invoice-amount" class="text-large text-emerald font-bold">0đ</div>
+        </div>
+        <div class="form-group">
+          <label for="pay-method">Phương thức thanh toán</label>
+          <select id="pay-method" required>
+            <option value="CASH">Tiền mặt (Cash)</option>
+            <option value="BANK_TRANSFER">Chuyển khoản Ngân hàng (Bank Transfer)</option>
+            <option value="MOMO">Ví MoMo</option>
+            <option value="VNPAY">VNPAY QR</option>
+          </select>
+        </div>
+        <div class="modal-footer flex justify-end">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Hủy</button>
+          <button type="submit" class="btn btn-success">Xác nhận thanh toán</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAINTENANCE MODAL (Add Request) -->
+  <div id="modal-maintenance" class="modal-overlay flex align-center justify-center">
+    <div class="modal-card">
+      <div class="modal-header flex justify-between align-center">
+        <h3 id="maintenance-modal-title">Báo cáo sự cố phòng trọ</h3>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="maintenance-form" class="modal-form">
+        <input type="hidden" id="maintenance-id-hidden">
+        
+        <div class="form-group">
+          <label for="maintenance-propertyId">Phòng trọ xảy ra sự cố</label>
+          <select id="maintenance-propertyId" required>
+            <!-- Injected from active properties -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="maintenance-title">Tên sự cố / Tiêu đề báo cáo</label>
+          <input type="text" id="maintenance-title" required placeholder="Hỏng bóng đèn vệ sinh, rò rỉ vòi nước">
+        </div>
+
+        <div class="form-group">
+          <label for="maintenance-description">Mô tả chi tiết sự cố</label>
+          <textarea id="maintenance-description" required rows="3" placeholder="Mô tả cụ thể trạng thái hỏng để chủ nhà dễ chuẩn bị dụng cụ sửa chữa..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="maintenance-imageUrl">Liên kết hình ảnh minh họa (URL)</label>
+          <input type="url" id="maintenance-imageUrl" placeholder="https://images.unsplash.com/photo-abc">
+        </div>
+
+        <div class="modal-footer flex justify-end">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Hủy</button>
+          <button type="submit" class="btn btn-primary">Gửi báo cáo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MAINTENANCE STATUS MODAL (Landlord/Admin) -->
+  <div id="modal-maintenance-status" class="modal-overlay flex align-center justify-center">
+    <div class="modal-card">
+      <div class="modal-header flex justify-between align-center">
+        <h3>Cập nhật tiến độ sửa chữa</h3>
+        <button class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="maintenance-status-form" class="modal-form">
+        <input type="hidden" id="maint-status-id">
+        <div class="form-group">
+          <label>Mã sự cố</label>
+          <input type="text" id="maint-status-code" readonly class="font-mono">
+        </div>
+        <div class="form-group">
+          <label>Nội dung báo cáo</label>
+          <div id="maint-status-desc" class="font-sm" style="padding: 0.5rem; background: var(--card-bg-light); border-radius: 4px; margin-top: 0.25rem;"></div>
+        </div>
+        <div class="form-group">
+          <label for="maint-status-select">Trạng thái xử lý</label>
+          <select id="maint-status-select" required>
+            <option value="PENDING">PENDING - Đang chờ xử lý</option>
+            <option value="IN_PROGRESS">IN_PROGRESS - Đang sửa chữa</option>
+            <option value="RESOLVED">RESOLVED - Đã khắc phục xong</option>
+          </select>
+        </div>
+        <div class="modal-footer flex justify-end">
+          <button type="button" class="btn btn-outline modal-cancel-btn">Hủy</button>
+          <button type="submit" class="btn btn-primary">Cập nhật trạng thái</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Global Alert Popup -->
+  <div id="global-toast" class="toast">
+    <i class="toast-icon fa-solid fa-circle-check"></i>
+    <span class="toast-message">Thành công!</span>
+  </div>
+
+  <!-- Script File -->
+  <script src="index.js"></script>
+</body>
+</html>
