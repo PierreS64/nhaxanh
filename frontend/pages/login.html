@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập | Nhà Xanh</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+  </head>
+  <body>
+    <main class="auth-page">
+      <section class="auth-visual">
+        <div>
+          <a class="brand" href="../index.html"><span class="brand-mark">NX</span><span>Nhà Xanh</span></a>
+          <h1>Một tài khoản cho tìm phòng, hợp đồng, hóa đơn và vận hành.</h1>
+        </div>
+      </section>
+      <section class="auth-panel">
+        <div class="auth-card" data-tabs>
+          <div class="tabs">
+            <button class="is-active" type="button" data-tab="login">Đăng nhập</button>
+            <button type="button" data-tab="register">Đăng ký</button>
+          </div>
+          <form data-tab-panel="login">
+            <label class="field">Email
+              <input type="email" placeholder="you@example.com">
+            </label>
+            <label class="field">Mật khẩu
+              <input type="password" placeholder="Nhập mật khẩu">
+            </label>
+            <button class="primary-btn" type="button">Đăng nhập</button>
+          </form>
+          <form data-tab-panel="register" hidden>
+            <label class="field">Họ tên
+              <input type="text" placeholder="Nguyễn Văn A">
+            </label>
+            <label class="field">Email
+              <input type="email" placeholder="you@example.com">
+            </label>
+            <label class="field">Vai trò
+              <select>
+                <option>Người thuê</option>
+                <option>Chủ nhà</option>
+              </select>
+            </label>
+            <button class="primary-btn" type="button">Tạo tài khoản</button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+  </body>
+</html>

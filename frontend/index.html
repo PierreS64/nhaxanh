@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhà Xanh | Tìm nhà thuê thông minh</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="index.html"><span class="brand-mark">NX</span><span>Nhà Xanh</span></a>
+        <nav class="main-nav" data-nav>
+          <a class="is-active" href="index.html">Trang chủ</a>
+          <a href="pages/listings.html">Tìm phòng</a>
+          <a href="pages/blog.html">Blog</a>
+          <a href="pages/help.html">Hướng dẫn</a>
+          <a href="pages/contact.html">Liên hệ</a>
+        </nav>
+        <div class="nav-actions">
+          <div class="role-nav">
+            <a href="pages/tenant-dashboard.html">Người thuê</a>
+            <a href="pages/landlord-dashboard.html">Chủ nhà</a>
+            <a href="pages/admin.html">Admin</a>
+          </div>
+          <a class="ghost-btn" href="pages/login.html">Đăng nhập</a>
+          <a class="primary-btn" href="pages/listings.html">Tìm ngay</a>
+          <button class="nav-toggle" type="button" data-nav-toggle aria-label="Mở menu">Menu</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="hero-content">
+            <span class="eyebrow">Smart Renting Hub</span>
+            <h1>Tìm phòng minh bạch, quản lý thuê nhà gọn hơn.</h1>
+            <p>Nhà Xanh kết nối người thuê và chủ nhà bằng tin đăng rõ chi phí, lọc theo nhu cầu thực tế, hợp đồng điện tử, hóa đơn và bảo trì trong một ứng dụng.</p>
+            <form class="hero-search" action="pages/listings.html">
+              <label>Từ khóa, khu vực
+                <input name="keyword" type="search" placeholder="VD: Cầu Giấy, ban công, gần đại học">
+              </label>
+              <label>Loại nhà
+                <select name="type">
+                  <option value="">Tất cả</option>
+                  <option value="ROOM">Phòng trọ</option>
+                  <option value="MINI_APARTMENT">Căn hộ mini</option>
+                  <option value="WHOLE_HOUSE">Nhà nguyên căn</option>
+                  <option value="DORMITORY">KTX / Sleepbox</option>
+                </select>
+              </label>
+              <label>Giá tối đa
+                <select name="maxPrice">
+                  <option value="">Không giới hạn</option>
+                  <option value="3000000">3 triệu</option>
+                  <option value="5000000">5 triệu</option>
+                  <option value="8000000">8 triệu</option>
+                  <option value="12000000">12 triệu</option>
+                </select>
+              </label>
+              <button class="primary-btn" type="submit">Tìm kiếm</button>
+            </form>
+            <div class="hero-stats">
+              <span><strong>1.240+</strong>Tin đăng đã kiểm duyệt</span>
+              <span><strong>92%</strong>Phòng có bảng giá điện nước</span>
+              <span><strong>18 phút</strong>Thời gian đặt lịch trung bình</span>
+              <span><strong>4.7/5</strong>Điểm hài lòng người thuê</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Phòng đang nổi bật</span>
+              <h2>Lựa chọn có đủ chi phí hằng tháng</h2>
+            </div>
+            <a class="ghost-btn" href="pages/listings.html">Xem tất cả</a>
+          </div>
+          <div class="listing-grid" data-featured-list></div>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Tính năng cần có</span>
+              <h2>Khách chưa đăng nhập vẫn xem đủ thông tin để quyết định</h2>
+            </div>
+            <p>Trang public cần tạo niềm tin trước khi bắt người dùng tạo tài khoản: minh bạch chi phí, ảnh thật, quy trình xem phòng và kênh hỗ trợ rõ ràng.</p>
+          </div>
+          <div class="public-feature-grid">
+            <article class="public-feature">
+              <span>01</span>
+              <h3>Bảng giá đầy đủ</h3>
+              <p>Tách riêng giá phòng, cọc, điện, nước, phí dịch vụ, gửi xe và các khoản có thể phát sinh.</p>
+            </article>
+            <article class="public-feature">
+              <span>02</span>
+              <h3>Đánh dấu tin an toàn</h3>
+              <p>Hiện trạng thái kiểm duyệt, PCCC, camera, khóa vân tay, hợp đồng và mức độ xác thực chủ nhà.</p>
+            </article>
+            <article class="public-feature">
+              <span>03</span>
+              <h3>So sánh nhanh</h3>
+              <p>Giúp người thuê so sánh diện tích, tổng chi phí tháng đầu, thời gian di chuyển và tiện ích.</p>
+            </article>
+            <article class="public-feature">
+              <span>04</span>
+              <h3>Hẹn xem phòng</h3>
+              <p>Cho phép để lại thông tin liên hệ, chọn khung giờ và gửi câu hỏi trước khi đăng nhập.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Blog Nhà Xanh</span>
+              <h2>Kinh nghiệm thuê nhà và vận hành phòng trọ</h2>
+            </div>
+            <a class="ghost-btn" href="pages/blog.html">Xem blog</a>
+          </div>
+          <div class="blog-grid" data-home-blogs></div>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Quy trình</span>
+              <h2>Từ tìm phòng đến quản lý hợp đồng</h2>
+            </div>
+            <p>Giao diện web tập trung vào các tác vụ thực tế: lọc tin, đặt lịch, quản lý phòng, hóa đơn, bảo trì và kiểm duyệt nội dung.</p>
+          </div>
+          <div class="workflow-grid">
+            <div class="workflow-item"><strong>Tìm và lọc</strong><p>Giá thuê, diện tích, cọc, điện, nước, phí dịch vụ, tiện ích và thời gian di chuyển.</p></div>
+            <div class="workflow-item"><strong>Đặt lịch</strong><p>Lưu phòng yêu thích, gửi yêu cầu xem phòng và chat với chủ nhà.</p></div>
+            <div class="workflow-item"><strong>Ký hợp đồng</strong><p>Theo dõi tiền cọc, ngày vào ở, hợp đồng điện tử và lịch thanh toán.</p></div>
+            <div class="workflow-item"><strong>Vận hành</strong><p>OCR chỉ số điện nước, hóa đơn tháng, bảo trì và đánh giá hai chiều.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-inner split-layout">
+          <div>
+            <span class="eyebrow">AI và dữ liệu</span>
+            <h2>Bộ lọc chất lượng cho thị trường phòng trọ Việt Nam</h2>
+            <ul class="feature-list">
+              <li><strong>Chi phí thật</strong>Hiện riêng tiền thuê, cọc, điện/kWh, nước/m3 hoặc theo người, phí dịch vụ.</li>
+              <li><strong>An toàn và tiện nghi</strong>Gắn nhãn PCCC, camera, vân tay, giờ tự do, nội thất, cửa sổ, ban công.</li>
+              <li><strong>Di chuyển thực tế</strong>Ưu tiên kết quả theo thời gian tới trường học, công ty hoặc tuyến giao thông.</li>
+            </ul>
+          </div>
+          <div class="feature-image">
+            <img src="https://images.unsplash.com/photo-1560448075-bb485b067938?auto=format&fit=crop&w=1400&q=80" alt="Không gian căn hộ sáng và gọn">
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Cho từng nhóm người dùng</span>
+              <h2>Không chỉ là trang rao phòng</h2>
+            </div>
+            <p>Web nên cho thấy rõ Nhà Xanh giải quyết cả bài toán tìm nhà, đăng tin, vận hành và kiểm soát rủi ro.</p>
+          </div>
+          <div class="audience-grid">
+            <article class="audience-panel">
+              <h3>Người thuê</h3>
+              <ul>
+                <li>Lọc phòng theo ngân sách thực tế và tổng chi phí tháng đầu.</li>
+                <li>Lưu phòng, so sánh tin, đặt lịch xem phòng và chat với chủ nhà.</li>
+                <li>Theo dõi hợp đồng, hóa đơn, điện nước và yêu cầu bảo trì.</li>
+              </ul>
+              <a class="ghost-btn" href="pages/listings.html">Tìm phòng phù hợp</a>
+            </article>
+            <article class="audience-panel">
+              <h3>Chủ nhà</h3>
+              <ul>
+                <li>Đăng tin có cấu trúc, chuẩn hóa chi phí và tiện ích.</li>
+                <li>Quản lý phòng trống, khách thuê, hợp đồng và doanh thu.</li>
+                <li>Quét điện nước OCR, tạo hóa đơn và xử lý bảo trì.</li>
+              </ul>
+              <a class="ghost-btn" href="pages/contact.html">Đăng ký tư vấn</a>
+            </article>
+            <article class="audience-panel">
+              <h3>Quản trị</h3>
+              <ul>
+                <li>Kiểm duyệt tin đăng, ảnh phòng và thông tin chủ nhà.</li>
+                <li>Gắn cờ rủi ro với tin giá rẻ bất thường hoặc nội dung lặp lại.</li>
+                <li>Theo dõi chất lượng dịch vụ và báo cáo tranh chấp.</li>
+              </ul>
+              <a class="ghost-btn" href="pages/admin.html">Xem dashboard</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-inner">
+          <div class="section-head">
+            <div>
+              <span class="eyebrow">Câu hỏi thường gặp</span>
+              <h2>Thông tin nên có trước khi đăng nhập</h2>
+            </div>
+          </div>
+          <div class="faq-grid">
+            <details open>
+              <summary>Phòng trên Nhà Xanh có được kiểm duyệt không?</summary>
+              <p>Mỗi tin nên có trạng thái xác thực chủ nhà, ảnh phòng, địa chỉ, giá thuê, cọc, điện nước và các phí chính. Tin nghi ngờ sẽ đưa vào hàng đợi admin.</p>
+            </details>
+            <details>
+              <summary>Giá hiển thị đã gồm điện nước chưa?</summary>
+              <p>Giá thuê được tách riêng với điện, nước và dịch vụ để người thuê tính tổng chi phí thực tế.</p>
+            </details>
+            <details>
+              <summary>Chủ nhà có thể đăng tin như thế nào?</summary>
+              <p>Chủ nhà có thể tạo tin theo mẫu có sẵn, thêm tiện ích, ảnh phòng, chi phí và điều kiện thuê. Sau đó admin kiểm duyệt trước khi hiển thị công khai.</p>
+            </details>
+            <details>
+              <summary>Có hỗ trợ hợp đồng và hóa đơn không?</summary>
+              <p>Có. Thiết kế web đã có dashboard cho hợp đồng, hóa đơn, chỉ số điện nước và bảo trì, phù hợp với các model backend hiện có.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="section cta-band">
+        <div class="section-inner cta-inner">
+          <div>
+            <span class="eyebrow">Cần hỗ trợ?</span>
+            <h2>Để lại nhu cầu, Nhà Xanh gợi ý bộ lọc và lộ trình triển khai phù hợp.</h2>
+          </div>
+          <a class="primary-btn" href="pages/contact.html">Liên hệ nhóm dự án</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-grid">
+        <div><strong>Nhà Xanh</strong><p>Frontend web app demo cho dự án Smart Renting Hub.</p></div>
+        <div><strong>Sản phẩm</strong><a href="pages/listings.html">Tìm phòng</a><a href="pages/detail.html">Chi tiết phòng</a><a href="pages/blog.html">Blog</a></div>
+        <div><strong>Quản lý</strong><a href="pages/tenant-dashboard.html">Người thuê</a><a href="pages/landlord-dashboard.html">Chủ nhà</a></div>
+        <div><strong>Hệ thống</strong><a href="pages/admin.html">Admin</a><a href="pages/login.html">Đăng nhập</a><a href="pages/contact.html">Liên hệ</a></div>
+      </div>
+    </footer>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/app.js"></script>
+  </body>
+</html>

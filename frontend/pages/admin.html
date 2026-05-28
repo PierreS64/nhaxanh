@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Nhà Xanh</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="../index.html"><span class="brand-mark">NX</span><span>Nhà Xanh</span></a>
+        <nav class="main-nav" data-nav>
+          <a href="../index.html">Trang chủ</a>
+          <a href="listings.html">Tìm phòng</a>
+          <a href="blog.html">Blog</a>
+          <a href="help.html">Hướng dẫn</a>
+          <a href="contact.html">Liên hệ</a>
+        </nav>
+        <div class="nav-actions">
+          <div class="role-nav">
+            <a href="tenant-dashboard.html">Người thuê</a>
+            <a href="landlord-dashboard.html">Chủ nhà</a>
+            <a class="is-active" href="admin.html">Admin</a>
+          </div>
+          <button class="nav-toggle" type="button" data-nav-toggle aria-label="Mở menu">Menu</button>
+        </div>
+      </div>
+    </header>
+    <main class="dashboard-shell">
+      <aside class="sidebar">
+        <nav>
+          <a class="is-active" href="#">Kiểm duyệt</a>
+          <a href="#">eKYC</a>
+          <a href="#">Cảnh báo lừa đảo</a>
+          <a href="#">Người dùng</a>
+          <a href="#">Báo cáo</a>
+        </nav>
+      </aside>
+      <section class="dashboard-main">
+        <span class="eyebrow">Quản trị</span>
+        <h1>Kiểm soát chất lượng nền tảng</h1>
+        <div class="metric-grid">
+          <div class="metric-card"><strong>18</strong>Tin chờ duyệt</div>
+          <div class="metric-card"><strong>6</strong>Hồ sơ KYC mới</div>
+          <div class="metric-card"><strong>2</strong>Cảnh báo rủi ro cao</div>
+        </div>
+        <div class="panel">
+          <h2>Hàng đợi kiểm duyệt tin</h2>
+          <div class="table-card">
+            <table>
+              <thead><tr><th>Tin đăng</th><th>Chủ nhà</th><th>Điểm AI</th><th>Vấn đề</th><th>Xử lý</th></tr></thead>
+              <tbody>
+                <tr><td>Studio gác lửng gần Đại học Công nghệ</td><td>Anh Minh</td><td>94/100</td><td>Hợp lệ</td><td><button class="ghost-btn" type="button">Duyệt</button></td></tr>
+                <tr><td>Phòng giá rẻ Quận 1</td><td>Tài khoản mới</td><td>48/100</td><td>Giá thấp bất thường</td><td><button class="ghost-btn" type="button">Kiểm tra</button></td></tr>
+                <tr><td>Căn hộ dịch vụ Duy Tân</td><td>Nhà Xanh Partner</td><td>91/100</td><td>Thiếu ảnh PCCC</td><td><button class="ghost-btn" type="button">Yêu cầu bổ sung</button></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+  </body>
+</html>
