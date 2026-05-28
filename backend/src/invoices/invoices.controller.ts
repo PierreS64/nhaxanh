@@ -1,34 +1,48 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { InvoicesService } from './invoices.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '@prisma/client';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('invoices')
 export class InvoicesController {
   constructor(private readonly invoicesService: InvoicesService) {}
 
+  @Roles(Role.LANDLORD, Role.ADMIN)
   @Post()
-  create(@Body() createInvoiceDto: CreateInvoiceDto) {
-    return this.invoicesService.create(createInvoiceDto);
+  create(@Body() createInvoiceDto: CreateInvoiceDto, @CurrentUser() user: any) {
+    return this.invoicesService.create(createInvoiceDto, user.userId, user.role);
   }
 
   @Get()
-  findAll() {
-    return this.invoicesService.findAll();
+  findAll(@CurrentUser() user: any) {
+    return this.invoicesService.findAll(user.userId, user.role);
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.invoicesService.findOne(id);
+  findOne(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.invoicesService.findOne(id, user.userId, user.role);
   }
 
+  @Roles(Role.LANDLORD, Role.ADMIN)
   @Patch(':id')
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateInvoiceDto: UpdateInvoiceDto) {
-    return this.invoicesService.update(id, updateInvoiceDto);
+  update(@Param('id') id: string, @Body() updateInvoiceDto: UpdateInvoiceDto, @CurrentUser() user: any) {
+    return this.invoicesService.update(id, updateInvoiceDto, user.userId, user.role);
   }
 
+  @Roles(Role.LANDLORD, Role.ADMIN)
   @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.invoicesService.remove(id);
+  remove(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.invoicesService.remove(id, user.userId, user.role);
+  }
+
+  @Patch(':id/pay')
+  payInvoice(@Param('id') id: string, @Body('paymentMethod') paymentMethod: string, @CurrentUser() user: any) {
+    return this.invoicesService.payInvoice(id, paymentMethod, user.userId, user.role);
   }
 }

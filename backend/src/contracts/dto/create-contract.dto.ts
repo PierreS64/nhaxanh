@@ -1,12 +1,8 @@
-import { IsString, IsNumber, IsEnum, IsUUID, IsOptional, IsDateString } from 'class-validator';
-import { ContractStatus } from '@prisma/client';
+import { IsDateString, IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateContractDto {
   @IsUUID()
   tenantId: string;
-
-  @IsUUID()
-  landlordId: string;
 
   @IsUUID()
   propertyId: string;
@@ -23,11 +19,7 @@ export class CreateContractDto {
   @IsNumber()
   depositAmount: number;
 
+  @IsOptional()
   @IsString()
-  @IsOptional()
   eSignatureUrl?: string;
-
-  @IsEnum(ContractStatus)
-  @IsOptional()
-  status?: ContractStatus;
 }

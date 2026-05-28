@@ -12,6 +12,7 @@ import { OcrModule } from './ocr/ocr.module';
 import { UploadModule } from './upload/upload.module';
 import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
+import { MaintenanceRequestsModule } from './maintenance-requests/maintenance-requests.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { AuthModule } from './auth/auth.module';
     PropertiesModule, 
     UsersModule, 
     ContractsModule, 
-    InvoicesModule, 
+    InvoicesModule,
+    MaintenanceRequestsModule,
     ChatbotsModule, 
     OcrModule, 
     UploadModule, 
