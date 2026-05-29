@@ -980,10 +980,17 @@ function switchView(viewName, params = {}) {
   state.currentView = viewName;
 
   // Handle header active link
+  const currentFilterType = params.filterType || (viewName === "home" ? homeActiveCategory : null);
   DOM.navLinks.forEach(link => {
     link.classList.remove("active");
-    if (link.dataset.view === viewName && !link.dataset.filterType) {
-      link.classList.add("active");
+    const linkView = link.dataset.view;
+    const linkFilterType = link.dataset.filterType;
+    if (linkView === viewName) {
+      if (!linkFilterType && (!currentFilterType || currentFilterType === "all")) {
+        link.classList.add("active");
+      } else if (linkFilterType && linkFilterType === currentFilterType) {
+        link.classList.add("active");
+      }
     }
   });
 
@@ -1134,6 +1141,19 @@ function initHomeView(cityFilter = null) {
       btn.classList.add("active");
       homeActiveCategory = btn.dataset.type;
       filterHomeListings();
+      
+      // Update navbar links active status to match selected category
+      DOM.navLinks.forEach(link => {
+        link.classList.remove("active");
+        const linkFilterType = link.dataset.filterType;
+        if (link.dataset.view === "home") {
+          if (!linkFilterType && homeActiveCategory === "all") {
+            link.classList.add("active");
+          } else if (linkFilterType === homeActiveCategory) {
+            link.classList.add("active");
+          }
+        }
+      });
     };
   });
 

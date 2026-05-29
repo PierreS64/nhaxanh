@@ -1,0 +1,9 @@
+{
+  "name": "nhaxanh-root",
+  "version": "1.0.0",
+  "description": "Root workspace of Nhà Xanh project",
+  "scripts": {
+    "dev": "node dev.js"
+  },
+  "private": true
+}

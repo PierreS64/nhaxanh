@@ -1,0 +1,32 @@
+TÓM TẮT LÝ THUYẾT DỰ ÁN NHÀ XANH
+
+1. Backend:
+- Sử dụng NestJS (Node.js framework) với kiến trúc module, controller, service.
+- Bảo mật xác thực và phân quyền bằng JWT.
+- ORM: Prisma để thao tác với cơ sở dữ liệu.
+- Áp dụng mô hình RESTful API cho các chức năng: quản lý người dùng, tài sản, hợp đồng, hóa đơn, yêu cầu bảo trì, upload file, chatbot, OCR.
+
+2. Frontend:
+- Xây dựng giao diện người dùng bằng HTML, CSS, JavaScript thuần.
+- Kết nối với backend qua API để thực hiện các chức năng quản lý và hiển thị dữ liệu.
+
+3. Mobile App:
+- Phát triển bằng React Native (TypeScript).
+- Quản lý trạng thái với store, điều hướng với navigation.
+- Giao tiếp với backend qua API.
+
+4. Các lý thuyết & mô hình áp dụng:
+- Kiến trúc phân lớp (Layered Architecture): tách biệt rõ ràng giữa giao diện, xử lý nghiệp vụ và dữ liệu.
+- RESTful API: chuẩn hóa giao tiếp giữa frontend, mobile và backend.
+- Xác thực & phân quyền: bảo vệ tài nguyên hệ thống, chỉ cho phép người dùng hợp lệ truy cập chức năng phù hợp.
+- ORM (Prisma): giúp thao tác cơ sở dữ liệu dễ dàng, an toàn, giảm lỗi truy vấn thủ công.
+- JWT (JSON Web Token): xác thực và truyền thông tin người dùng an toàn giữa các thành phần hệ thống.
+- Quản lý trạng thái (State Management) trên mobile app.
+
+5. Các chức năng chính:
+- Đăng ký, đăng nhập, phân quyền người dùng.
+- Quản lý tài sản, hợp đồng, hóa đơn, yêu cầu bảo trì.
+- Tích hợp chatbot, OCR, upload file.
+
+---
+Tài liệu này giúp thành viên mới hoặc người đọc nhanh chóng nắm được các lý thuyết, mô hình và công nghệ đã sử dụng trong dự án.
