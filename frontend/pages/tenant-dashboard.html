@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Người thuê | Nhà Xanh</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="../index.html"><span class="brand-mark">NX</span><span>Nhà Xanh</span></a>
+        <nav class="main-nav" data-nav>
+          <a href="../index.html">Trang chủ</a>
+          <a href="listings.html">Tìm phòng</a>
+          <a href="blog.html">Blog</a>
+          <a href="help.html">Hướng dẫn</a>
+          <a href="contact.html">Liên hệ</a>
+        </nav>
+        <div class="nav-actions">
+          <div class="role-nav">
+            <a class="is-active" href="tenant-dashboard.html">Người thuê</a>
+            <a href="landlord-dashboard.html">Chủ nhà</a>
+            <a href="admin.html">Admin</a>
+          </div>
+          <button class="nav-toggle" type="button" data-nav-toggle aria-label="Mở menu">Menu</button>
+        </div>
+      </div>
+    </header>
+    <main class="dashboard-shell">
+      <aside class="sidebar">
+        <nav>
+          <a class="is-active" href="#">Tổng quan</a>
+          <a href="#">Hợp đồng</a>
+          <a href="#">Hóa đơn</a>
+          <a href="#">Bảo trì</a>
+          <a href="#">Tin đã lưu</a>
+        </nav>
+      </aside>
+      <section class="dashboard-main">
+        <span class="eyebrow">Người thuê</span>
+        <h1>Quản lý phòng đang thuê</h1>
+        <div class="metric-grid">
+          <div class="metric-card"><strong>4.800.000đ</strong>Tiền phòng tháng 6</div>
+          <div class="metric-card"><strong>312.000đ</strong>Điện nước tạm tính</div>
+          <div class="metric-card"><strong>05/06</strong>Hạn thanh toán</div>
+        </div>
+        <div class="content-grid">
+          <div class="panel">
+            <h2>Hóa đơn gần đây</h2>
+            <div class="table-card">
+              <table>
+                <thead><tr><th>Kỳ</th><th>Tiền phòng</th><th>Điện</th><th>Nước</th><th>Trạng thái</th></tr></thead>
+                <tbody>
+                  <tr><td>06/2026</td><td>4.800.000đ</td><td>182.400đ</td><td>90.000đ</td><td><span class="status-pill">Chưa trả</span></td></tr>
+                  <tr><td>05/2026</td><td>4.800.000đ</td><td>174.800đ</td><td>90.000đ</td><td>Đã trả</td></tr>
+                  <tr><td>04/2026</td><td>4.800.000đ</td><td>167.200đ</td><td>90.000đ</td><td>Đã trả</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <aside class="contact-box">
+            <h2>Báo sự cố</h2>
+            <p>Gửi hình ảnh và mô tả để chủ nhà cập nhật trạng thái xử lý.</p>
+            <button class="primary-btn" type="button">Tạo yêu cầu</button>
+            <button class="ghost-btn" type="button">Chat với chủ nhà</button>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+  </body>
+</html>

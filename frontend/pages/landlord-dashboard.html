@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chủ nhà | Nhà Xanh</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="../index.html"><span class="brand-mark">NX</span><span>Nhà Xanh</span></a>
+        <nav class="main-nav" data-nav>
+          <a href="../index.html">Trang chủ</a>
+          <a href="listings.html">Tìm phòng</a>
+          <a href="blog.html">Blog</a>
+          <a href="help.html">Hướng dẫn</a>
+          <a href="contact.html">Liên hệ</a>
+        </nav>
+        <div class="nav-actions">
+          <div class="role-nav">
+            <a href="tenant-dashboard.html">Người thuê</a>
+            <a class="is-active" href="landlord-dashboard.html">Chủ nhà</a>
+            <a href="admin.html">Admin</a>
+          </div>
+          <button class="nav-toggle" type="button" data-nav-toggle aria-label="Mở menu">Menu</button>
+        </div>
+      </div>
+    </header>
+    <main class="dashboard-shell">
+      <aside class="sidebar">
+        <nav>
+          <a class="is-active" href="#">Tổng quan</a>
+          <a href="#">Phòng</a>
+          <a href="#">Khách thuê</a>
+          <a href="#">Điện nước OCR</a>
+          <a href="#">Thu chi</a>
+        </nav>
+      </aside>
+      <section class="dashboard-main">
+        <span class="eyebrow">Chủ nhà</span>
+        <h1>Vận hành phòng cho thuê</h1>
+        <div class="metric-grid">
+          <div class="metric-card"><strong>86%</strong>Tỷ lệ lấp đầy</div>
+          <div class="metric-card"><strong>42,6 triệu</strong>Doanh thu tháng</div>
+          <div class="metric-card"><strong>3</strong>Yêu cầu bảo trì</div>
+        </div>
+        <div class="content-grid">
+          <div class="panel">
+            <h2>Trạng thái phòng</h2>
+            <div class="table-card">
+              <table>
+                <thead><tr><th>Phòng</th><th>Giá</th><th>Khách</th><th>Trạng thái</th><th>Thu tháng này</th></tr></thead>
+                <tbody>
+                  <tr><td>Studio 301</td><td>4.800.000đ</td><td>Nguyễn Hà</td><td>Đang thuê</td><td><span class="status-pill">Chờ thanh toán</span></td></tr>
+                  <tr><td>Phòng 204</td><td>3.300.000đ</td><td>Trần Kiệt</td><td>Đang thuê</td><td>Đã thu</td></tr>
+                  <tr><td>Căn 502</td><td>7.200.000đ</td><td>-</td><td>Còn trống</td><td>-</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <aside class="contact-box">
+            <h2>Chốt điện nước</h2>
+            <p>Nhập chỉ số hoặc tải ảnh đồng hồ để tạo hóa đơn tháng.</p>
+            <button class="primary-btn" type="button">Quét đồng hồ</button>
+            <button class="ghost-btn" type="button">Tạo hóa đơn</button>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+  </body>
+</html>

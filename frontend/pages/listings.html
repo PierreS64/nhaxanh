@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm phòng | Nhà Xanh</title>
+    <link rel="stylesheet" href="../assets/css/styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="../index.html"><span class="brand-mark">NX</span><span>Nhà Xanh</span></a>
+        <nav class="main-nav" data-nav>
+          <a href="../index.html">Trang chủ</a>
+          <a class="is-active" href="listings.html">Tìm phòng</a>
+          <a href="blog.html">Blog</a>
+          <a href="help.html">Hướng dẫn</a>
+          <a href="contact.html">Liên hệ</a>
+        </nav>
+        <div class="nav-actions">
+          <div class="role-nav">
+            <a href="tenant-dashboard.html">Người thuê</a>
+            <a href="landlord-dashboard.html">Chủ nhà</a>
+            <a href="admin.html">Admin</a>
+          </div>
+          <a class="ghost-btn" href="login.html">Đăng nhập</a>
+          <button class="nav-toggle" type="button" data-nav-toggle aria-label="Mở menu">Menu</button>
+        </div>
+      </div>
+    </header>
+    <main>
+      <section class="page-title">
+        <div class="section-inner">
+          <span class="eyebrow">Tìm phòng</span>
+          <h1>Lọc nhà thuê theo đúng chi phí và cách sống.</h1>
+          <p>Bộ lọc gồm giá thuê mỗi tháng, diện tích, tiền cọc, giá điện nước, phí dịch vụ, loại hình, khu vực và tiện ích bắt buộc.</p>
+        </div>
+      </section>
+      <section class="section">
+        <div class="section-inner search-layout">
+          <aside class="filter-panel">
+            <form data-filter-form>
+              <h2>Bộ lọc</h2>
+              <div class="filter-grid">
+                <label class="field">Từ khóa
+                  <input name="keyword" type="search" placeholder="Quận, đường, tiện ích">
+                </label>
+                <div class="two-col">
+                  <label class="field">Thành phố
+                    <select name="city">
+                      <option value="">Tất cả</option>
+                      <option value="Hà Nội">Hà Nội</option>
+                      <option value="TP.HCM">TP.HCM</option>
+                    </select>
+                  </label>
+                  <label class="field">Loại hình
+                    <select name="type">
+                      <option value="">Tất cả</option>
+                      <option value="ROOM">Phòng trọ</option>
+                      <option value="MINI_APARTMENT">Căn hộ mini</option>
+                      <option value="WHOLE_HOUSE">Nhà nguyên căn</option>
+                      <option value="DORMITORY">KTX / Sleepbox</option>
+                    </select>
+                  </label>
+                </div>
+                <div class="two-col">
+                  <label class="field">Giá từ
+                    <input name="minPrice" type="number" min="0" step="500000" placeholder="0">
+                  </label>
+                  <label class="field">Giá đến
+                    <input name="maxPrice" type="number" min="0" step="500000" placeholder="8000000">
+                  </label>
+                </div>
+                <div class="two-col">
+                  <label class="field">Diện tích từ
+                    <input name="minArea" type="number" min="0" placeholder="15">
+                  </label>
+                  <label class="field">Diện tích đến
+                    <input name="maxArea" type="number" min="0" placeholder="45">
+                  </label>
+                </div>
+                <div class="two-col">
+                  <label class="field">Điện tối đa/kWh
+                    <input name="maxElectricity" type="number" min="0" step="100" placeholder="4000">
+                  </label>
+                  <label class="field">Nước tối đa
+                    <input name="maxWater" type="number" min="0" step="10000" placeholder="120000">
+                  </label>
+                </div>
+                <label class="field">Cọc tối đa
+                  <select name="maxDepositMonths">
+                    <option value="">Không giới hạn</option>
+                    <option value="1">1 tháng tiền phòng</option>
+                    <option value="2">2 tháng tiền phòng</option>
+                  </select>
+                </label>
+                <label class="field">Sắp xếp
+                  <select name="sort">
+                    <option value="vibeDesc">Điểm chất lượng cao</option>
+                    <option value="priceAsc">Giá thấp đến cao</option>
+                    <option value="priceDesc">Giá cao đến thấp</option>
+                    <option value="areaDesc">Diện tích lớn</option>
+                  </select>
+                </label>
+                <div>
+                  <label class="field">Tiện ích bắt buộc</label>
+                  <div class="amenity-grid" data-amenities></div>
+                </div>
+                <button class="ghost-btn" type="reset">Xóa lọc</button>
+              </div>
+            </form>
+          </aside>
+          <div>
+            <div class="results-head">
+              <strong data-result-count>0 kết quả</strong>
+              <span class="status-pill">Tin đã chuẩn hóa chi phí</span>
+            </div>
+            <div class="results-list" data-results></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script src="../assets/js/data.js"></script>
+    <script src="../assets/js/app.js"></script>
+  </body>
+</html>
