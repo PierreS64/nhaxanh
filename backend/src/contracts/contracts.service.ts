@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, ForbiddenException, BadRequestException 
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { Role } from '@prisma/client';
+import { Role, ContractStatus } from '@prisma/client';
 
 @Injectable()
 export class ContractsService {
@@ -87,6 +87,18 @@ export class ContractsService {
     return this.prisma.contract.update({
       where: { id },
       data,
+    });
+  }
+
+  async updateStatus(id: string, status: ContractStatus, userId: string, role: string) {
+    const contract = await this.findOne(id, userId, role); // verify
+    if (role !== Role.ADMIN && contract.landlordId !== userId) {
+      throw new ForbiddenException('Only owner or admin can update status');
+    }
+
+    return this.prisma.contract.update({
+      where: { id },
+      data: { status },
     });
   }
 

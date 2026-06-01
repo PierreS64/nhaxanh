@@ -13,10 +13,13 @@ import { UploadModule } from './upload/upload.module';
 import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
 import { MaintenanceRequestsModule } from './maintenance-requests/maintenance-requests.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
     PrismaModule, 
     PropertiesModule, 
     UsersModule, 
@@ -27,7 +30,8 @@ import { MaintenanceRequestsModule } from './maintenance-requests/maintenance-re
     OcrModule, 
     UploadModule, 
     ChatsModule, 
-    AuthModule
+    AuthModule,
+    CloudinaryModule
   ],
   controllers: [AppController],
   providers: [AppService],
