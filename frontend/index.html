@@ -26,9 +26,17 @@
         <a href="#" class="nav-link" data-view="home" data-filter-type="phong-tro">Phòng trọ</a>
         <a href="#" class="nav-link" data-view="home" data-filter-type="can-ho">Căn hộ</a>
         <a href="#" class="nav-link" data-view="home" data-filter-type="ky-tuc-xa">Ký túc xá</a>
+        <a href="#" class="nav-link" data-view="blog">Cộng đồng</a>
+        <a href="#" class="nav-link" data-view="contact">Liên hệ</a>
+        <a href="#" class="nav-link" data-view="about">Về chúng tôi</a>
       </nav>
 
       <div class="header-actions">
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="Đổi giao diện">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
         <!-- Guest Actions -->
         <div id="guest-actions" class="flex align-center" style="gap: 0.75rem;">
           <button class="btn btn-outline btn-sm" id="nav-login-btn">Đăng nhập</button>
@@ -323,121 +331,145 @@
       </div>
     </section>
 
-    <!-- ==================== VIEW 3: AUTHENTICATION PAGE (LOGIN/REGISTER) ==================== -->
-    <section id="view-auth" class="view-section">
+    <!-- ==================== VIEW 3: LOGIN PAGE ==================== -->
+    <section id="view-login" class="view-section">
       <div class="auth-page-bg">
         <div class="auth-card">
-          <!-- Auth Logo / Header -->
           <div class="auth-header">
-            <h2>Nhà Xanh</h2>
-            <p id="auth-subtitle">Bắt đầu hành trình tìm kiếm không gian sống lý tưởng.</p>
-          </div>
-
-          <!-- Auth Tab controls -->
-          <div class="auth-tabs">
-            <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Đăng nhập</div>
-            <div class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Đăng ký</div>
+            <h2>Đăng Nhập</h2>
+            <p>Vui lòng đăng nhập để tiếp tục sử dụng dịch vụ Nhà Xanh.</p>
           </div>
 
           <!-- Form Đăng nhập -->
           <form id="auth-login-form" onsubmit="handleAuthSubmit(event, 'login')">
-            <div class="form-group">
-              <label for="login-phone">Số điện thoại</label>
-              <div class="input-wrapper">
-                <i class="fa-solid fa-phone prefix-icon"></i>
-                <input type="tel" id="login-phone" placeholder="090 123 4567" required pattern="[0-9]{10,11}">
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label for="login-phone" style="font-weight: 700; margin-bottom: 0.5rem; display: block;">Số điện thoại</label>
+              <div class="input-wrapper" style="position: relative;">
+                <i class="fa-solid fa-phone prefix-icon" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                <input type="tel" id="login-phone" placeholder="090 123 4567" required pattern="[0-9]{10,11}" style="padding-left: 2.75rem; width: 100%;">
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="login-password">Mật khẩu</label>
-              <div class="input-wrapper">
-                <i class="fa-solid fa-lock prefix-icon"></i>
-                <input type="password" id="login-password" placeholder="••••••••" required>
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('login-password')">
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label for="login-password" style="font-weight: 700; margin-bottom: 0.5rem; display: block;">Mật khẩu</label>
+              <div class="input-wrapper" style="position: relative;">
+                <i class="fa-solid fa-lock prefix-icon" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                <input type="password" id="login-password" placeholder="••••••••" required style="padding-left: 2.75rem; width: 100%;">
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('login-password')" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; border: none; background: none;">
                   <i class="fa-solid fa-eye"></i>
                 </button>
               </div>
             </div>
 
-            <div class="form-options">
-              <label class="checkbox-label">
+            <div class="form-options" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+              <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-weight: 600; font-size: 0.9rem;">
                 <input type="checkbox" id="login-remember">
                 <span>Ghi nhớ đăng nhập</span>
               </label>
-              <a href="#" class="forgot-pass" onclick="alert('Tính năng này sẽ sớm được hỗ trợ!'); return false;">Quên mật khẩu?</a>
+              <a href="#" class="forgot-pass" onclick="alert('Tính năng này sẽ sớm được hỗ trợ!'); return false;" style="font-weight: 600; font-size: 0.9rem; color: var(--primary);">Quên mật khẩu?</a>
             </div>
 
-            <button type="submit" class="btn btn-primary auth-submit-btn">
-              Đăng nhập <i class="fa-solid fa-arrow-right"></i>
-            </button>
-          </form>
-
-          <!-- Form Đăng ký -->
-          <form id="auth-register-form" onsubmit="handleAuthSubmit(event, 'register')" style="display: none;">
-            <div class="form-group">
-              <label for="reg-name">Họ và Tên</label>
-              <div class="input-wrapper">
-                <i class="fa-solid fa-user prefix-icon"></i>
-                <input type="text" id="reg-name" placeholder="Nguyễn Văn A" required minlength="2">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="reg-phone">Số điện thoại</label>
-              <div class="input-wrapper">
-                <i class="fa-solid fa-phone prefix-icon"></i>
-                <input type="tel" id="reg-phone" placeholder="090 123 4567" required pattern="[0-9]{10,11}">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="reg-password">Mật khẩu</label>
-              <div class="input-wrapper">
-                <i class="fa-solid fa-lock prefix-icon"></i>
-                <input type="password" id="reg-password" placeholder="••••••••" required minlength="6">
-                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('reg-password')">
-                  <i class="fa-solid fa-eye"></i>
-                </button>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>Vai trò</label>
-              <div class="role-selector-grid">
-                <button type="button" class="role-btn active" id="role-tenant" onclick="selectRole('tenant')">
-                  <i class="fa-solid fa-map-pin"></i>
-                  <span>Người thuê</span>
-                </button>
-                <button type="button" class="role-btn" id="role-landlord" onclick="selectRole('landlord')">
-                  <i class="fa-solid fa-house-chimney-user"></i>
-                  <span>Chủ nhà</span>
-                </button>
-              </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary auth-submit-btn">
-              Đăng ký <i class="fa-solid fa-arrow-right"></i>
+            <button type="submit" class="btn btn-primary auth-submit-btn" style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 1rem; border-radius: var(--radius-md);">
+              Đăng nhập <i class="fa-solid fa-right-to-bracket" style="margin-left: 0.5rem;"></i>
             </button>
           </form>
 
           <!-- Social login divider and buttons -->
-          <div class="social-auth">
-            <span class="social-title" id="social-divider-text">Hoặc đăng nhập với</span>
-            <div class="social-buttons">
-              <button class="social-btn google" onclick="handleSocialAuth('Google'); return false;">
-                <i class="fa-brands fa-google"></i> Google
+          <div class="social-auth" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
+            <span class="social-title" style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); background: var(--bg-surface); padding: 0 0.75rem; position: relative; top: -2.15rem;">Hoặc đăng nhập với</span>
+            <div class="social-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: -1rem;">
+              <button class="social-btn google" onclick="handleSocialAuth('Google'); return false;" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; background: white; transition: all 0.2s ease;">
+                <i class="fa-brands fa-google" style="color: #ea4335;"></i> Google
               </button>
-              <button class="social-btn facebook" onclick="handleSocialAuth('Facebook'); return false;">
-                <i class="fa-brands fa-facebook"></i> Facebook
+              <button class="social-btn facebook" onclick="handleSocialAuth('Facebook'); return false;" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; background: white; transition: all 0.2s ease;">
+                <i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook
               </button>
             </div>
           </div>
 
           <!-- Toggle view link -->
-          <div class="auth-footer">
-            <span id="auth-footer-text">Chưa có tài khoản?</span>
-            <a href="#" id="auth-toggle-link" onclick="toggleAuthMode(); return false;">Đăng ký ngay</a>
+          <div class="auth-footer" style="text-align: center; margin-top: 2rem; font-weight: 600; font-size: 0.95rem;">
+            <span style="color: var(--text-muted);">Chưa có tài khoản?</span>
+            <a href="#" onclick="switchView('register'); return false;" style="color: var(--primary); font-weight: 700; margin-left: 0.25rem;">Đăng ký ngay</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3.5: REGISTER PAGE ==================== -->
+    <section id="view-register" class="view-section">
+      <div class="auth-page-bg">
+        <div class="auth-card">
+          <div class="auth-header">
+            <h2>Đăng Ký</h2>
+            <p>Bắt đầu hành trình tìm kiếm không gian sống lý tưởng.</p>
+          </div>
+
+          <!-- Form Đăng ký -->
+          <form id="auth-register-form" onsubmit="handleAuthSubmit(event, 'register')">
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label for="reg-name" style="font-weight: 700; margin-bottom: 0.5rem; display: block;">Họ và Tên *</label>
+              <div class="input-wrapper" style="position: relative;">
+                <i class="fa-solid fa-user prefix-icon" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                <input type="text" id="reg-name" placeholder="Nguyễn Văn A" required minlength="2" style="padding-left: 2.75rem; width: 100%;">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label for="reg-phone" style="font-weight: 700; margin-bottom: 0.5rem; display: block;">Số điện thoại *</label>
+              <div class="input-wrapper" style="position: relative;">
+                <i class="fa-solid fa-phone prefix-icon" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                <input type="tel" id="reg-phone" placeholder="090 123 4567" required pattern="[0-9]{10,11}" style="padding-left: 2.75rem; width: 100%;">
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+              <label for="reg-password" style="font-weight: 700; margin-bottom: 0.5rem; display: block;">Mật khẩu *</label>
+              <div class="input-wrapper" style="position: relative;">
+                <i class="fa-solid fa-lock prefix-icon" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                <input type="password" id="reg-password" placeholder="••••••••" required minlength="6" style="padding-left: 2.75rem; width: 100%;">
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('reg-password')" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); cursor: pointer; border: none; background: none;">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label style="font-weight: 700; margin-bottom: 0.5rem; display: block;">Vai trò</label>
+              <div class="role-selector-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <button type="button" class="role-btn active" id="role-tenant" onclick="selectRole('tenant')" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: all 0.2s ease;">
+                  <i class="fa-solid fa-map-pin" style="font-size: 1.2rem; color: var(--primary);"></i>
+                  <span>Người thuê</span>
+                </button>
+                <button type="button" class="role-btn" id="role-landlord" onclick="selectRole('landlord')" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; transition: all 0.2s ease;">
+                  <i class="fa-solid fa-house-chimney-user" style="font-size: 1.2rem; color: var(--text-muted);"></i>
+                  <span>Chủ nhà</span>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary auth-submit-btn" style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 1rem; border-radius: var(--radius-md);">
+              Đăng ký <i class="fa-solid fa-user-plus" style="margin-left: 0.5rem;"></i>
+            </button>
+          </form>
+
+          <!-- Social register options -->
+          <div class="social-auth" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
+            <span class="social-title" style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); background: var(--bg-surface); padding: 0 0.75rem; position: relative; top: -2.15rem;">Hoặc đăng ký bằng</span>
+            <div class="social-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: -1rem;">
+              <button class="social-btn google" onclick="handleSocialAuth('Google'); return false;" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; background: white; transition: all 0.2s ease;">
+                <i class="fa-brands fa-google" style="color: #ea4335;"></i> Google
+              </button>
+              <button class="social-btn facebook" onclick="handleSocialAuth('Facebook'); return false;" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; background: white; transition: all 0.2s ease;">
+                <i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook
+              </button>
+            </div>
+          </div>
+
+          <!-- Toggle view link -->
+          <div class="auth-footer" style="text-align: center; margin-top: 2rem; font-weight: 600; font-size: 0.95rem;">
+            <span style="color: var(--text-muted);">Đã có tài khoản?</span>
+            <a href="#" onclick="switchView('login'); return false;" style="color: var(--primary); font-weight: 700; margin-left: 0.25rem;">Đăng nhập</a>
           </div>
         </div>
       </div>
@@ -761,6 +793,338 @@
       </div>
     </section>
 
+    <!-- ==================== VIEW 6: BLOG / COMMUNITY SECTION ==================== -->
+    <section id="view-blog" class="view-section">
+      <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+        <div class="blog-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <div>
+            <h1 style="font-size: 2rem; font-weight: 850; letter-spacing: -0.5px; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--text) 30%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Cộng đồng Nhà Xanh</h1>
+            <p class="text-muted" style="font-weight: 500;">Nơi thảo luận, phàn nàn, chia sẻ mẹo vặt và đánh giá phòng trọ.</p>
+          </div>
+          <button class="btn btn-primary" id="blog-create-btn">
+            <i class="fa-solid fa-pen-to-square" style="margin-right: 0.5rem;"></i> Đăng bài viết
+          </button>
+        </div>
+
+        <!-- Blog Categories Filter -->
+        <div class="blog-categories" style="display: flex; gap: 0.75rem; overflow-x: auto; padding-bottom: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem;">
+          <button class="blog-cat-btn active" data-category="all" style="padding: 0.6rem 1.2rem; border-radius: var(--radius-full); font-weight: 700; border: 1.5px solid var(--border); background: var(--bg-surface); cursor: pointer; transition: all 0.2s ease;">Tất cả</button>
+          <button class="blog-cat-btn" data-category="REVIEW" style="padding: 0.6rem 1.2rem; border-radius: var(--radius-full); font-weight: 700; border: 1.5px solid var(--border); background: var(--bg-surface); cursor: pointer; transition: all 0.2s ease;">Đánh giá (Review)</button>
+          <button class="blog-cat-btn" data-category="COMPLAINT" style="padding: 0.6rem 1.2rem; border-radius: var(--radius-full); font-weight: 700; border: 1.5px solid var(--border); background: var(--bg-surface); cursor: pointer; transition: all 0.2s ease;">Phàn nàn / Góp ý</button>
+          <button class="blog-cat-btn" data-category="CHAT" style="padding: 0.6rem 1.2rem; border-radius: var(--radius-full); font-weight: 700; border: 1.5px solid var(--border); background: var(--bg-surface); cursor: pointer; transition: all 0.2s ease;">Trò chuyện</button>
+          <button class="blog-cat-btn" data-category="TIP" style="padding: 0.6rem 1.2rem; border-radius: var(--radius-full); font-weight: 700; border: 1.5px solid var(--border); background: var(--bg-surface); cursor: pointer; transition: all 0.2s ease;">Mẹo & Kinh nghiệm</button>
+        </div>
+
+        <!-- Blog Posts Grid -->
+        <div class="blog-posts-grid" id="blog-posts-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 7: CONTACT / SUPPORT SECTION ==================== -->
+    <section id="view-contact" class="view-section">
+      <div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+        <div class="contact-layout" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 3rem;">
+          <!-- Left: Contact Details -->
+          <div class="contact-info-panel" style="display: flex; flex-direction: column; justify-content: center;">
+            <h1 style="font-size: 2.25rem; font-weight: 850; letter-spacing: -0.5px; margin-bottom: 1rem; background: linear-gradient(135deg, var(--text) 30%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Liên hệ với Admin</h1>
+            <p style="font-weight: 500; font-size: 1.05rem; line-height: 1.6; margin-bottom: 2.5rem; color: var(--text-muted);">Nếu bạn gặp các vấn đề phức tạp liên quan đến hợp đồng, lừa đảo, hoặc cần hỗ trợ tài khoản, vui lòng gửi tin nhắn. Đội ngũ admin Nhà Xanh sẽ phản hồi trong vòng 24 giờ.</p>
+
+            <div class="contact-methods" style="display: flex; flex-direction: column; gap: 1.5rem;">
+              <div class="contact-method-card" style="display: flex; align-items: flex-start; gap: 1.25rem; padding: 1.25rem; border-radius: var(--radius-lg); background: var(--bg-surface-low); border: 1px solid var(--border); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div style="font-size: 1.5rem; color: var(--primary); background: var(--primary-light); width: 45px; height: 45px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-phone"></i></div>
+                <div>
+                  <h4 style="font-weight: 800; font-size: 1.05rem; margin-bottom: 0.25rem;">Đường dây nóng</h4>
+                  <p style="font-weight: 700; font-size: 1rem; color: var(--text);">0396 340 364</p>
+                  <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Hỗ trợ 24/7 đối với sự cố khẩn cấp</span>
+                </div>
+              </div>
+
+              <div class="contact-method-card" style="display: flex; align-items: flex-start; gap: 1.25rem; padding: 1.25rem; border-radius: var(--radius-lg); background: var(--bg-surface-low); border: 1px solid var(--border); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div style="font-size: 1.5rem; color: var(--secondary); background: var(--secondary-light); width: 45px; height: 45px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-envelope"></i></div>
+                <div>
+                  <h4 style="font-weight: 800; font-size: 1.05rem; margin-bottom: 0.25rem;">Email hỗ trợ</h4>
+                  <p style="font-weight: 700; font-size: 1rem; color: var(--text);">support@nhaxanh.com</p>
+                  <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Giải quyết tranh chấp và khiếu nại</span>
+                </div>
+              </div>
+
+              <div class="contact-method-card" style="display: flex; align-items: flex-start; gap: 1.25rem; padding: 1.25rem; border-radius: var(--radius-lg); background: var(--bg-surface-low); border: 1px solid var(--border); transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                <div style="font-size: 1.5rem; color: var(--tertiary); background: var(--tertiary-light); width: 45px; height: 45px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="fa-solid fa-map-location-dot"></i></div>
+                <div>
+                  <h4 style="font-weight: 800; font-size: 1.05rem; margin-bottom: 0.25rem;">Văn phòng chính</h4>
+                  <p style="font-weight: 700; font-size: 1rem; color: var(--text);">84C P. Nguyễn Thanh Bình, Hà Đông, Hà Nội</p>
+                  <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Giờ làm việc: 8:00 - 17:30 (Thứ 2 - Thứ 6)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Contact Form -->
+          <div class="contact-form-panel" style="padding: 2rem; border-radius: var(--radius-xl); background: var(--bg-surface); border: 1px solid var(--border); box-shadow: var(--shadow-lg);">
+            <h3 style="font-size: 1.35rem; font-weight: 850; margin-bottom: 1.5rem;">Gửi yêu cầu hỗ trợ</h3>
+            <form id="support-contact-form" onsubmit="handleContactSubmit(event)">
+              <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label for="contact-name" style="margin-bottom: 0.5rem; font-weight: 700;">Họ và Tên *</label>
+                <div class="input-wrapper" style="position: relative;">
+                  <i class="fa-solid fa-user prefix-icon" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                  <input type="text" id="contact-name" placeholder="Nguyễn Văn A" required style="padding-left: 2.75rem; width: 100%;">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+                <div class="form-group">
+                  <label for="contact-email" style="margin-bottom: 0.5rem; font-weight: 700;">Email liên hệ *</label>
+                  <div class="input-wrapper" style="position: relative;">
+                    <i class="fa-solid fa-envelope prefix-icon" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="email" id="contact-email" placeholder="example@gmail.com" required style="padding-left: 2.75rem; width: 100%;">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="contact-phone" style="margin-bottom: 0.5rem; font-weight: 700;">Số điện thoại</label>
+                  <div class="input-wrapper" style="position: relative;">
+                    <i class="fa-solid fa-phone prefix-icon" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                    <input type="tel" id="contact-phone" placeholder="090 123 4567" style="padding-left: 2.75rem; width: 100%;">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label for="contact-subject" style="margin-bottom: 0.5rem; font-weight: 700;">Chủ đề cần giải quyết *</label>
+                <div class="input-wrapper" style="position: relative;">
+                  <i class="fa-solid fa-circle-question prefix-icon" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                  <select id="contact-subject" required style="padding-left: 2.75rem; padding-top: 0.75rem; padding-bottom: 0.75rem; width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 600; cursor: pointer; appearance: none; background: white;">
+                    <option value="">Chọn chủ đề</option>
+                    <option value="Tranh chấp hợp đồng">Tranh chấp hợp đồng / Đặt cọc</option>
+                    <option value="Báo cáo lừa đảo">Báo cáo tin đăng giả mạo / Lừa đảo</option>
+                    <option value="Lỗi ứng dụng / Tài khoản">Lỗi tài khoản / Đăng nhập</option>
+                    <option value="Khác">Vấn đề khác</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="contact-message" style="margin-bottom: 0.5rem; font-weight: 700;">Nội dung chi tiết *</label>
+                <textarea id="contact-message" class="form-textarea" placeholder="Mô tả cụ thể vấn đề của bạn để admin hỗ trợ nhanh nhất..." required style="min-height: 120px; width: 100%; padding: 0.8rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); resize: vertical;"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 1rem; border-radius: var(--radius-md);">
+                Gửi yêu cầu hỗ trợ <i class="fa-solid fa-paper-plane" style="margin-left: 0.5rem;"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Support History (Visible only when logged in) -->
+        <div id="support-history-section" style="margin-top: 5rem; border-top: 1.5px solid var(--border); padding-top: 3rem; display: none;">
+          <h2 style="margin-bottom: 1.5rem; font-size: 1.6rem; font-weight: 850; letter-spacing: -0.5px; background: linear-gradient(135deg, var(--text) 30%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Lịch sử yêu cầu hỗ trợ</h2>
+          <div class="support-tickets-list" id="support-tickets-container" style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 8: ABOUT US PAGE ==================== -->
+    <section id="view-about" class="view-section">
+      <!-- Cinematic Hero -->
+      <div class="about-hero" style="background-image: linear-gradient(to bottom, rgba(9, 9, 11, 0.4), rgba(9, 9, 11, 0.95)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=80');">
+        <div class="container about-hero-container">
+          <div class="reveal-on-scroll">
+            <span class="about-eyebrow">HÀNH TRÌNH NHÀ XANH</span>
+            <h1 class="about-title">Kiến tạo <em>không gian</em><br>nâng tầm cuộc sống</h1>
+            <p class="about-subtitle">Chúng tôi tin rằng mỗi người đều xứng đáng có một không gian sống xanh, an toàn và tràn đầy cảm hứng.</p>
+          </div>
+          <div class="scroll-indicator">
+            <span class="mouse-icon"><span class="mouse-wheel"></span></span>
+            <span class="scroll-text">Cuộn để khám phá câu chuyện</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kinetic Typography Section -->
+      <div class="about-manifesto section-padding">
+        <div class="container">
+          <div class="manifesto-wrap">
+            <h2 class="kinetic-title reveal-on-scroll">
+              <span>Không chỉ là phòng trọ.</span>
+              <span class="text-gradient">Đó là tổ ấm,</span>
+              <span>nơi nuôi dưỡng những ước mơ khởi đầu.</span>
+            </h2>
+            <p class="manifesto-desc reveal-on-scroll" style="transition-delay: 0.2s;">
+              Nhà Xanh được thành lập từ sự trăn trở của những người trẻ từng đi thuê trọ. Chúng tôi thấu hiểu những khó khăn về chi phí, sự thiếu minh bạch và cảm giác bất an khi tìm kiếm không gian sống. Hệ sinh thái được thiết kế để mang đến sự minh bạch tối đa, kết nối trực tiếp và trải nghiệm điện ảnh chân thực nhất.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Grid Section -->
+      <div class="about-bento section-padding bg-surface-low-tint">
+        <div class="container">
+          <h2 class="section-title reveal-on-scroll">Giá trị cốt lõi</h2>
+          <div class="bento-grid">
+            <!-- Cell 1: Vision (Large 2x2) -->
+            <div class="bento-cell cell-large reveal-on-scroll" style="background-image: linear-gradient(to right, rgba(15, 15, 18, 0.95) 40%, rgba(15, 15, 18, 0.2)), url('https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80');">
+              <div class="bento-content">
+                <span class="bento-tag">TẦM NHÌN</span>
+                <h3>Trở thành nền tảng thuê nhà số 1 cho người Việt</h3>
+                <p>Tiên phong ứng dụng công nghệ để chuẩn hóa quy trình thuê trọ, giúp hàng triệu người tìm kiếm tổ ấm mơ ước chỉ trong vài click chuột.</p>
+              </div>
+            </div>
+
+            <!-- Cell 2: Green Living (Medium 1x2) -->
+            <div class="bento-cell cell-medium reveal-on-scroll" style="transition-delay: 0.1s;">
+              <div class="bento-content">
+                <div class="bento-icon"><i class="fa-solid fa-leaf text-primary"></i></div>
+                <h3>Sống Xanh</h3>
+                <p>Khuyến khích lối sống bền vững, tiết kiệm năng lượng và thân thiện môi trường trong mỗi khu trọ của Nhà Xanh.</p>
+              </div>
+            </div>
+
+            <!-- Cell 3: Trust & Safety (Medium 1x2) -->
+            <div class="bento-cell cell-medium reveal-on-scroll" style="transition-delay: 0.2s;">
+              <div class="bento-content">
+                <div class="bento-icon"><i class="fa-solid fa-shield-halved text-tertiary"></i></div>
+                <h3>An Toàn Tuyệt Đối</h3>
+                <p>100% tin đăng được kiểm duyệt nghiêm ngặt. Hệ thống hợp đồng điện tử bảo vệ quyền lợi pháp lý cho cả chủ nhà và người thuê.</p>
+              </div>
+            </div>
+
+            <!-- Cell 4: Community (Large 2x1) -->
+            <div class="bento-cell cell-wide reveal-on-scroll" style="background-image: linear-gradient(to top, rgba(15, 15, 18, 0.95), rgba(15, 15, 18, 0.4)), url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80'); transition-delay: 0.3s;">
+              <div class="bento-content flex-row-desktop">
+                <div style="flex: 1;">
+                  <span class="bento-tag">CỘNG ĐỒNG</span>
+                  <h3>Gắn kết & Chia sẻ</h3>
+                  <p>Chúng tôi xây dựng chuyên mục Cộng đồng nhằm giúp người đi thuê chia sẻ kinh nghiệm trọ học, đánh giá chân thực và tìm kiếm bạn ở ghép phù hợp.</p>
+                </div>
+                <div class="bento-stats">
+                  <div class="stat-item">
+                    <span class="stat-num">50K+</span>
+                    <span class="stat-lbl">Thành viên</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-num">98%</span>
+                    <span class="stat-lbl">Hài lòng</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Horizontal Scroll Section (Timeline) -->
+      <div class="about-timeline-section section-padding overflow-hidden">
+        <div class="container">
+          <h2 class="section-title reveal-on-scroll">Hành trình phát triển</h2>
+          <p class="text-muted reveal-on-scroll" style="margin-top: -1rem; margin-bottom: 2rem;">Cuộn chuột hoặc kéo sang ngang để xem các mốc lịch sử</p>
+          
+          <div class="timeline-container">
+            <div class="timeline-track">
+              <!-- Item 1 -->
+              <div class="timeline-item">
+                <div class="timeline-year">2023</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <h4>Khởi Đầu Ý Tưởng</h4>
+                  <p>Nhóm dự án gồm 3 thành viên sáng lập bắt đầu phác thảo mô hình kết nối phòng trọ thông minh, loại bỏ trung gian môi giới lừa đảo.</p>
+                </div>
+              </div>
+              
+              <!-- Item 2 -->
+              <div class="timeline-item">
+                <div class="timeline-year">2024</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <h4>Ra Mắt Phiên Bản Đầu Tiên</h4>
+                  <p>Hệ thống Nhà Xanh thử nghiệm tại Hà Nội với 1,000+ phòng trọ kiểm duyệt đầu tiên. Nhận được sự phản hồi tích cực lớn từ sinh viên.</p>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="timeline-item">
+                <div class="timeline-year">2025</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <h4>Mở Rộng Quy Mô Toàn Quốc</h4>
+                  <p>Mở rộng dịch vụ vào TP.HCM và Đà Nẵng. Đạt mốc 30,000+ tin đăng đã được xác minh thực tế bởi đội ngũ Nhà Xanh.</p>
+                </div>
+              </div>
+
+              <!-- Item 4 -->
+              <div class="timeline-item">
+                <div class="timeline-year">2026</div>
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <h4>Cách Mạng Số Hóa</h4>
+                  <p>Tích hợp tính năng thanh toán hóa đơn tự động, Chatbot tư vấn thông minh và giao thức Scrollytelling giúp nâng tầm trải nghiệm người dùng.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Micro-Interactions Team Section -->
+      <div class="about-team section-padding bg-surface-low-tint">
+        <div class="container">
+          <h2 class="section-title reveal-on-scroll">Đội ngũ sáng lập</h2>
+          <div class="team-grid">
+            <!-- Member 1 -->
+            <div class="team-card reveal-on-scroll">
+              <div class="team-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Founder 1">
+              </div>
+              <div class="team-info">
+                <h4>Hàn Minh Tùng</h4>
+                <span>Co-Founder & CEO & Head of Design</span>
+                <p>Sinh viên trường đại học CMC, chịu trách nhiệm định hướng chiến lược phát triển</p>
+                <div class="team-socials">
+                  <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                  <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Member 2 -->
+            <div class="team-card reveal-on-scroll" style="transition-delay: 0.15s;">
+              <div class="team-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Founder 2">
+              </div>
+              <div class="team-info">
+                <h4>Nguyễn Thuận Phong</h4>
+                <span>Co-Founder & CTO</span>
+                <p>Kỹ sư phần mềm đam mê tối ưu hóa hiệu suất và trải nghiệm người dùng</p>
+                <div class="team-socials">
+                  <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                  <a href="#"><i class="fa-brands fa-github"></i></a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Member 3 -->
+            <div class="team-card reveal-on-scroll" style="transition-delay: 0.3s;">
+              <div class="team-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" alt="Founder 3">
+              </div>
+              <div class="team-info">
+                <h4>Nguyễn Tiến Thành</h4>
+                <span>Developer</span>
+                <p>Developer</p>
+                <div class="team-socials">
+                  <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                  <a href="#"><i class="fa-brands fa-dribbble"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- ==================== MODAL 1: PROFILE MANAGEMENT ==================== -->
@@ -841,9 +1205,9 @@
         <h4>Hệ thống</h4>
         <div class="footer-links">
           <a href="#" onclick="alert('Vui lòng đăng ký/đăng nhập tài khoản Chủ nhà để sử dụng tính năng này!'); return false;">Dành cho chủ trọ</a>
-          <a href="#" onclick="alert('Tính năng Blog đang được cập nhật!'); return false;">Blog tin tức</a>
+          <a href="#" onclick="switchView('blog'); return false;">Blog tin tức</a>
           <a href="#" onclick="alert('Vui lòng đăng nhập tài khoản Chủ nhà để đăng tin!'); return false;">Hướng dẫn đăng tin</a>
-          <a href="#" onclick="alert('Trung tâm hỗ trợ đang chuẩn bị ra mắt!'); return false;">Liên hệ hỗ trợ</a>
+          <a href="#" onclick="switchView('contact'); return false;">Liên hệ hỗ trợ</a>
         </div>
       </div>
 
@@ -882,6 +1246,104 @@
       <p>&copy; 2026 Nhà Xanh Vietnam. All rights reserved.</p>
     </div>
   </footer>
+
+  <!-- ==================== MODAL 2: CREATE BLOG POST ==================== -->
+  <div class="modal-overlay" id="modal-blog-create" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 2000; transition: opacity 0.25s ease;">
+    <div class="modal-window" style="max-width: 600px; background: white; border-radius: var(--radius-xl); box-shadow: var(--shadow-2xl); width: 90%; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid var(--border);">
+        <h3 style="font-size: 1.25rem; font-weight: 850;"><i class="fa-solid fa-pen-to-square" style="color: var(--primary); margin-right: 0.5rem;"></i> Đăng bài viết cộng đồng</h3>
+        <button class="modal-close-btn" onclick="closeBlogCreateModal()" style="border: none; background: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding: 1.5rem;">
+        <form id="blog-create-form" onsubmit="handleBlogCreateSubmit(event)">
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label for="blog-form-category" style="margin-bottom: 0.5rem; font-weight: 700;">Chuyên mục *</label>
+            <div class="input-wrapper" style="position: relative;">
+              <select id="blog-form-category" required style="padding-left: 1rem; padding-top: 0.7rem; padding-bottom: 0.7rem; width: 100%; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 600; cursor: pointer; appearance: none; background: white;">
+                <option value="REVIEW">Đánh giá (Review)</option>
+                <option value="COMPLAINT">Phàn nàn / Góp ý</option>
+                <option value="CHAT">Trò chuyện</option>
+                <option value="TIP">Mẹo & Kinh nghiệm</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label for="blog-form-title" style="margin-bottom: 0.5rem; font-weight: 700;">Tiêu đề bài đăng *</label>
+            <div class="input-wrapper" style="position: relative;">
+              <input type="text" id="blog-form-title" placeholder="Nhập tiêu đề ngắn gọn, rõ ràng" required style="padding-left: 1rem; width: 100%;">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label for="blog-form-content" style="margin-bottom: 0.5rem; font-weight: 700;">Nội dung *</label>
+            <textarea id="blog-form-content" class="form-textarea" placeholder="Chia sẻ câu chuyện, đánh giá chi tiết của bạn..." required style="min-height: 200px; width: 100%; padding: 0.8rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); resize: vertical;"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem; border-radius: var(--radius-md); font-size: 1rem;">
+            Đăng bài viết <i class="fa-solid fa-circle-check" style="margin-left: 0.5rem;"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 3: VIEW BLOG POST DETAIL & COMMENTS ==================== -->
+  <div class="modal-overlay" id="modal-blog-detail" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 2000; transition: opacity 0.25s ease;">
+    <div class="modal-window" style="max-width: 750px; background: white; border-radius: var(--radius-xl); box-shadow: var(--shadow-2xl); width: 90%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;">
+      <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);">
+        <span class="badge" id="blog-detail-badge" style="padding: 0.35rem 0.75rem; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 700; color: white;">REVIEW</span>
+        <button class="modal-close-btn" onclick="closeBlogDetailModal()" style="border: none; background: none; font-size: 1.25rem; cursor: pointer; color: var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body" style="padding: 1.5rem; overflow-y: auto; flex-grow: 1;">
+        <!-- Post Content -->
+        <div class="blog-detail-content">
+          <h2 id="blog-detail-title" style="font-size: 1.5rem; font-weight: 850; line-height: 1.35; margin-bottom: 1rem; color: var(--text);">Tiêu đề bài viết</h2>
+          
+          <div class="blog-author-bar" style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+            <div class="author-avatar" id="blog-detail-author-avatar" style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem;">US</div>
+            <div>
+              <div id="blog-detail-author-name" style="font-weight: 700; font-size: 0.95rem; color: var(--text);">Nguyễn Văn A</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; font-weight: 500;">
+                <span id="blog-detail-author-role" class="role-badge shadow-sm" style="background: var(--bg-surface-high); border: 1px solid var(--border); padding: 0.1rem 0.4rem; border-radius: var(--radius-sm); font-weight: 700;">Người thuê</span> • <span id="blog-detail-date">2 giờ trước</span>
+              </div>
+            </div>
+            <button class="btn btn-outline btn-sm" id="blog-detail-delete-btn" style="margin-left: auto; color: var(--error); border-color: var(--error); display: none; padding: 0.4rem 0.8rem;">
+              <i class="fa-solid fa-trash" style="margin-right: 0.25rem;"></i> Xóa bài
+            </button>
+          </div>
+
+          <div id="blog-detail-body" style="line-height: 1.6; font-size: 1.05rem; white-space: pre-line; color: var(--text); margin-bottom: 2rem;">
+            Nội dung bài viết...
+          </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="blog-comments-section" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+          <h3 style="font-size: 1.15rem; font-weight: 850; margin-bottom: 1.25rem; color: var(--text);">Bình luận (<span id="blog-detail-comment-count">0</span>)</h3>
+          
+          <!-- Comments List -->
+          <div class="comments-list" id="blog-detail-comments-list" style="display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 1.5rem;">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Add Comment Form -->
+          <div class="add-comment-box" id="blog-comment-form-container">
+            <form id="blog-comment-form" onsubmit="handleCommentSubmit(event)">
+              <div class="form-group" style="margin-bottom: 0.75rem;">
+                <textarea id="blog-comment-content" class="form-textarea" placeholder="Nhập bình luận của bạn..." required style="min-height: 80px; width: 100%; padding: 0.8rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-md);"></textarea>
+              </div>
+              <div style="display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn btn-primary btn-sm">
+                  Gửi bình luận <i class="fa-solid fa-paper-plane" style="margin-left: 0.5rem; font-size: 0.8rem;"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- App Script -->
   <script src="index.js"></script>

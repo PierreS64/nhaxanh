@@ -121,6 +121,9 @@
         <a href="#maintenance" class="nav-item" data-target="page-maintenance">
           <i class="fa-solid fa-screwdriver-wrench"></i> <span>Sự cố (Maintenance)</span>
         </a>
+        <a href="#support" class="nav-item" data-target="page-support">
+          <i class="fa-solid fa-headset"></i> <span>Hỗ trợ (Support)</span>
+        </a>
       </nav>
 
       <div class="sidebar-footer">
@@ -466,6 +469,37 @@
               </thead>
               <tbody id="maintenance-table-body">
                 <!-- Maintenance rows injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ==================== PAGE: SUPPORT ==================== -->
+        <section id="page-support" class="page-section">
+          <div class="action-bar flex justify-between align-center">
+            <div class="filters-group flex">
+              <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="search-support-input" placeholder="Tìm tin nhắn hỗ trợ...">
+              </div>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table id="support-table">
+              <thead>
+                <tr>
+                  <th>Ngày gửi</th>
+                  <th>Người gửi</th>
+                  <th>Thông tin liên hệ</th>
+                  <th>Chủ đề</th>
+                  <th>Nội dung yêu cầu</th>
+                  <th>Trạng thái</th>
+                  <th style="width: 150px;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="support-table-body">
+                <!-- Support ticket rows injected dynamically -->
               </tbody>
             </table>
           </div>
@@ -867,6 +901,30 @@
   <div id="global-toast" class="toast">
     <i class="toast-icon fa-solid fa-circle-check"></i>
     <span class="toast-message">Thành công!</span>
+  </div>
+
+  <!-- SUPPORT REPLY MODAL -->
+  <div id="modal-support-reply" class="modal-overlay flex align-center justify-center" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000;">
+    <div class="modal-card" style="background: var(--bg-surface); border-radius: var(--radius-lg); border: 1px solid var(--border); max-width: 600px; width: 95%; box-shadow: var(--shadow-lg);">
+      <div class="modal-header flex justify-between align-center" style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex;">
+        <h3>Phản hồi yêu cầu hỗ trợ</h3>
+        <button class="modal-close-btn" onclick="closeSupportReplyModal()" style="border: none; background: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted);"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="support-reply-form" class="modal-form" style="padding: 1.5rem;" onsubmit="handleSupportReplySubmit(event)">
+        <input type="hidden" id="reply-ticket-id">
+        <div style="margin-bottom: 1.25rem;">
+          <h4 style="font-weight: 800; font-size: 1rem; margin-bottom: 0.5rem;" id="reply-ticket-subject">Chủ đề: ...</h4>
+          <p style="font-size: 0.9rem; color: var(--text-muted); background: var(--bg-surface-low); padding: 1rem; border-radius: var(--radius-sm); white-space: pre-line;" id="reply-ticket-message">Nội dung tin nhắn...</p>
+        </div>
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label for="reply-content" style="font-weight: 700; margin-bottom: 0.5rem; display: block;"><i class="fa-solid fa-reply"></i> Nội dung phản hồi *</label>
+          <textarea id="reply-content" required placeholder="Nhập câu trả lời hoặc hướng dẫn giải quyết cho người dùng..." style="min-height: 120px; width: 100%; padding: 0.8rem 1rem; border: 1.5px solid var(--border); border-radius: var(--radius-sm); resize: vertical; background: var(--bg-surface); color: var(--text-main);"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem;">
+          Gửi phản hồi <i class="fa-solid fa-paper-plane" style="margin-left: 0.5rem;"></i>
+        </button>
+      </form>
+    </div>
   </div>
 
   <!-- Script File -->

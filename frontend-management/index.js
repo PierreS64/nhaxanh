@@ -241,6 +241,8 @@ function refreshSpecificPageData(pageId) {
     fetchInvoices();
   } else if (pageId === 'page-maintenance') {
     fetchMaintenance();
+  } else if (pageId === 'page-support') {
+    fetchSupportMessages();
   }
 }
 
@@ -1306,3 +1308,140 @@ function closeActiveModal() {
     activeModal.classList.remove('active');
   }
 }
+
+/* ==================== SUPPORT TICKETS MANAGEMENT (ADMIN) ==================== */
+let allSupportTickets = [];
+
+async function fetchSupportMessages() {
+  try {
+    const data = await apiCall('/contact/admin');
+    allSupportTickets = data || [];
+  } catch (err) {
+    // Graceful fallback to local storage if API is offline
+    const localTickets = localStorage.getItem("nhaxanh_support_tickets");
+    allSupportTickets = localTickets ? JSON.parse(localTickets) : [];
+  }
+  renderSupportTable(allSupportTickets);
+}
+
+function renderSupportTable(tickets) {
+  const tbody = document.getElementById('support-table-body');
+  tbody.innerHTML = '';
+
+  if (tickets.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" class="text-center font-muted">Không tìm thấy yêu cầu hỗ trợ nào.</td></tr>`;
+    return;
+  }
+
+  tickets.forEach(ticket => {
+    const isResolved = ticket.status === 'RESOLVED';
+    const badgeClass = isResolved ? 'badge-success' : 'badge-warn';
+    const statusLabel = isResolved ? 'Đã phản hồi' : 'Chưa xử lý';
+
+    const contactInfo = `
+      <div style="font-size: 0.85rem;">
+        <strong>Email:</strong> ${ticket.email}
+        ${ticket.phone ? `<br><strong>SĐT:</strong> ${ticket.phone}` : ''}
+      </div>
+    `;
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="font-mono font-xs">${new Date(ticket.createdAt).toLocaleString('vi-VN')}</td>
+      <td><strong>${ticket.fullName}</strong></td>
+      <td>${contactInfo}</td>
+      <td><span class="badge badge-primary">${ticket.subject}</span></td>
+      <td><div style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${ticket.message}">${ticket.message}</div></td>
+      <td><span class="badge ${badgeClass}">${statusLabel}</span></td>
+      <td>
+        <div class="flex justify-end gap-xs">
+          <button class="btn btn-sm btn-outline-primary reply-ticket-btn" data-id="${ticket.id}">
+            <i class="fa-solid fa-reply"></i> Phản hồi
+          </button>
+        </div>
+      </td>
+    `;
+
+    // Bind action
+    tr.querySelector('.reply-ticket-btn').onclick = (e) => {
+      e.preventDefault();
+      openSupportReplyModal(ticket.id, ticket.subject, ticket.message);
+    };
+
+    tbody.appendChild(tr);
+  });
+}
+
+function openSupportReplyModal(id, subject, message) {
+  document.getElementById('reply-ticket-id').value = id;
+  document.getElementById('reply-ticket-subject').textContent = `Chủ đề: ${subject}`;
+  document.getElementById('reply-ticket-message').textContent = message;
+  document.getElementById('reply-content').value = '';
+  
+  const modal = document.getElementById('modal-support-reply');
+  modal.style.display = 'flex';
+  modal.classList.add('active');
+}
+
+function closeSupportReplyModal() {
+  const modal = document.getElementById('modal-support-reply');
+  modal.style.display = 'none';
+  modal.classList.remove('active');
+}
+
+async function handleSupportReplySubmit(e) {
+  e.preventDefault();
+  const id = document.getElementById('reply-ticket-id').value;
+  const reply = document.getElementById('reply-content').value.trim();
+
+  if (!reply) {
+    showToast('Vui lòng nhập nội dung phản hồi!', true);
+    return;
+  }
+
+  try {
+    // Try API call
+    let response = null;
+    try {
+      response = await apiCall(`/contact/admin/${id}/reply`, {
+        method: 'POST',
+        body: JSON.stringify({ reply })
+      });
+    } catch (apiErr) {
+      // Local Storage Fallback if API fails
+      const localTickets = localStorage.getItem("nhaxanh_support_tickets");
+      if (localTickets) {
+        let tickets = JSON.parse(localTickets);
+        const idx = tickets.findIndex(t => t.id === id);
+        if (idx !== -1) {
+          tickets[idx].reply = reply;
+          tickets[idx].status = 'RESOLVED';
+          localStorage.setItem("nhaxanh_support_tickets", JSON.stringify(tickets));
+          response = tickets[idx];
+        }
+      }
+    }
+
+    if (response) {
+      showToast('Đã gửi phản hồi thành công!');
+      closeSupportReplyModal();
+      fetchSupportMessages();
+    } else {
+      throw new Error('Không thể phản hồi tin nhắn này.');
+    }
+  } catch (err) {
+    showToast(err.message, true);
+  }
+}
+
+// Support search binding
+document.getElementById('search-support-input').addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase();
+  const filtered = allSupportTickets.filter(t => 
+    t.fullName.toLowerCase().includes(query) || 
+    t.subject.toLowerCase().includes(query) || 
+    t.message.toLowerCase().includes(query) || 
+    t.email.toLowerCase().includes(query)
+  );
+  renderSupportTable(filtered);
+});

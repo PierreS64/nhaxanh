@@ -23,6 +23,77 @@ const LOCATION_DATA = {
   }
 };
 
+// Initial Mock Blog Data
+const INITIAL_BLOG_POSTS = [
+  {
+    id: "post-1",
+    title: "Review phòng trọ cực chill tại Bình Thạnh",
+    content: "Mình mới thuê được căn phòng trọ mini ở Bình Thạnh, view Landmark 81 cực đẹp. Điện nước giá hợp lý, đặc biệt là chị chủ nhà cực kỳ dễ tính và hỗ trợ nhiệt tình. Phòng rộng 40m2, thiết kế hiện đại thoáng mát, có thang máy, bảo vệ 24/7. Ai cần thông tin chi tiết nhắn mình nhé!",
+    category: "REVIEW",
+    authorName: "Trần Minh Quân",
+    authorRole: "TENANT",
+    authorPhone: "0901234567",
+    createdAt: new Date(Date.now() - 3600000 * 2).toISOString()
+  },
+  {
+    id: "post-2",
+    title: "Cảnh báo lừa đảo đặt cọc tại khu vực Cầu Giấy",
+    content: "Mọi người cảnh giác với số điện thoại 0987 654 321 nhé. Người này đăng tin cho thuê căn hộ giá rất rẻ chỉ 2.5 triệu ở Cầu Giấy, sau đó yêu cầu chuyển khoản đặt cọc giữ phòng trước vì nhiều người hỏi. Sau khi nhận cọc xong thì khóa máy và xóa bài đăng. Mong admin kiểm duyệt kỹ các tài khoản như thế này.",
+    category: "COMPLAINT",
+    authorName: "Nguyễn Khánh Linh",
+    authorRole: "TENANT",
+    authorPhone: "0912345678",
+    createdAt: new Date(Date.now() - 3600000 * 12).toISOString()
+  },
+  {
+    id: "post-3",
+    title: "Tìm bạn ở ghép khu vực Thủ Đức gần Đại học Sư Phạm Kỹ Thuật",
+    content: "Mình là nam sinh viên năm 2, sạch sẽ, không hút thuốc, ít tụ tập. Cần tìm 1 bạn nam ở ghép chia đôi tiền phòng (khoảng 1.5 triệu/người). Phòng rộng 20m2 ở Linh Trung, có gác lửng và vệ sinh khép kín. Ai quan tâm thì nhắn tin hoặc bình luận ở dưới nha.",
+    category: "CHAT",
+    authorName: "Hoàng Đức Nam",
+    authorRole: "TENANT",
+    authorPhone: "0934567890",
+    createdAt: new Date(Date.now() - 3600000 * 24).toISOString()
+  },
+  {
+    id: "post-4",
+    title: "Kinh nghiệm xương máu khi đi thuê phòng trọ sinh viên",
+    content: "Chào các bạn, mình đi thuê trọ được 4 năm rồi nên đúc kết được vài kinh nghiệm chia sẻ cho tân sinh viên:\n1. Phải ghi rõ giá điện nước, wifi, phí gửi xe vào hợp đồng. Tránh trường hợp chủ nhà tự tăng giá.\n2. Kiểm tra kỹ hệ thống nước, xả thử bồn cầu, mở thử vòi hoa sen xem có rò rỉ hay yếu nước không.\n3. Đi xem phòng nên đi ban ngày và rủ thêm bạn bè đi cùng để đánh giá an ninh khu vực.",
+    category: "TIP",
+    authorName: "Lê Thanh Sơn",
+    authorRole: "TENANT",
+    authorPhone: "0987111222",
+    createdAt: new Date(Date.now() - 3600000 * 48).toISOString()
+  }
+];
+
+const INITIAL_BLOG_COMMENTS = [
+  {
+    id: "comment-1",
+    postId: "post-1",
+    content: "Phòng đẹp quá bạn ơi, giá thuê bao nhiêu một tháng vậy ạ?",
+    authorName: "Nguyễn Thị Mai",
+    authorRole: "TENANT",
+    createdAt: new Date(Date.now() - 3600000 * 1.5).toISOString()
+  },
+  {
+    id: "comment-2",
+    postId: "post-1",
+    content: "Giá là 6 triệu đó bạn ơi, mình thấy có đăng trên Nhà Xanh luôn đó.",
+    authorName: "Trần Minh Quân",
+    authorRole: "TENANT",
+    createdAt: new Date(Date.now() - 3600000 * 1).toISOString()
+  },
+  {
+    id: "comment-3",
+    postId: "post-2",
+    content: "Cảm ơn bạn đã cảnh báo nhé, xém chút nữa mình cũng cọc cho bên này rồi.",
+    authorName: "Lê Văn Hải",
+    authorRole: "TENANT",
+    createdAt: new Date(Date.now() - 3600000 * 8).toISOString()
+  }
+];
+
 // Initial Mock Properties (Matching Designs)
 const INITIAL_PROPERTIES = [
   {
@@ -758,6 +829,10 @@ class AppState {
     this.formStep = 1;
     this.uploadedImages = [];
     this.selectedAmenities = [];
+
+    this.blogPosts = this.loadLocalStorage("nhaxanh_blog_posts", INITIAL_BLOG_POSTS);
+    this.blogComments = this.loadLocalStorage("nhaxanh_blog_comments", INITIAL_BLOG_COMMENTS);
+    this.supportTickets = this.loadLocalStorage("nhaxanh_support_tickets", []);
   }
 
   loadLocalStorage(key, defaultValue) {
@@ -770,6 +845,9 @@ class AppState {
     localStorage.setItem("nhaxanh_properties", JSON.stringify(this.properties));
     localStorage.setItem("nhaxanh_user", JSON.stringify(this.currentUser));
     localStorage.setItem("nhaxanh_liked", JSON.stringify(this.likedProperties));
+    localStorage.setItem("nhaxanh_blog_posts", JSON.stringify(this.blogPosts));
+    localStorage.setItem("nhaxanh_blog_comments", JSON.stringify(this.blogComments));
+    localStorage.setItem("nhaxanh_support_tickets", JSON.stringify(this.supportTickets));
   }
 
   toggleLike(propertyId) {
@@ -833,19 +911,26 @@ const DOM = {
   menuProfileBtn: document.getElementById("menu-profile-btn"),
   menuDashboardBtn: document.getElementById("menu-dashboard-btn"),
   menuLogoutBtn: document.getElementById("menu-logout-btn"),
+  themeToggle: document.getElementById("theme-toggle"),
   
   // Views
   views: {
     home: document.getElementById("view-home"),
     detail: document.getElementById("view-detail"),
-    auth: document.getElementById("view-auth"),
+    login: document.getElementById("view-login"),
+    register: document.getElementById("view-register"),
     dashboard: document.getElementById("view-dashboard"),
-    form: document.getElementById("view-form")
+    form: document.getElementById("view-form"),
+    blog: document.getElementById("view-blog"),
+    contact: document.getElementById("view-contact"),
+    about: document.getElementById("view-about")
   },
 
   // Modals
   modals: {
-    profile: document.getElementById("modal-profile")
+    profile: document.getElementById("modal-profile"),
+    blogCreate: document.getElementById("modal-blog-create"),
+    blogDetail: document.getElementById("modal-blog-detail")
   },
 
   // Homepage
@@ -887,14 +972,8 @@ const DOM = {
   detailZaloBtn: document.getElementById("detail-zalo-btn"),
 
   // Auth
-  authSubtitle: document.getElementById("auth-subtitle"),
-  tabLogin: document.getElementById("tab-login"),
-  tabRegister: document.getElementById("tab-register"),
   authLoginForm: document.getElementById("auth-login-form"),
   authRegisterForm: document.getElementById("auth-register-form"),
-  socialDividerText: document.getElementById("social-divider-text"),
-  authFooterText: document.getElementById("auth-footer-text"),
-  authToggleLink: document.getElementById("auth-toggle-link"),
   loginPhone: document.getElementById("login-phone"),
   loginPassword: document.getElementById("login-password"),
   loginRemember: document.getElementById("login-remember"),
@@ -963,9 +1042,16 @@ let homeActiveCategory = "all";
 // SPA ROUTER (VIEW SWITCHER)
 // ==========================================
 function switchView(viewName, params = {}) {
+  // Normalize auth requests
+  if (viewName === "auth") {
+    viewName = params.tab === "register" ? "register" : "login";
+  }
+
   // Hide all views, remove active class
   Object.keys(DOM.views).forEach(key => {
-    DOM.views[key].classList.remove("active");
+    if (DOM.views[key]) {
+      DOM.views[key].classList.remove("active");
+    }
   });
 
   // Reset dropdown menu if open
@@ -973,7 +1059,9 @@ function switchView(viewName, params = {}) {
 
   // Show target view after a minor delay for styling transitions
   setTimeout(() => {
-    DOM.views[viewName].classList.add("active");
+    if (DOM.views[viewName]) {
+      DOM.views[viewName].classList.add("active");
+    }
     window.scrollTo(0, 0);
   }, 50);
 
@@ -996,22 +1084,26 @@ function switchView(viewName, params = {}) {
 
   // View specific initializations
   if (viewName === "home") {
-    if (params.filterType) {
-      homeActiveCategory = params.filterType;
-      // update category pills
-      DOM.searchTabs.forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.type === homeActiveCategory);
-      });
-    }
+    homeActiveCategory = params.filterType || "all";
+    // update category pills
+    DOM.searchTabs.forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.type === homeActiveCategory);
+    });
     initHomeView(params.city);
   } else if (viewName === "detail") {
     initDetailView(params.propertyId);
-  } else if (viewName === "auth") {
-    initAuthView(params.tab);
+  } else if (viewName === "login" || viewName === "register") {
+    initAuthView(viewName);
   } else if (viewName === "dashboard") {
     initDashboardView();
   } else if (viewName === "form") {
     initFormView(params.propertyId);
+  } else if (viewName === "blog") {
+    initBlogView();
+  } else if (viewName === "contact") {
+    initContactView();
+  } else if (viewName === "about") {
+    initAboutView();
   }
 }
 
@@ -1023,6 +1115,35 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initApp() {
+  // Check and apply saved theme or default to dark
+  const savedTheme = localStorage.getItem("nhaxanh_theme") || "dark";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+  updateThemeIcon(savedTheme);
+
+  // Bind theme toggle click handler
+  if (DOM.themeToggle) {
+    DOM.themeToggle.addEventListener("click", () => {
+      const activeTheme = document.documentElement.getAttribute("data-theme");
+      const newTheme = activeTheme === "dark" ? "light" : "dark";
+      
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("nhaxanh_theme", newTheme);
+      updateThemeIcon(newTheme);
+    });
+  }
+
+  function updateThemeIcon(theme) {
+    if (!DOM.themeToggle) return;
+    const icon = DOM.themeToggle.querySelector("i");
+    if (icon) {
+      if (theme === "dark") {
+        icon.className = "fa-solid fa-sun";
+      } else {
+        icon.className = "fa-solid fa-moon";
+      }
+    }
+  }
+
   // Check scroll for header effects
   window.addEventListener("scroll", () => {
     DOM.header.classList.toggle("scrolled", window.scrollY > 10);
@@ -1043,17 +1164,21 @@ function initApp() {
       DOM.navLinks.forEach(l => l.classList.remove("active"));
       link.classList.add("active");
       
-      if (filterType) {
-        switchView(view, { filterType });
+      if (view === "home") {
+        switchView(view, { filterType: filterType || "all" });
       } else {
-        switchView(view);
+        if (filterType) {
+          switchView(view, { filterType });
+        } else {
+          switchView(view);
+        }
       }
     });
   });
 
   // Guest actions buttons
-  DOM.navLoginBtn.addEventListener("click", () => switchView("auth", { tab: "login" }));
-  DOM.navRegisterBtn.addEventListener("click", () => switchView("auth", { tab: "register" }));
+  DOM.navLoginBtn.addEventListener("click", () => switchView("login"));
+  DOM.navRegisterBtn.addEventListener("click", () => switchView("register"));
   DOM.navPostBtn.addEventListener("click", () => switchView("form"));
   
   // Back to home links
@@ -1406,34 +1531,6 @@ let activeAuthMode = "login";
 
 function initAuthView(defaultTab = "login") {
   activeAuthMode = defaultTab;
-  switchAuthTab(activeAuthMode);
-}
-
-function switchAuthTab(mode) {
-  activeAuthMode = mode;
-  if (mode === "login") {
-    DOM.tabLogin.classList.add("active");
-    DOM.tabRegister.classList.remove("active");
-    DOM.authLoginForm.style.display = "block";
-    DOM.authRegisterForm.style.display = "none";
-    DOM.authSubtitle.textContent = "Vui lòng đăng nhập để tiếp tục quản lý nhà của bạn.";
-    DOM.socialDividerText.textContent = "Hoặc đăng nhập với";
-    DOM.authFooterText.textContent = "Chưa có tài khoản?";
-    DOM.authToggleLink.textContent = "Đăng ký ngay";
-  } else {
-    DOM.tabLogin.classList.remove("active");
-    DOM.tabRegister.classList.add("active");
-    DOM.authLoginForm.style.display = "none";
-    DOM.authRegisterForm.style.display = "block";
-    DOM.authSubtitle.textContent = "Bắt đầu hành trình tìm kiếm không gian sống lý tưởng.";
-    DOM.socialDividerText.textContent = "Hoặc đăng ký bằng";
-    DOM.authFooterText.textContent = "Đã có tài khoản?";
-    DOM.authToggleLink.textContent = "Đăng nhập ngay";
-  }
-}
-
-function toggleAuthMode() {
-  switchAuthTab(activeAuthMode === "login" ? "register" : "login");
 }
 
 function selectRole(role) {
@@ -2032,3 +2129,600 @@ function handleFormSubmit(e) {
   alert("Lưu dữ liệu bất động sản thành công!");
   switchView("dashboard");
 }
+
+// ==========================================================================
+// BLOG & SUPPORT MODULES (MOCK STATE + API FALLBACK INTEGRATION)
+// ==========================================================================
+
+const API_URL = "http://localhost:3000";
+
+// API helper with graceful fallback to LocalStorage
+async function tryApiRequest(path, method = "GET", body = null) {
+  try {
+    const headers = { "Content-Type": "application/json" };
+    // If we want to simulate logged-in user in backend, we search if we have a token (e.g. from admin)
+    const token = localStorage.getItem("nhaxanh_token");
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+
+    const config = { method, headers };
+    if (body) config.body = JSON.stringify(body);
+
+    const res = await fetch(`${API_URL}${path}`, config);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch (err) {
+    return null;
+  }
+}
+
+// Blog constants relocated to top of file
+
+let blogActiveCategory = "all";
+let activeDetailPostId = null;
+
+// Display label helper
+function displayBlogCategory(cat) {
+  switch (cat) {
+    case "REVIEW": return "Đánh giá (Review)";
+    case "COMPLAINT": return "Phàn nàn / Góp ý";
+    case "CHAT": return "Trò chuyện";
+    case "TIP": return "Mẹo & Kinh nghiệm";
+    default: return cat;
+  }
+}
+
+// Display style color helper
+function getBlogCategoryColor(cat) {
+  switch (cat) {
+    case "REVIEW": return "#2e7d32"; // Green
+    case "COMPLAINT": return "#c62828"; // Red
+    case "CHAT": return "#1565c0"; // Blue
+    case "TIP": return "#6a1b9a"; // Purple
+    default: return "var(--primary)";
+  }
+}
+
+// Format date nicely (time ago)
+function formatTimeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const minutes = Math.floor(diff / 60000);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (minutes < 1) return "Vừa xong";
+  if (minutes < 60) return `${minutes} phút trước`;
+  if (hours < 24) return `${hours} giờ trước`;
+  return `${days} ngày trước`;
+}
+
+// ----------------------------------------------------
+// BLOG VIEW INITIALIZATION & RENDERING
+// ----------------------------------------------------
+async function initBlogView() {
+  const categoryButtons = document.querySelectorAll(".blog-cat-btn");
+  categoryButtons.forEach(btn => {
+    btn.onclick = () => {
+      categoryButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      blogActiveCategory = btn.dataset.category;
+      renderBlogPosts();
+    };
+  });
+
+  // Bind create button
+  const createBtn = document.getElementById("blog-create-btn");
+  createBtn.onclick = () => {
+    if (!state.currentUser) {
+      alert("Vui lòng đăng nhập để đăng bài viết cộng đồng!");
+      switchView("login");
+      return;
+    }
+    openBlogCreateModal();
+  };
+
+  await syncBlogData();
+  renderBlogPosts();
+}
+
+// Fetch from API or fallback
+async function syncBlogData() {
+  const apiPosts = await tryApiRequest("/blog");
+  if (apiPosts && Array.isArray(apiPosts)) {
+    // Transform NestJS API data to match frontend model
+    state.blogPosts = apiPosts.map(p => ({
+      id: p.id,
+      title: p.title,
+      content: p.content,
+      category: p.category,
+      authorName: p.Author ? p.Author.fullName : "Người dùng",
+      authorRole: p.Author ? p.Author.role : "TENANT",
+      authorPhone: p.Author ? p.Author.phone : "",
+      createdAt: p.createdAt,
+      commentCount: p._count ? p._count.Comment : 0
+    }));
+    state.saveState();
+  }
+}
+
+function renderBlogPosts() {
+  const container = document.getElementById("blog-posts-container");
+  container.innerHTML = "";
+
+  const filtered = blogActiveCategory === "all" 
+    ? state.blogPosts 
+    : state.blogPosts.filter(p => p.category === blogActiveCategory);
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 4rem 2rem; border: 1.5px dashed var(--border); border-radius: var(--radius-xl); background: var(--bg-surface-low);">
+        <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+        <h3 style="font-weight: 800; font-size: 1.25rem;">Chưa có bài viết nào</h3>
+        <p class="text-muted" style="margin-top: 0.5rem;">Hãy là người đầu tiên chia sẻ câu chuyện của bạn!</p>
+      </div>
+    `;
+    return;
+  }
+
+  filtered.forEach(post => {
+    const count = post.commentCount !== undefined 
+      ? post.commentCount 
+      : state.blogComments.filter(c => c.postId === post.id).length;
+
+    const card = document.createElement("div");
+    card.className = "blog-card";
+    card.style = "background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 1.5rem; display: flex; flex-direction: column; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease; box-shadow: var(--shadow-sm);";
+    
+    // Add hover effects dynamically
+    card.onmouseover = () => {
+      card.style.transform = "translateY(-4px)";
+      card.style.boxShadow = "var(--shadow-md)";
+    };
+    card.onmouseout = () => {
+      card.style.transform = "none";
+      card.style.boxShadow = "var(--shadow-sm)";
+    };
+
+    const catColor = getBlogCategoryColor(post.category);
+    
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: white; background: ${catColor}; padding: 0.3rem 0.6rem; border-radius: var(--radius-sm);">${displayBlogCategory(post.category)}</span>
+        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;"><i class="fa-regular fa-clock" style="margin-right: 0.25rem;"></i>${formatTimeAgo(post.createdAt)}</span>
+      </div>
+      <h3 style="font-size: 1.15rem; font-weight: 850; margin-bottom: 0.75rem; line-height: 1.4; color: var(--text);">${post.title}</h3>
+      <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 1.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex-grow: 1;">${post.content}</p>
+      
+      <div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 1rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">${post.authorName.charAt(0).toUpperCase()}</div>
+          <div>
+            <span style="font-weight: 750; font-size: 0.85rem; display: block; color: var(--text);">${post.authorName}</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">${post.authorRole === "ADMIN" ? "Quản trị viên" : (post.authorRole === "LANDLORD" ? "Chủ nhà" : "Người thuê")}</span>
+          </div>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--primary); font-weight: 700; display: flex; align-items: center; gap: 0.35rem;">
+          <i class="fa-regular fa-comments"></i> ${count} bình luận
+        </div>
+      </div>
+    `;
+
+    card.onclick = () => openBlogDetailModal(post.id);
+    container.appendChild(card);
+  });
+}
+
+// ----------------------------------------------------
+// BLOG MODAL HANDLERS
+// ----------------------------------------------------
+function openBlogCreateModal() {
+  DOM.modals.blogCreate.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeBlogCreateModal() {
+  DOM.modals.blogCreate.style.display = "none";
+  document.body.style.overflow = "";
+  document.getElementById("blog-create-form").reset();
+}
+
+async function handleBlogCreateSubmit(e) {
+  e.preventDefault();
+  const category = document.getElementById("blog-form-category").value;
+  const title = document.getElementById("blog-form-title").value.trim();
+  const content = document.getElementById("blog-form-content").value.trim();
+
+  if (!title || !content) {
+    alert("Vui lòng điền đầy đủ tiêu đề và nội dung!");
+    return;
+  }
+
+  const payload = { title, content, category };
+  
+  // Try sending to NestJS API
+  const newApiPost = await tryApiRequest("/blog", "POST", payload);
+  
+  if (newApiPost) {
+    // If api succeeded, sync
+    await syncBlogData();
+  } else {
+    // Local storage fallback
+    const newPost = {
+      id: "post-" + Date.now(),
+      title,
+      content,
+      category,
+      authorName: state.currentUser ? state.currentUser.name : "Người dùng",
+      authorRole: state.currentUser ? state.currentUser.role.toUpperCase() : "TENANT",
+      authorPhone: state.currentUser ? state.currentUser.phone : "",
+      createdAt: new Date().toISOString()
+    };
+    state.blogPosts.unshift(newPost);
+    state.saveState();
+  }
+
+  alert("Đăng bài viết cộng đồng thành công!");
+  closeBlogCreateModal();
+  renderBlogPosts();
+}
+
+async function openBlogDetailModal(postId) {
+  activeDetailPostId = postId;
+  DOM.modals.blogDetail.style.display = "flex";
+  document.body.style.overflow = "hidden";
+
+  // Try syncing from API
+  const apiPost = await tryApiRequest(`/blog/${postId}`);
+  let post = null;
+  let comments = [];
+
+  if (apiPost) {
+    post = {
+      id: apiPost.id,
+      title: apiPost.title,
+      content: apiPost.content,
+      category: apiPost.category,
+      authorName: apiPost.Author ? apiPost.Author.fullName : "Người dùng",
+      authorRole: apiPost.Author ? apiPost.Author.role : "TENANT",
+      authorPhone: apiPost.Author ? apiPost.Author.phone : "",
+      createdAt: apiPost.createdAt
+    };
+    comments = apiPost.Comment.map(c => ({
+      id: c.id,
+      postId: c.postId,
+      content: c.content,
+      authorName: c.Author ? c.Author.fullName : "Người dùng",
+      authorRole: c.Author ? c.Author.role : "TENANT",
+      createdAt: c.createdAt
+    }));
+  } else {
+    // Fallback
+    post = state.blogPosts.find(p => p.id === postId);
+    comments = state.blogComments.filter(c => c.postId === postId);
+  }
+
+  if (!post) {
+    alert("Không tìm thấy bài viết!");
+    closeBlogDetailModal();
+    return;
+  }
+
+  // Populate data
+  const badge = document.getElementById("blog-detail-badge");
+  badge.textContent = displayBlogCategory(post.category);
+  badge.style.background = getBlogCategoryColor(post.category);
+
+  document.getElementById("blog-detail-title").textContent = post.title;
+  document.getElementById("blog-detail-author-avatar").textContent = post.authorName.charAt(0).toUpperCase();
+  document.getElementById("blog-detail-author-name").textContent = post.authorName;
+  document.getElementById("blog-detail-author-role").textContent = post.authorRole === "ADMIN" ? "Quản trị viên" : (post.authorRole === "LANDLORD" ? "Chủ nhà" : "Người thuê");
+  document.getElementById("blog-detail-date").textContent = formatTimeAgo(post.createdAt);
+  document.getElementById("blog-detail-body").textContent = post.content;
+
+  // Render delete button if owner or admin
+  const deleteBtn = document.getElementById("blog-detail-delete-btn");
+  const isOwner = state.currentUser && state.currentUser.phone === post.authorPhone;
+  const isAdmin = state.currentUser && state.currentUser.role === "admin";
+  
+  if (isOwner || isAdmin) {
+    deleteBtn.style.display = "block";
+    deleteBtn.onclick = () => handleDeletePost(post.id);
+  } else {
+    deleteBtn.style.display = "none";
+  }
+
+  renderComments(comments);
+}
+
+function closeBlogDetailModal() {
+  DOM.modals.blogDetail.style.display = "none";
+  document.body.style.overflow = "";
+  document.getElementById("blog-comment-form").reset();
+  activeDetailPostId = null;
+}
+
+function renderComments(commentsList) {
+  const container = document.getElementById("blog-detail-comments-list");
+  container.innerHTML = "";
+
+  document.getElementById("blog-detail-comment-count").textContent = commentsList.length;
+
+  if (commentsList.length === 0) {
+    container.innerHTML = `<p class="text-muted" style="text-align: center; padding: 1.5rem; font-weight: 500; font-size: 0.9rem;">Chưa có bình luận nào. Hãy gửi ý kiến của bạn!</p>`;
+    return;
+  }
+
+  commentsList.forEach(comment => {
+    const div = document.createElement("div");
+    div.style = "background: var(--bg-surface-low); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1rem; position: relative;";
+    
+    const isCommentOwner = state.currentUser && state.currentUser.name === comment.authorName;
+    const isAdmin = state.currentUser && state.currentUser.role === "admin";
+
+    const deleteCommentHtml = (isCommentOwner || isAdmin) 
+      ? `<button class="delete-comment-btn" style="position: absolute; right: 1rem; top: 1rem; border: none; background: none; color: var(--error); cursor: pointer; font-size: 0.85rem;" onclick="handleDeleteComment('${comment.id}')"><i class="fa-solid fa-trash-can"></i></button>`
+      : "";
+
+    div.innerHTML = `
+      <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+        <div style="width: 26px; height: 26px; border-radius: 50%; background: var(--secondary-light); color: var(--secondary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">${comment.authorName.charAt(0).toUpperCase()}</div>
+        <div>
+          <span style="font-weight: 750; font-size: 0.85rem; color: var(--text);">${comment.authorName}</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 0.35rem; font-weight: 500;">(${comment.authorRole === "ADMIN" ? "Quản trị viên" : (comment.authorRole === "LANDLORD" ? "Chủ nhà" : "Người thuê")})</span>
+        </div>
+        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500; margin-left: auto; padding-right: 1.5rem;">${formatTimeAgo(comment.createdAt)}</span>
+      </div>
+      <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text); white-space: pre-line;">${comment.content}</p>
+      ${deleteCommentHtml}
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+async function handleCommentSubmit(e) {
+  e.preventDefault();
+  if (!state.currentUser) {
+    alert("Vui lòng đăng nhập để viết bình luận!");
+    switchView("login");
+    return;
+  }
+
+  const content = document.getElementById("blog-comment-content").value.trim();
+  if (!content) return;
+
+  // Try calling NestJS API
+  const newApiComment = await tryApiRequest(`/blog/${activeDetailPostId}/comments`, "POST", { content });
+  
+  if (newApiComment) {
+    // Reload detail modal
+    openBlogDetailModal(activeDetailPostId);
+  } else {
+    // Local storage fallback
+    const newComment = {
+      id: "comment-" + Date.now(),
+      postId: activeDetailPostId,
+      content,
+      authorName: state.currentUser.name,
+      authorRole: state.currentUser.role.toUpperCase(),
+      createdAt: new Date().toISOString()
+    };
+    state.blogComments.push(newComment);
+    state.saveState();
+    
+    // Rerender comments
+    const comments = state.blogComments.filter(c => c.postId === activeDetailPostId);
+    renderComments(comments);
+  }
+
+  document.getElementById("blog-comment-content").value = "";
+  // Update the count in the background list
+  renderBlogPosts();
+}
+
+async function handleDeletePost(postId) {
+  if (!confirm("Bạn có chắc chắn muốn xóa bài viết này không?")) return;
+
+  const res = await tryApiRequest(`/blog/${postId}`, "DELETE");
+  if (res) {
+    await syncBlogData();
+  } else {
+    state.blogPosts = state.blogPosts.filter(p => p.id !== postId);
+    state.blogComments = state.blogComments.filter(c => c.postId !== postId);
+    state.saveState();
+  }
+
+  alert("Đã xóa bài viết thành công!");
+  closeBlogDetailModal();
+  renderBlogPosts();
+}
+
+async function handleDeleteComment(commentId) {
+  if (!confirm("Bạn có chắc chắn muốn xóa bình luận này không?")) return;
+
+  const res = await tryApiRequest(`/blog/comments/${commentId}`, "DELETE");
+  if (res) {
+    openBlogDetailModal(activeDetailPostId);
+  } else {
+    state.blogComments = state.blogComments.filter(c => c.id !== commentId);
+    state.saveState();
+    
+    // Rerender comments
+    const comments = state.blogComments.filter(c => c.postId === activeDetailPostId);
+    renderComments(comments);
+  }
+}
+
+// ----------------------------------------------------
+// CONTACT & SUPPORT TICKET FUNCTIONALITY
+// ----------------------------------------------------
+async function initContactView() {
+  // Autofill if logged in
+  if (state.currentUser) {
+    document.getElementById("contact-name").value = state.currentUser.name;
+    document.getElementById("contact-phone").value = state.currentUser.phone || "";
+    // Guess email based on phone or leave empty
+    document.getElementById("contact-email").value = state.currentUser.email || "";
+
+    document.getElementById("support-history-section").style.display = "block";
+    await syncSupportTickets();
+    renderSupportTickets();
+  } else {
+    document.getElementById("support-history-section").style.display = "none";
+    document.getElementById("support-contact-form").reset();
+  }
+}
+
+async function syncSupportTickets() {
+  const apiTickets = await tryApiRequest("/contact/my");
+  if (apiTickets && Array.isArray(apiTickets)) {
+    state.supportTickets = apiTickets;
+    state.saveState();
+  }
+}
+
+async function handleContactSubmit(e) {
+  e.preventDefault();
+  const fullName = document.getElementById("contact-name").value.trim();
+  const email = document.getElementById("contact-email").value.trim();
+  const phone = document.getElementById("contact-phone").value.trim() || null;
+  const subject = document.getElementById("contact-subject").value;
+  const message = document.getElementById("contact-message").value.trim();
+
+  if (!fullName || !email || !subject || !message) {
+    alert("Vui lòng điền đầy đủ thông tin bắt buộc!");
+    return;
+  }
+
+  const payload = { fullName, email, phone, subject, message };
+
+  // Try API submission
+  const apiRes = await tryApiRequest("/contact", "POST", payload);
+
+  if (apiRes) {
+    await syncSupportTickets();
+  } else {
+    // Local fallback
+    const newTicket = {
+      id: "ticket-" + Date.now(),
+      fullName,
+      email,
+      phone,
+      subject,
+      message,
+      status: "PENDING",
+      reply: null,
+      createdAt: new Date().toISOString()
+    };
+    state.supportTickets.unshift(newTicket);
+    state.saveState();
+  }
+
+  alert("Yêu cầu hỗ trợ của bạn đã được gửi thành công! Admin sẽ phản hồi sớm nhất qua email hoặc trong lịch sử hỗ trợ.");
+  document.getElementById("contact-message").value = "";
+  
+  if (state.currentUser) {
+    renderSupportTickets();
+  }
+}
+
+function renderSupportTickets() {
+  const container = document.getElementById("support-tickets-container");
+  container.innerHTML = "";
+
+  if (state.supportTickets.length === 0) {
+    container.innerHTML = `<p class="text-muted" style="text-align: center; padding: 2rem; border: 1.5px dashed var(--border); border-radius: var(--radius-lg); font-weight: 500;">Bạn chưa gửi yêu cầu hỗ trợ nào.</p>`;
+    return;
+  }
+
+  state.supportTickets.forEach(ticket => {
+    const div = document.createElement("div");
+    div.style = "background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; box-shadow: var(--shadow-sm);";
+
+    const isResolved = ticket.status === "RESOLVED";
+    const statusBg = isResolved ? "var(--success)" : "var(--warning)";
+    const statusLabel = isResolved ? "ĐÃ GIẢI QUYẾT" : "ĐANG CHỜ PHẢN HỒI";
+
+    const replyHtml = ticket.reply 
+      ? `<div style="background: var(--primary-light); color: var(--primary); padding: 1rem; border-radius: var(--radius-md); border-left: 4px solid var(--primary); margin-top: 0.5rem;">
+          <h5 style="font-weight: 850; font-size: 0.9rem; margin-bottom: 0.25rem;"><i class="fa-solid fa-user-tie"></i> Phản hồi từ Admin Nhà Xanh:</h5>
+          <p style="font-size: 0.95rem; line-height: 1.5; font-weight: 500;">${ticket.reply}</p>
+         </div>`
+      : "";
+
+    div.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <span style="font-weight: 850; font-size: 1.05rem; color: var(--text);">${ticket.subject}</span>
+        <span style="font-size: 0.75rem; font-weight: 800; background: ${statusBg}; color: white; padding: 0.25rem 0.5rem; border-radius: var(--radius-sm);">${statusLabel}</span>
+      </div>
+      <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500;">Ngày gửi: ${new Date(ticket.createdAt).toLocaleString("vi-VN")}</div>
+      <p style="font-size: 0.95rem; line-height: 1.5; color: var(--text-muted); white-space: pre-line;">${ticket.message}</p>
+      ${replyHtml}
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+// ----------------------------------------------------
+// ABOUT US VIEW & SCROLLYTELLING LOGIC
+// ----------------------------------------------------
+function initAboutView() {
+  // 1. Setup Scroll Reveal (Intersection Observer)
+  const revealElements = document.querySelectorAll(".reveal-on-scroll");
+  
+  const observerOptions = {
+    root: null,
+    threshold: 0.1,
+    rootMargin: "0px 0px -50px 0px"
+  };
+
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  revealElements.forEach(el => {
+    // Reset state first to allow smooth re-animations when switching views
+    el.classList.remove("visible");
+    revealObserver.observe(el);
+  });
+
+  // 2. Setup Horizontal Scroll Drag-to-Scroll or Mouse Wheel Scroll
+  const timelineContainer = document.querySelector(".timeline-container");
+  if (timelineContainer) {
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    timelineContainer.addEventListener("mousedown", (e) => {
+      isDown = true;
+      timelineContainer.style.cursor = "grabbing";
+      startX = e.pageX - timelineContainer.offsetLeft;
+      scrollLeft = timelineContainer.scrollLeft;
+    });
+
+    timelineContainer.addEventListener("mouseleave", () => {
+      isDown = false;
+      timelineContainer.style.cursor = "grab";
+    });
+
+    timelineContainer.addEventListener("mouseup", () => {
+      isDown = false;
+      timelineContainer.style.cursor = "grab";
+    });
+
+    timelineContainer.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - timelineContainer.offsetLeft;
+      const walk = (x - startX) * 2; // scroll-fast multiplier
+      timelineContainer.scrollLeft = scrollLeft - walk;
+    });
+  }
+}
+
+

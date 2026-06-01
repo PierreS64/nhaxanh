@@ -13,6 +13,8 @@ import { UploadModule } from './upload/upload.module';
 import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
 import { MaintenanceRequestsModule } from './maintenance-requests/maintenance-requests.module';
+import { BlogModule } from './blog/blog.module';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -27,7 +29,9 @@ import { MaintenanceRequestsModule } from './maintenance-requests/maintenance-re
     OcrModule, 
     UploadModule, 
     ChatsModule, 
-    AuthModule
+    AuthModule,
+    BlogModule,
+    ContactModule
   ],
   controllers: [AppController],
   providers: [AppService],
