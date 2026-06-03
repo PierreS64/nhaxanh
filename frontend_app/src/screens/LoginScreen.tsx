@@ -21,10 +21,11 @@ const LoginScreen = () => {
 
   const setToken = useAuthStore((state) => state.setToken);
   const setUser = useAuthStore((state) => state.setUser);
+  const setGuest = useAuthStore((state) => state.setGuest);
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Validation Error', 'Please enter both email and password.');
+      Alert.alert('Thiếu thông tin', 'Vui lòng nhập email và mật khẩu.');
       return;
     }
 
@@ -37,17 +38,16 @@ const LoginScreen = () => {
 
       const { accessToken, user } = response.data;
 
-      // Persist token and user payload securely
       await SecureStore.setItemAsync('token', accessToken);
       await SecureStore.setItemAsync('user', JSON.stringify(user));
 
-      // Update Zustand state (triggers navigation switch)
       setUser(user);
       setToken(accessToken);
+      setGuest(false);
     } catch (error: any) {
       const errorMessage =
-        error.response?.data?.message || 'Unable to connect to the server. Please check your API_URL.';
-      Alert.alert('Login Failed', Array.isArray(errorMessage) ? errorMessage.join('\n') : errorMessage);
+        error.response?.data?.message || 'Không thể kết nối máy chủ. Vui lòng kiểm tra API_URL.';
+      Alert.alert('Đăng nhập thất bại', Array.isArray(errorMessage) ? errorMessage.join('\n') : errorMessage);
     } finally {
       setLoading(false);
     }
@@ -59,12 +59,13 @@ const LoginScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <View style={styles.formContainer}>
-        <Text style={styles.title}>Nhà Xanh 🌿</Text>
+        <Text style={styles.title}>Nhà Xanh</Text>
         <Text style={styles.subtitle}>Smart Renting Hub</Text>
 
         <TextInput
           style={styles.input}
-          placeholder="Email address"
+          placeholder="Email"
+          placeholderTextColor="#7B8B83"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -74,7 +75,8 @@ const LoginScreen = () => {
 
         <TextInput
           style={styles.input}
-          placeholder="Password"
+          placeholder="Mật khẩu"
+          placeholderTextColor="#7B8B83"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
@@ -82,11 +84,19 @@ const LoginScreen = () => {
 
         <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
           {loading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color="#FFFFFF" />
           ) : (
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>Đăng nhập</Text>
           )}
         </TouchableOpacity>
+
+        <TouchableOpacity style={styles.secondaryButton} onPress={() => setGuest(true)} disabled={loading}>
+          <Text style={styles.secondaryButtonText}>Xem demo không đăng nhập</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.helperText}>
+          Chế độ demo dùng dữ liệu mẫu để người thuê xem chi phí, kiểm duyệt và chi tiết phòng trước khi tạo tài khoản.
+        </Text>
       </View>
     </KeyboardAvoidingView>
   );
@@ -95,7 +105,7 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F9F6', // Subtle green tint background
+    backgroundColor: '#F4F7F2',
   },
   formContainer: {
     flex: 1,
@@ -104,39 +114,61 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 42,
-    fontWeight: 'bold',
-    color: '#2E7D32',
+    fontWeight: '900',
+    color: '#0D7A55',
     textAlign: 'center',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#666',
+    color: '#617068',
     textAlign: 'center',
-    marginBottom: 48,
+    marginBottom: 42,
   },
   input: {
-    backgroundColor: '#fff',
-    height: 56,
+    backgroundColor: '#FFFFFF',
+    height: 54,
     borderRadius: 12,
     paddingHorizontal: 16,
     fontSize: 16,
-    marginBottom: 16,
+    marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#E0E0E0',
+    borderColor: '#DCE5DF',
+    color: '#17201C',
   },
   button: {
-    backgroundColor: '#4CAF50',
-    height: 56,
+    backgroundColor: '#0D7A55',
+    height: 54,
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 8,
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '900',
+  },
+  secondaryButton: {
+    height: 50,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: '#0D7A55',
+    backgroundColor: '#FFFFFF',
+  },
+  secondaryButtonText: {
+    color: '#0D7A55',
+    fontSize: 16,
+    fontWeight: '900',
+  },
+  helperText: {
+    color: '#617068',
+    textAlign: 'center',
+    lineHeight: 20,
+    marginTop: 20,
   },
 });
 

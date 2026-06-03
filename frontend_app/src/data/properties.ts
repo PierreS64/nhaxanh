@@ -1,0 +1,247 @@
+export type PropertyType = 'ROOM' | 'MINI_APARTMENT' | 'WHOLE_HOUSE' | 'DORMITORY';
+export type PropertyStatus = 'AVAILABLE' | 'RENTED' | 'MAINTENANCE';
+
+export interface RentalProperty {
+  id: string;
+  title: string;
+  type: PropertyType;
+  typeLabel: string;
+  status: PropertyStatus;
+  district: string;
+  city: string;
+  address: string;
+  price: number;
+  area: number;
+  deposit: number;
+  electricity: number;
+  water: number;
+  waterUnit: string;
+  service: number;
+  commute: number;
+  vibe: number;
+  tags: string[];
+  amenities: string[];
+  description: string;
+  landlord: string;
+  phone: string;
+}
+
+const baseProperties: RentalProperty[] = [
+  {
+    id: 'NX-101',
+    title: 'Studio gác lửng gần Đại học Công nghệ, cửa sổ lớn',
+    type: 'MINI_APARTMENT',
+    typeLabel: 'Căn hộ mini',
+    status: 'AVAILABLE',
+    district: 'Cầu Giấy',
+    city: 'Hà Nội',
+    address: 'Ngõ 68 Cầu Giấy, quận Cầu Giấy',
+    price: 4800000,
+    area: 28,
+    deposit: 4800000,
+    electricity: 3800,
+    water: 90000,
+    waterUnit: 'người',
+    service: 180000,
+    commute: 12,
+    vibe: 91,
+    tags: ['Đầy đủ nội thất', 'Giờ tự do', 'Camera', 'PCCC', 'Máy giặt chung', 'Ban công'],
+    amenities: ['aircon', 'balcony', 'washer', 'parking', 'security', 'pccc', 'kitchen'],
+    description: 'Studio sáng, có gác lửng và bếp riêng, phù hợp sinh viên hoặc nhân viên văn phòng cần di chuyển nhanh tới Cầu Giấy.',
+    landlord: 'Anh Minh',
+    phone: '0901 233 688',
+  },
+  {
+    id: 'NX-102',
+    title: 'Phòng trọ mới, tách bếp, gần metro Thủ Đức',
+    type: 'ROOM',
+    typeLabel: 'Phòng trọ',
+    status: 'AVAILABLE',
+    district: 'Thủ Đức',
+    city: 'TP.HCM',
+    address: 'Đường Man Thiện, TP. Thủ Đức',
+    price: 3300000,
+    area: 22,
+    deposit: 3300000,
+    electricity: 4000,
+    water: 18000,
+    waterUnit: 'm3',
+    service: 150000,
+    commute: 18,
+    vibe: 84,
+    tags: ['Giá tốt', 'Không chung chủ', 'Cửa sổ', 'Wifi', 'Để xe'],
+    amenities: ['window', 'parking', 'security', 'wifi', 'kitchen'],
+    description: 'Phòng mới, khu dân cư yên tĩnh, phù hợp sinh viên Khu công nghệ cao và người đi làm tại Thủ Đức.',
+    landlord: 'Chị Lan',
+    phone: '0937 880 120',
+  },
+  {
+    id: 'NX-103',
+    title: 'Căn hộ dịch vụ 1PN đầy đủ nội thất, gần Duy Tân',
+    type: 'MINI_APARTMENT',
+    typeLabel: 'Căn hộ dịch vụ',
+    status: 'AVAILABLE',
+    district: 'Cầu Giấy',
+    city: 'Hà Nội',
+    address: 'Phố Duy Tân, quận Cầu Giấy',
+    price: 7200000,
+    area: 35,
+    deposit: 7200000,
+    electricity: 3900,
+    water: 120000,
+    waterUnit: 'người',
+    service: 250000,
+    commute: 8,
+    vibe: 94,
+    tags: ['1 phòng ngủ', 'Thang máy', 'Máy lạnh', 'Dọn vệ sinh', 'Bảo vệ'],
+    amenities: ['aircon', 'elevator', 'washer', 'security', 'pccc', 'cleaning', 'kitchen'],
+    description: 'Căn hộ dịch vụ riêng tư, nội thất đồng bộ, phù hợp cặp đôi hoặc nhân sự văn phòng ở khu Duy Tân.',
+    landlord: 'Nhà Xanh Partner',
+    phone: '0247 668 990',
+  },
+  {
+    id: 'NX-104',
+    title: 'Phòng có ban công quận Phú Nhuận, cho nuôi thú cưng',
+    type: 'ROOM',
+    typeLabel: 'Phòng trọ',
+    status: 'AVAILABLE',
+    district: 'Phú Nhuận',
+    city: 'TP.HCM',
+    address: 'Đường Huỳnh Văn Bánh, quận Phú Nhuận',
+    price: 5600000,
+    area: 26,
+    deposit: 5600000,
+    electricity: 4200,
+    water: 100000,
+    waterUnit: 'người',
+    service: 200000,
+    commute: 15,
+    vibe: 88,
+    tags: ['Cho nuôi thú cưng', 'Ban công', 'Giờ tự do', 'Vân tay', 'Gần trung tâm'],
+    amenities: ['pet', 'balcony', 'aircon', 'security', 'parking', 'pccc'],
+    description: 'Phòng thoáng, có ban công và cửa sổ, thuận tiện đi Quận 1, Quận 3, Bình Thạnh.',
+    landlord: 'Chị Thảo',
+    phone: '0919 318 345',
+  },
+  {
+    id: 'NX-105',
+    title: 'Nhà nguyên căn 2 tầng cho nhóm 4-5 người',
+    type: 'WHOLE_HOUSE',
+    typeLabel: 'Nhà nguyên căn',
+    status: 'AVAILABLE',
+    district: 'Thanh Xuân',
+    city: 'Hà Nội',
+    address: 'Khương Đình, quận Thanh Xuân',
+    price: 11800000,
+    area: 62,
+    deposit: 23600000,
+    electricity: 3600,
+    water: 16000,
+    waterUnit: 'm3',
+    service: 0,
+    commute: 22,
+    vibe: 82,
+    tags: ['Nhà riêng', 'Bếp lớn', 'Để xe riêng', 'Hợp đồng dài hạn'],
+    amenities: ['parking', 'kitchen', 'window', 'pccc'],
+    description: 'Nhà riêng phù hợp nhóm bạn hoặc gia đình nhỏ, hợp đồng minh bạch, gần chợ và tuyến xe buýt.',
+    landlord: 'Chú Tuấn',
+    phone: '0988 271 600',
+  },
+  {
+    id: 'NX-106',
+    title: 'Sleepbox ký túc xá cao cấp, trọn gói dịch vụ',
+    type: 'DORMITORY',
+    typeLabel: 'KTX / Sleepbox',
+    status: 'AVAILABLE',
+    district: 'Bình Thạnh',
+    city: 'TP.HCM',
+    address: 'Đường D2, quận Bình Thạnh',
+    price: 1900000,
+    area: 8,
+    deposit: 1900000,
+    electricity: 0,
+    water: 0,
+    waterUnit: 'gói',
+    service: 0,
+    commute: 10,
+    vibe: 79,
+    tags: ['Trọn gói', 'Máy lạnh', 'Tủ riêng', 'Camera', 'Dọn vệ sinh'],
+    amenities: ['aircon', 'security', 'wifi', 'cleaning', 'pccc'],
+    description: 'Gói ở tiết kiệm cho sinh viên và thực tập sinh, đã gồm điện nước wifi trong tiền thuê.',
+    landlord: 'Nhà Xanh Dorm',
+    phone: '0906 901 234',
+  },
+];
+
+type PropertySeed = [
+  string,
+  string,
+  PropertyType,
+  string,
+  string,
+  string,
+  string,
+  number,
+  number,
+  number,
+  number,
+  number,
+  string,
+  number,
+  number,
+  number,
+  string[],
+  string[],
+];
+
+const variants: PropertySeed[] = [
+  ['NX-107', 'Căn hộ mini ban công rộng gần Hồ Tùng Mậu', 'MINI_APARTMENT', 'Căn hộ mini', 'Cầu Giấy', 'Hà Nội', 'Đường Hồ Tùng Mậu, quận Cầu Giấy', 6200000, 32, 6200000, 3900, 100000, 'người', 220000, 14, 90, ['Ban công', 'Thang máy', 'Máy lạnh', 'PCCC'], ['balcony', 'elevator', 'aircon', 'security', 'pccc', 'kitchen']],
+  ['NX-108', 'Studio mới có bếp riêng gần Bách Khoa', 'MINI_APARTMENT', 'Căn hộ mini', 'Hai Bà Trưng', 'Hà Nội', 'Phố Tạ Quang Bửu, quận Hai Bà Trưng', 5400000, 27, 5400000, 3800, 90000, 'người', 180000, 9, 87, ['Bếp riêng', 'Cửa sổ', 'Giờ tự do', 'Wifi'], ['window', 'aircon', 'wifi', 'kitchen', 'pccc']],
+  ['NX-109', 'Căn hộ dịch vụ full nội thất tại Bình Thạnh', 'MINI_APARTMENT', 'Căn hộ dịch vụ', 'Bình Thạnh', 'TP.HCM', 'Đường Nguyễn Gia Trí, quận Bình Thạnh', 6900000, 34, 6900000, 4100, 120000, 'người', 250000, 11, 92, ['Full nội thất', 'Thang máy', 'Bảo vệ'], ['aircon', 'elevator', 'security', 'cleaning', 'pccc']],
+  ['NX-110', 'Căn hộ mini cửa sổ lớn gần Văn Quán', 'MINI_APARTMENT', 'Căn hộ mini', 'Hà Đông', 'Hà Nội', 'Khu đô thị Văn Quán, quận Hà Đông', 5200000, 31, 5200000, 3700, 90000, 'người', 160000, 16, 85, ['Cửa sổ lớn', 'Bếp riêng', 'Máy lạnh'], ['window', 'aircon', 'kitchen', 'parking', 'pccc']],
+  ['NX-111', 'Phòng trọ không chung chủ tại Đống Đa', 'ROOM', 'Phòng trọ', 'Đống Đa', 'Hà Nội', 'Ngõ Thái Hà, quận Đống Đa', 4100000, 24, 4100000, 4000, 100000, 'người', 150000, 10, 83, ['Không chung chủ', 'Giờ tự do', 'Camera'], ['aircon', 'security', 'parking', 'window']],
+  ['NX-112', 'Phòng có gác xép gần chợ Hạnh Thông Tây', 'ROOM', 'Phòng trọ', 'Gò Vấp', 'TP.HCM', 'Đường Quang Trung, quận Gò Vấp', 3500000, 23, 3500000, 4100, 90000, 'người', 120000, 19, 78, ['Gác xép', 'Bếp nhỏ', 'Để xe'], ['parking', 'kitchen', 'window', 'wifi']],
+  ['NX-113', 'Phòng trọ mới xây gần Mỹ Đình', 'ROOM', 'Phòng trọ', 'Nam Từ Liêm', 'Hà Nội', 'Đường Mỹ Đình, quận Nam Từ Liêm', 4300000, 25, 4300000, 3800, 100000, 'người', 180000, 14, 86, ['Mới xây', 'Thang máy', 'Camera', 'PCCC'], ['elevator', 'security', 'pccc', 'parking', 'aircon']],
+  ['NX-114', 'Phòng nhỏ sạch sẽ gần Hồ Tây', 'ROOM', 'Phòng trọ', 'Tây Hồ', 'Hà Nội', 'Ngõ Âu Cơ, quận Tây Hồ', 3900000, 18, 3900000, 4200, 90000, 'người', 120000, 18, 81, ['Cửa sổ', 'Khu yên tĩnh', 'Wifi'], ['window', 'wifi', 'parking', 'security']],
+  ['NX-115', 'Nhà nguyên căn 3 tầng gần Đại học Thương mại', 'WHOLE_HOUSE', 'Nhà nguyên căn', 'Cầu Giấy', 'Hà Nội', 'Đường Mai Dịch, quận Cầu Giấy', 16500000, 86, 33000000, 3600, 16000, 'm3', 0, 12, 88, ['3 tầng', 'Bếp lớn', 'Để xe riêng'], ['parking', 'kitchen', 'window', 'pccc']],
+  ['NX-116', 'Nhà hẻm xe hơi tại Tân Bình', 'WHOLE_HOUSE', 'Nhà nguyên căn', 'Tân Bình', 'TP.HCM', 'Đường Cộng Hòa, quận Tân Bình', 14500000, 72, 29000000, 4000, 18000, 'm3', 0, 14, 84, ['Hẻm xe hơi', '2 phòng ngủ', 'Gần sân bay'], ['parking', 'kitchen', 'window', 'pccc', 'pet']],
+  ['NX-117', 'Nhà nguyên căn 4 phòng ngủ tại Quận 7', 'WHOLE_HOUSE', 'Nhà nguyên căn', 'Quận 7', 'TP.HCM', 'Khu dân cư Tân Quy, Quận 7', 22000000, 110, 44000000, 4100, 19000, 'm3', 0, 18, 90, ['4 phòng ngủ', 'Sân để xe', 'Khu dân cư'], ['parking', 'kitchen', 'window', 'pccc', 'pet', 'security']],
+  ['NX-118', 'Nhà 2 tầng gần Ngã Tư Sở', 'WHOLE_HOUSE', 'Nhà nguyên căn', 'Thanh Xuân', 'Hà Nội', 'Phố Vũ Tông Phan, quận Thanh Xuân', 13500000, 68, 27000000, 3700, 16000, 'm3', 0, 17, 81, ['2 tầng', 'Gần chợ', 'Bếp riêng'], ['kitchen', 'parking', 'window', 'pccc']],
+  ['NX-119', 'Sleepbox nữ gần Đại học Kinh tế Quốc dân', 'DORMITORY', 'KTX / Sleepbox', 'Hai Bà Trưng', 'Hà Nội', 'Đường Trần Đại Nghĩa, quận Hai Bà Trưng', 2100000, 7, 2100000, 0, 0, 'gói', 0, 8, 82, ['Trọn gói', 'Khu nữ', 'Tủ riêng'], ['aircon', 'wifi', 'security', 'cleaning', 'pccc']],
+  ['NX-120', 'Ký túc xá cao cấp gần Bến Thành', 'DORMITORY', 'KTX / Sleepbox', 'Quận 1', 'TP.HCM', 'Đường Nguyễn Thái Bình, Quận 1', 3200000, 9, 3200000, 0, 0, 'gói', 0, 6, 88, ['Trung tâm', 'Trọn gói', 'Camera'], ['aircon', 'wifi', 'security', 'cleaning', 'pccc']],
+  ['NX-121', 'Giường tầng sinh viên gần Đại học Sài Gòn', 'DORMITORY', 'KTX / Sleepbox', 'Quận 5', 'TP.HCM', 'Đường An Dương Vương, Quận 5', 1700000, 6, 1700000, 0, 0, 'gói', 0, 10, 74, ['Giá tiết kiệm', 'Wifi', 'Tủ riêng'], ['wifi', 'security', 'cleaning']],
+  ['NX-122', 'Sleepbox cao cấp tại Phú Nhuận', 'DORMITORY', 'KTX / Sleepbox', 'Phú Nhuận', 'TP.HCM', 'Đường Phan Đăng Lưu, quận Phú Nhuận', 2800000, 8, 2800000, 0, 0, 'gói', 0, 11, 86, ['Cao cấp', 'Dọn vệ sinh', 'Giờ tự do'], ['aircon', 'wifi', 'security', 'cleaning', 'pccc']],
+].map((item) => ({
+  id: item[0],
+  title: item[1],
+  type: item[2],
+  typeLabel: item[3],
+  status: 'AVAILABLE',
+  district: item[4],
+  city: item[5],
+  address: item[6],
+  price: item[7],
+  area: item[8],
+  deposit: item[9],
+  electricity: item[10],
+  water: item[11],
+  waterUnit: item[12],
+  service: item[13],
+  commute: item[14],
+  vibe: item[15],
+  tags: item[16],
+  amenities: item[17],
+  description: 'Tin mẫu đã chuẩn hóa chi phí, tiện ích và trạng thái kiểm duyệt để nhóm demo luồng tìm phòng trên React Native.',
+  landlord: 'Nhà Xanh Partner',
+  phone: '0900 123 456',
+})) as RentalProperty[];
+
+export const sampleProperties: RentalProperty[] = [...baseProperties, ...variants];
+
+export const propertyTypes: Array<{ label: string; value: PropertyType | 'ALL' }> = [
+  { label: 'Tất cả', value: 'ALL' },
+  { label: 'Phòng trọ', value: 'ROOM' },
+  { label: 'Căn hộ mini', value: 'MINI_APARTMENT' },
+  { label: 'Nhà nguyên căn', value: 'WHOLE_HOUSE' },
+  { label: 'KTX / Sleepbox', value: 'DORMITORY' },
+];
