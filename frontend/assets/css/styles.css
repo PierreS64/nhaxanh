@@ -435,6 +435,70 @@ h1 {
   font-weight: 800;
 }
 
+.trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.trust-badge {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  border: 1px solid rgba(13, 122, 85, 0.22);
+  border-radius: 999px;
+  padding: 0 10px;
+  color: var(--brand-dark);
+  background: #eef8f2;
+  font-size: 0.76rem;
+  font-weight: 900;
+}
+
+.trust-badge--safety {
+  color: #8b4b00;
+  border-color: rgba(244, 185, 66, 0.45);
+  background: #fff6df;
+}
+
+.trust-badge--contract {
+  color: #174ea6;
+  border-color: rgba(31, 111, 235, 0.22);
+  background: #eef5ff;
+}
+
+.trust-badge--cost {
+  color: #6f3b00;
+  border-color: rgba(111, 59, 0, 0.16);
+  background: #fff3e7;
+}
+
+.trust-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.detail-stack {
+  display: grid;
+  gap: 18px;
+}
+
+.trust-list {
+  display: grid;
+  gap: 12px;
+}
+
+.trust-list p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.trust-list strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+
 .workflow-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));

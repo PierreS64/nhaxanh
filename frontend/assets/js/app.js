@@ -20,6 +20,47 @@ function getSelectedAmenities() {
   return qsa("[data-filter-amenity]:checked").map((item) => item.value);
 }
 
+function getTrustBadges(property) {
+  const tags = property.tags.join(" ").toLowerCase();
+  const amenities = new Set(property.amenities);
+  const badges = [
+    { label: "Tin đã kiểm duyệt", type: "verified", show: true },
+    { label: "PCCC", type: "safety", show: amenities.has("pccc") || tags.includes("pccc") },
+    { label: "Camera", type: "safety", show: amenities.has("security") || tags.includes("camera") },
+    { label: "Giờ tự do", type: "comfort", show: tags.includes("giờ tự do") || tags.includes("gio tu do") },
+    { label: "Hợp đồng điện tử", type: "contract", show: property.deposit > 0 },
+    { label: "Chi phí tách riêng", type: "cost", show: property.electricity > 0 || property.water > 0 || property.service > 0 }
+  ];
+  return badges.filter((badge) => badge.show);
+}
+
+function renderTrustBadges(property, limit = 4) {
+  return `<div class="trust-badges">${getTrustBadges(property).slice(0, limit).map((badge) => `<span class="trust-badge trust-badge--${badge.type}">${badge.label}</span>`).join("")}</div>`;
+}
+
+function renderTrustPanel(property) {
+  const feeMessage = property.electricity || property.water || property.service
+    ? `Giá thuê tách riêng điện ${property.electricity ? currency.format(property.electricity) + "đ/kWh" : "trọn gói"}, nước ${property.water ? currency.format(property.water) + "đ/" + property.waterUnit : "trọn gói"} và phí dịch vụ ${property.service ? currency.format(property.service) + "đ/tháng" : "không thu"}.`
+    : "Giá thuê đang hiển thị theo gói trọn gói, không tách thêm điện nước trong dữ liệu mẫu.";
+  const safetyMessage = property.amenities.includes("pccc") || property.amenities.includes("security")
+    ? "PCCC và camera/an ninh được gắn nhãn trong tin để người thuê kiểm tra nhanh trước khi đặt lịch."
+    : "Tin đã chuẩn hóa thông tin cơ bản; người thuê nên xác nhận thêm PCCC và an ninh khi xem phòng.";
+  return `
+    <div class="panel trust-panel">
+      <div>
+        <span class="eyebrow">Thông tin đáng tin cậy</span>
+        <h2>Minh bạch trước khi đặt lịch</h2>
+      </div>
+      ${renderTrustBadges(property, 6)}
+      <div class="trust-list">
+        <p><strong>Chi phí rõ ràng</strong>${feeMessage}</p>
+        <p><strong>Hợp đồng</strong>Hỗ trợ hợp đồng SMS/điện tử hoặc nhãn “Tin đã kiểm duyệt” trong giai đoạn frontend tĩnh.</p>
+        <p><strong>An toàn</strong>${safetyMessage}</p>
+      </div>
+    </div>
+  `;
+}
+
 function cardTemplate(property) {
   const feeLine = `Điện ${property.electricity ? currency.format(property.electricity) + "đ/kWh" : "trọn gói"} - Nước ${property.water ? currency.format(property.water) + "đ/" + property.waterUnit : "trọn gói"}`;
   return `
@@ -44,6 +85,7 @@ function cardTemplate(property) {
           <span>${feeLine}</span>
           <span>${property.commute} phút di chuyển</span>
         </div>
+        ${renderTrustBadges(property)}
         <div class="tag-list">${property.tags.slice(0, 4).map((tag) => `<span>${tag}</span>`).join("")}</div>
       </div>
     </article>
@@ -172,16 +214,19 @@ function renderDetail() {
       </div>
     </section>
     <section class="content-grid">
-      <div class="panel">
-        <h2>Thông tin thuê</h2>
-        <div class="spec-grid">
-          <span><strong>${property.area} m2</strong>Diện tích</span>
-          <span><strong>${formatMoney(property.deposit)}</strong>Tiền cọc</span>
-          <span><strong>${property.electricity ? currency.format(property.electricity) + "đ" : "Trọn gói"}</strong>Điện mỗi kWh</span>
-          <span><strong>${property.water ? currency.format(property.water) + "đ" : "Trọn gói"}</strong>Nước / ${property.waterUnit}</span>
-          <span><strong>${property.service ? currency.format(property.service) + "đ" : "Không thu"}</strong>Phí dịch vụ</span>
-          <span><strong>${property.availableFrom}</strong>Có thể vào ở</span>
+      <div class="detail-stack">
+        <div class="panel">
+          <h2>Thông tin thuê</h2>
+          <div class="spec-grid">
+            <span><strong>${property.area} m2</strong>Diện tích</span>
+            <span><strong>${formatMoney(property.deposit)}</strong>Tiền cọc</span>
+            <span><strong>${property.electricity ? currency.format(property.electricity) + "đ" : "Trọn gói"}</strong>Điện mỗi kWh</span>
+            <span><strong>${property.water ? currency.format(property.water) + "đ" : "Trọn gói"}</strong>Nước / ${property.waterUnit}</span>
+            <span><strong>${property.service ? currency.format(property.service) + "đ" : "Không thu"}</strong>Phí dịch vụ</span>
+            <span><strong>${property.availableFrom}</strong>Có thể vào ở</span>
+          </div>
         </div>
+        ${renderTrustPanel(property)}
       </div>
       <aside class="contact-box">
         <h2>Hẹn xem phòng</h2>
