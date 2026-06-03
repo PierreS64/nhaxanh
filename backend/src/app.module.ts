@@ -14,6 +14,7 @@ import { ChatsModule } from './chats/chats.module';
 import { AuthModule } from './auth/auth.module';
 import { MaintenanceRequestsModule } from './maintenance-requests/maintenance-requests.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { PayosModule } from './payos/payos.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
@@ -31,7 +32,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     UploadModule, 
     ChatsModule, 
     AuthModule,
-    CloudinaryModule
+    CloudinaryModule,
+    PayosModule
   ],
   controllers: [AppController],
   providers: [AppService],
