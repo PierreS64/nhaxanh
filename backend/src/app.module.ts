@@ -16,6 +16,7 @@ import { MaintenanceRequestsModule } from './maintenance-requests/maintenance-re
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { PayosModule } from './payos/payos.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     ChatsModule, 
     AuthModule,
     CloudinaryModule,
-    PayosModule
+    PayosModule,
+    DashboardModule
   ],
   controllers: [AppController],
   providers: [AppService],

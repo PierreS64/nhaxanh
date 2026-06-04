@@ -25,6 +25,13 @@ export class InvoicesController {
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Get('admin/unsettled')
+  getUnsettledInvoices(@CurrentUser() user: any) {
+    return this.invoicesService.getUnsettledInvoices(user.role);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
   findAll(@CurrentUser() user: any) {
     return this.invoicesService.findAll(user.id, user.role);
@@ -60,5 +67,12 @@ export class InvoicesController {
   @Post(':id/payment-link')
   generatePaymentLink(@Param('id') id: string, @CurrentUser() user: any) {
     return this.invoicesService.generatePaymentLink(id, user.id, user.role);
+  }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  @Post(':id/settle')
+  settleInvoice(@Param('id') id: string, @CurrentUser() user: any) {
+    return this.invoicesService.settleInvoice(id, user.role);
   }
 }
