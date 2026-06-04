@@ -133,6 +133,8 @@ CREATE TABLE "Invoice" (
     "status" "InvoiceStatus" NOT NULL DEFAULT 'UNPAID',
     "paymentMethod" VARCHAR(50),
     "paidAt" TIMESTAMP(3),
+    "isSettled" BOOLEAN NOT NULL DEFAULT false,
+    "settledAt" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "fk_invoice_contract" FOREIGN KEY ("contractId") REFERENCES "Contract"("id") ON DELETE CASCADE
