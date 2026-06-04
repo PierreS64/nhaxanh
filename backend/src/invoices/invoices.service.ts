@@ -32,6 +32,25 @@ export class InvoicesService {
     });
   }
 
+  async getUnsettledInvoices(role: string) {
+    if (role !== Role.ADMIN) throw new ForbiddenException('Access denied');
+    return this.prisma.invoice.findMany({
+      where: {
+        status: InvoiceStatus.PAID,
+        isSettled: false,
+      },
+      include: {
+        Contract: {
+          include: {
+            Property: true,
+            User_Contract_landlordIdToUser: { select: { id: true, fullName: true, email: true, phone: true } },
+            User_Contract_tenantIdToUser: { select: { id: true, fullName: true } }
+          }
+        }
+      }
+    });
+  }
+
   async findAll(userId: string, role: string) {
     if (role === Role.TENANT) {
       return this.prisma.invoice.findMany({
@@ -175,5 +194,22 @@ export class InvoicesService {
       // Even if there is an error, return a 200 so PayOS marks webhook as delivered
       return { success: true }; 
     }
+  }
+
+  async settleInvoice(id: string, role: string) {
+    if (role !== Role.ADMIN) throw new ForbiddenException('Access denied');
+    
+    const invoice = await this.prisma.invoice.findUnique({ where: { id } });
+    if (!invoice) throw new NotFoundException('Invoice not found');
+    if (invoice.status !== InvoiceStatus.PAID) throw new BadRequestException('Only paid invoices can be settled');
+    if (invoice.isSettled) throw new BadRequestException('Invoice is already settled');
+
+    return this.prisma.invoice.update({
+      where: { id },
+      data: {
+        isSettled: true,
+        settledAt: new Date(),
+      }
+    });
   }
 }
