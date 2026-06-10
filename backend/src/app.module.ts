@@ -15,10 +15,15 @@ import { AuthModule } from './auth/auth.module';
 import { MaintenanceRequestsModule } from './maintenance-requests/maintenance-requests.module';
 import { BlogModule } from './blog/blog.module';
 import { ContactModule } from './contact/contact.module';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { PayosModule } from './payos/payos.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
     PrismaModule, 
     PropertiesModule, 
     UsersModule, 
@@ -31,7 +36,10 @@ import { ContactModule } from './contact/contact.module';
     ChatsModule, 
     AuthModule,
     BlogModule,
-    ContactModule
+    ContactModule,
+    CloudinaryModule,
+    PayosModule,
+    DashboardModule
   ],
   controllers: [AppController],
   providers: [AppService],

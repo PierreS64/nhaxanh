@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@n
 import { ContractsService } from './contracts.service';
 import { CreateContractDto } from './dto/create-contract.dto';
 import { UpdateContractDto } from './dto/update-contract.dto';
+import { UpdateContractStatusDto } from './dto/update-contract-status.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -33,6 +34,12 @@ export class ContractsController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateContractDto: UpdateContractDto, @CurrentUser() user: any) {
     return this.contractsService.update(id, updateContractDto, user.id, user.role);
+  }
+
+  @Roles(Role.LANDLORD, Role.ADMIN)
+  @Patch(':id/status')
+  updateStatus(@Param('id') id: string, @Body() updateStatusDto: UpdateContractStatusDto, @CurrentUser() user: any) {
+    return this.contractsService.updateStatus(id, updateStatusDto.status, user.id, user.role);
   }
 
   @Roles(Role.LANDLORD, Role.ADMIN)

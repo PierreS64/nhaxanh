@@ -2,7 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
-import { PropertyType } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import { PropertyQueryDto } from './dto/property-query.dto';
 
 @Injectable()
 export class PropertiesService {
@@ -26,12 +27,97 @@ export class PropertiesService {
     });
   }
 
-  async findAll() {
-    return this.prisma.property.findMany({
-      include: {
-        User: true, // Based on relation map 'User' -> 'landlordId'
-      }
-    });
+  async findAll(query: PropertyQueryDto = {}) {
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      type,
+      status,
+      minPrice,
+      maxPrice,
+      city,
+      district,
+      ward,
+    } = query;
+
+    const pageNumber = Math.max(1, page);
+    const limitNumber = Math.max(1, limit);
+    const skip = (pageNumber - 1) * limitNumber;
+
+    const where: Prisma.PropertyWhereInput = {};
+
+    if (search) {
+      where.OR = [
+        { title: { contains: search, mode: 'insensitive' } },
+        { description: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    if (type) {
+      where.type = type;
+    }
+
+    if (status) {
+      where.status = status;
+    }
+
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      where.price = {};
+      if (minPrice !== undefined) where.price.gte = minPrice;
+      if (maxPrice !== undefined) where.price.lte = maxPrice;
+    }
+
+    const addressConditions: Prisma.PropertyWhereInput[] = [];
+    if (city)
+      addressConditions.push({
+        address: { contains: city, mode: 'insensitive' },
+      });
+    if (district)
+      addressConditions.push({
+        address: { contains: district, mode: 'insensitive' },
+      });
+    if (ward)
+      addressConditions.push({
+        address: { contains: ward, mode: 'insensitive' },
+      });
+
+    if (addressConditions.length > 0) {
+      // If there's an existing OR from search, we can just use AND to combine them
+      where.AND = addressConditions;
+    }
+
+    const [data, totalCount] = await Promise.all([
+      this.prisma.property.findMany({
+        where,
+        skip,
+        take: limitNumber,
+        include: {
+          User: {
+            select: {
+              id: true,
+              fullName: true,
+              avatarUrl: true,
+              email: true,
+              phone: true,
+            },
+          },
+          PropertyImage: true,
+        },
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.property.count({ where }),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total: totalCount,
+        page: pageNumber,
+        limit: limitNumber,
+        totalPages: Math.ceil(totalCount / limitNumber),
+      },
+    };
   }
 
   async findOne(id: string) {
@@ -47,7 +133,7 @@ export class PropertiesService {
 
   async update(id: string, updatePropertyDto: UpdatePropertyDto) {
     await this.findOne(id);
-    
+
     return this.prisma.property.update({
       where: { id },
       data: updatePropertyDto,

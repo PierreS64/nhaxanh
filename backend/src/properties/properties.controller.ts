@@ -1,7 +1,17 @@
-import { 
-  Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe, UseGuards 
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseUUIDPipe,
+  UseGuards,
+  Query,
 } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
+import { PropertyQueryDto } from './dto/property-query.dto';
 import { CreatePropertyDto } from './dto/create-property.dto';
 import { UpdatePropertyDto } from './dto/update-property.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -17,15 +27,18 @@ export class PropertiesController {
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.LANDLORD, Role.ADMIN)
-  create(@Body() createPropertyDto: CreatePropertyDto, @CurrentUser() user: any) {
+  create(
+    @Body() createPropertyDto: CreatePropertyDto,
+    @CurrentUser() user: { id: string },
+  ) {
     // Automatically attach landlordId from the JWT payload
     createPropertyDto.landlordId = user.id;
     return this.propertiesService.create(createPropertyDto);
   }
 
   @Get()
-  findAll() {
-    return this.propertiesService.findAll();
+  findAll(@Query() query: PropertyQueryDto) {
+    return this.propertiesService.findAll(query);
   }
 
   @Get(':id')
@@ -37,8 +50,8 @@ export class PropertiesController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.LANDLORD, Role.ADMIN)
   update(
-    @Param('id', ParseUUIDPipe) id: string, 
-    @Body() updatePropertyDto: UpdatePropertyDto
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updatePropertyDto: UpdatePropertyDto,
   ) {
     return this.propertiesService.update(id, updatePropertyDto);
   }

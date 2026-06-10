@@ -1,5 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { MaintenanceRequestsService } from './maintenance-requests.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { CreateMaintenanceRequestDto } from './dto/create-maintenance-request.dto';
 import { UpdateMaintenanceRequestDto } from './dto/update-maintenance-request.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -11,12 +13,28 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('maintenance-requests')
 export class MaintenanceRequestsController {
-  constructor(private readonly maintenanceRequestsService: MaintenanceRequestsService) {}
+  constructor(
+    private readonly maintenanceRequestsService: MaintenanceRequestsService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   @Roles(Role.TENANT, Role.ADMIN)
   @Post()
-  create(@Body() createMaintenanceRequestDto: CreateMaintenanceRequestDto, @CurrentUser() user: any) {
-    return this.maintenanceRequestsService.create(createMaintenanceRequestDto, user.id);
+  @UseInterceptors(FileInterceptor('image'))
+  async create(
+    @Body() createMaintenanceRequestDto: CreateMaintenanceRequestDto,
+    @CurrentUser() user: any,
+    @UploadedFile() image?: Express.Multer.File,
+  ) {
+    let imageUrl = createMaintenanceRequestDto.imageUrl;
+    if (image) {
+      imageUrl = await this.cloudinaryService.uploadImage(image);
+    }
+    
+    return this.maintenanceRequestsService.create(
+      { ...createMaintenanceRequestDto, imageUrl },
+      user.id
+    );
   }
 
   @Get()
