@@ -833,6 +833,8 @@ class AppState {
     this.blogPosts = this.loadLocalStorage("nhaxanh_blog_posts", INITIAL_BLOG_POSTS);
     this.blogComments = this.loadLocalStorage("nhaxanh_blog_comments", INITIAL_BLOG_COMMENTS);
     this.supportTickets = this.loadLocalStorage("nhaxanh_support_tickets", []);
+    this.homeScrollPosition = 0;
+    this.homeSavedCategory = "all";
   }
 
   loadLocalStorage(key, defaultValue) {
@@ -935,6 +937,12 @@ const DOM = {
 
   // Homepage
   homeListingsGrid: document.getElementById("home-listings-grid"),
+  defaultListingsSection: document.getElementById("default-listings-section"),
+  categorizedListingsSections: document.getElementById("categorized-listings-sections"),
+  gridCanHo: document.getElementById("grid-can-ho"),
+  gridPhongTro: document.getElementById("grid-phong-tro"),
+  gridKyTucXa: document.getElementById("grid-ky-tuc-xa"),
+  gridNhaNguyenCan: document.getElementById("grid-nha-nguyen-can"),
   homeSearchForm: document.getElementById("home-search-form"),
   searchLocation: document.getElementById("search-location"),
   searchPrice: document.getElementById("search-price"),
@@ -1042,6 +1050,12 @@ let homeActiveCategory = "all";
 // SPA ROUTER (VIEW SWITCHER)
 // ==========================================
 function switchView(viewName, params = {}) {
+  // Save home page state when leaving home
+  if (state.currentView === "home" && viewName !== "home") {
+    state.homeScrollPosition = window.scrollY;
+    state.homeSavedCategory = homeActiveCategory;
+  }
+
   // Normalize auth requests
   if (viewName === "auth") {
     viewName = params.tab === "register" ? "register" : "login";
@@ -1057,17 +1071,59 @@ function switchView(viewName, params = {}) {
   // Reset dropdown menu if open
   DOM.userDropdownMenu.classList.remove("show");
 
+  // Determine home Active Category before rendering
+  if (viewName === "home") {
+    // If navigating back (no filterType param), restore the saved category
+    if (params.filterType === undefined && state.homeSavedCategory !== undefined) {
+      homeActiveCategory = state.homeSavedCategory;
+    } else {
+      homeActiveCategory = params.filterType || "all";
+      // If they explicitly clicked a category/filter, reset scroll position
+      state.homeScrollPosition = 0;
+    }
+
+    // update category pills
+    DOM.searchTabs.forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.type === homeActiveCategory);
+    });
+    
+    initHomeView(params.city);
+  } else {
+    // View specific initializations for other views
+    if (viewName === "detail") {
+      initDetailView(params.propertyId);
+    } else if (viewName === "login" || viewName === "register") {
+      initAuthView(viewName);
+    } else if (viewName === "dashboard") {
+      initDashboardView();
+    } else if (viewName === "form") {
+      initFormView(params.propertyId);
+    } else if (viewName === "blog") {
+      initBlogView();
+    } else if (viewName === "contact") {
+      initContactView();
+    } else if (viewName === "about") {
+      initAboutView();
+    }
+  }
+
   // Show target view after a minor delay for styling transitions
   setTimeout(() => {
     if (DOM.views[viewName]) {
       DOM.views[viewName].classList.add("active");
     }
-    window.scrollTo(0, 0);
+    
+    // Set scroll position: restore if home and saved, otherwise instant scroll to top
+    if (viewName === "home" && state.homeScrollPosition) {
+      window.scrollTo({ top: state.homeScrollPosition, behavior: 'instant' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
   }, 50);
 
   state.currentView = viewName;
 
-  // Handle header active link
+  // Handle header active link indicators
   const currentFilterType = params.filterType || (viewName === "home" ? homeActiveCategory : null);
   DOM.navLinks.forEach(link => {
     link.classList.remove("active");
@@ -1081,30 +1137,6 @@ function switchView(viewName, params = {}) {
       }
     }
   });
-
-  // View specific initializations
-  if (viewName === "home") {
-    homeActiveCategory = params.filterType || "all";
-    // update category pills
-    DOM.searchTabs.forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.type === homeActiveCategory);
-    });
-    initHomeView(params.city);
-  } else if (viewName === "detail") {
-    initDetailView(params.propertyId);
-  } else if (viewName === "login" || viewName === "register") {
-    initAuthView(viewName);
-  } else if (viewName === "dashboard") {
-    initDashboardView();
-  } else if (viewName === "form") {
-    initFormView(params.propertyId);
-  } else if (viewName === "blog") {
-    initBlogView();
-  } else if (viewName === "contact") {
-    initContactView();
-  } else if (viewName === "about") {
-    initAboutView();
-  }
 }
 
 // ==========================================
@@ -1226,6 +1258,7 @@ function initApp() {
 
   // Initial render setup
   updateUserInterface();
+  initFloatingChats();
   switchView("home");
 }
 
@@ -1308,6 +1341,41 @@ function initHomeView(cityFilter = null) {
     filterHomeListings();
   };
 
+  // Bind View All Links for Categorized Sections
+  document.querySelectorAll(".view-all-link").forEach(link => {
+    link.onclick = (e) => {
+      e.preventDefault();
+      const filterType = link.dataset.filterType;
+      
+      // Switch top search tabs
+      DOM.searchTabs.forEach(btn => {
+        if (btn.dataset.type === filterType) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+
+      homeActiveCategory = filterType;
+
+      // Update navbar active state
+      DOM.navLinks.forEach(l => {
+        l.classList.remove("active");
+        const linkFilterType = l.dataset.filterType;
+        if (l.dataset.view === "home") {
+          if (!linkFilterType && homeActiveCategory === "all") {
+            l.classList.add("active");
+          } else if (linkFilterType === homeActiveCategory) {
+            l.classList.add("active");
+          }
+        }
+      });
+
+      filterHomeListings();
+      DOM.homeSearchForm.scrollIntoView({ behavior: "smooth" });
+    };
+  });
+
   // Perform initial render
   filterHomeListings();
 }
@@ -1353,76 +1421,129 @@ function filterHomeListings() {
   renderHomeListings(filtered);
 }
 
-function renderHomeListings(listings) {
-  DOM.homeListingsGrid.innerHTML = "";
-  DOM.listingsCount.textContent = `${listings.length} kết quả được tìm thấy`;
+function createPropertyCard(property) {
+  const card = document.createElement("div");
+  card.className = "property-card";
+  
+  const isLiked = state.isLiked(property.id);
+  const likeClass = isLiked ? "like-btn liked" : "like-btn";
+  const likeIcon = isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart";
+  const statusText = property.status === "available" ? "Còn trống" : "Đã thuê";
+  const statusClass = property.status === "available" ? "status-badge status-available" : "status-badge status-rented";
 
-  if (listings.length === 0) {
-    DOM.homeListingsGrid.innerHTML = `
-      <div class="empty-state" style="grid-column: 1 / -1;">
-        <i class="fa-solid fa-house-circle-exclamation"></i>
-        <h3>Không tìm thấy phòng phù hợp</h3>
-        <p class="text-muted">Thử thay đổi bộ lọc tìm kiếm hoặc từ khóa của bạn.</p>
+  // Set fallback image if empty
+  const imgUrl = property.images && property.images.length > 0 ? property.images[0] : "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=600&q=80";
+
+  card.innerHTML = `
+    <div class="property-image-wrapper">
+      <span class="price-badge">${formatPrice(property.price)}/tháng</span>
+      <button class="${likeClass}" data-id="${property.id}" aria-label="Yêu thích">
+        <i class="${likeIcon}"></i>
+      </button>
+      <span class="${statusClass}">${statusText}</span>
+      <img class="property-img" src="${imgUrl}" alt="${property.title}" loading="lazy">
+    </div>
+    <div class="property-content">
+      <span class="text-primary" style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.25rem;">
+        ${displayType(property.type)}
+      </span>
+      <h3 class="property-title">${property.title}</h3>
+      <div class="property-location">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>${property.street}, Q.${property.district}, ${property.city}</span>
       </div>
-    `;
-    return;
-  }
-
-  listings.forEach(property => {
-    const card = document.createElement("div");
-    card.className = "property-card";
-    
-    const isLiked = state.isLiked(property.id);
-    const likeClass = isLiked ? "like-btn liked" : "like-btn";
-    const likeIcon = isLiked ? "fa-solid fa-heart" : "fa-regular fa-heart";
-    const statusText = property.status === "available" ? "Còn trống" : "Đã thuê";
-    const statusClass = property.status === "available" ? "status-badge status-available" : "status-badge status-rented";
-
-    // Set fallback image if empty
-    const imgUrl = property.images && property.images.length > 0 ? property.images[0] : "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=600&q=80";
-
-    card.innerHTML = `
-      <div class="property-image-wrapper">
-        <span class="price-badge">${formatPrice(property.price)}/tháng</span>
-        <span class="${statusClass}">${statusText}</span>
-        <button class="${likeClass}" data-id="${property.id}" aria-label="Yêu thích">
-          <i class="${likeIcon}"></i>
-        </button>
-        <img class="property-img" src="${imgUrl}" alt="${property.title}" loading="lazy">
+      <div class="property-details-meta">
+        <span class="property-price">${formatPrice(property.price)}<span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">/tháng</span></span>
+        <span class="property-area"><i class="fa-solid fa-maximize"></i> ${property.area} m²</span>
       </div>
-      <div class="property-content">
-        <span class="text-primary" style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.25rem;">
-          ${displayType(property.type)}
-        </span>
-        <h3 class="property-title">${property.title}</h3>
-        <div class="property-location">
-          <i class="fa-solid fa-location-dot"></i>
-          <span>${property.street}, Q.${property.district}, ${property.city}</span>
-        </div>
-        <div class="property-details-meta">
-          <span class="property-price">${formatPrice(property.price)}<span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">/tháng</span></span>
-          <span class="property-area"><i class="fa-solid fa-maximize"></i> ${property.area} m²</span>
-        </div>
-      </div>
-    `;
+    </div>
+  `;
 
-    // Click on Card (Except Like Button) -> details page
-    card.addEventListener("click", (e) => {
-      if (e.target.closest(".like-btn")) return;
-      switchView("detail", { propertyId: property.id });
-    });
-
-    // Like Button action
-    const btnLike = card.querySelector(".like-btn");
-    btnLike.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const liked = state.toggleLike(property.id);
-      btnLike.className = liked ? "like-btn liked" : "like-btn";
-      btnLike.querySelector("i").className = liked ? "fa-solid fa-heart" : "fa-regular fa-heart";
-    });
-
-    DOM.homeListingsGrid.appendChild(card);
+  // Click on Card (Except Like Button) -> details page
+  card.addEventListener("click", (e) => {
+    if (e.target.closest(".like-btn")) return;
+    switchView("detail", { propertyId: property.id });
   });
+
+  // Like Button action
+  const btnLike = card.querySelector(".like-btn");
+  btnLike.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const liked = state.toggleLike(property.id);
+    btnLike.className = liked ? "like-btn liked" : "like-btn";
+    btnLike.querySelector("i").className = liked ? "fa-solid fa-heart" : "fa-regular fa-heart";
+  });
+
+  return card;
+}
+
+function renderHomeListings(listings) {
+  const selectedLocation = DOM.searchLocation.value;
+  const selectedPriceRange = DOM.searchPrice.value;
+  const keyword = DOM.searchKeyword.value.toLowerCase().trim();
+
+  const isDefaultHomeView = (
+    homeActiveCategory === "all" &&
+    selectedLocation === "all" &&
+    selectedPriceRange === "all" &&
+    keyword === ""
+  );
+
+  if (isDefaultHomeView) {
+    if (DOM.defaultListingsSection) DOM.defaultListingsSection.style.display = "none";
+    if (DOM.categorizedListingsSections) DOM.categorizedListingsSections.style.display = "block";
+
+    const apartments = listings.filter(p => p.type === "can-ho");
+    const rooms = listings.filter(p => p.type === "phong-tro");
+    const dorms = listings.filter(p => p.type === "ky-tuc-xa");
+    const houses = listings.filter(p => p.type === "nha-nguyen-can");
+
+    const populateGrid = (gridEl, items) => {
+      if (!gridEl) return;
+      gridEl.innerHTML = "";
+      
+      const parentSection = gridEl.closest(".container");
+      if (items.length === 0) {
+        if (parentSection) parentSection.style.display = "none";
+        return;
+      } else {
+        if (parentSection) parentSection.style.display = "block";
+      }
+
+      items.slice(0, 3).forEach(property => {
+        const card = createPropertyCard(property);
+        gridEl.appendChild(card);
+      });
+    };
+
+    populateGrid(DOM.gridCanHo, apartments);
+    populateGrid(DOM.gridPhongTro, rooms);
+    populateGrid(DOM.gridKyTucXa, dorms);
+    populateGrid(DOM.gridNhaNguyenCan, houses);
+
+  } else {
+    if (DOM.defaultListingsSection) DOM.defaultListingsSection.style.display = "block";
+    if (DOM.categorizedListingsSections) DOM.categorizedListingsSections.style.display = "none";
+
+    DOM.homeListingsGrid.innerHTML = "";
+    DOM.listingsCount.textContent = `${listings.length} kết quả được tìm thấy`;
+
+    if (listings.length === 0) {
+      DOM.homeListingsGrid.innerHTML = `
+        <div class="empty-state" style="grid-column: 1 / -1;">
+          <i class="fa-solid fa-house-circle-exclamation"></i>
+          <h3>Không tìm thấy phòng phù hợp</h3>
+          <p class="text-muted">Thử thay đổi bộ lọc tìm kiếm hoặc từ khóa của bạn.</p>
+        </div>
+      `;
+      return;
+    }
+
+    listings.forEach(property => {
+      const card = createPropertyCard(property);
+      DOM.homeListingsGrid.appendChild(card);
+    });
+  }
 }
 
 // ==========================================
@@ -2723,6 +2844,271 @@ function initAboutView() {
       timelineContainer.scrollLeft = scrollLeft - walk;
     });
   }
+}
+
+// ----------------------------------------------------
+// FLOATING CHAT BUBBLES & CHAT WINDOWS LOGIC
+// ----------------------------------------------------
+function initFloatingChats() {
+  const staffToggle = document.getElementById("staff-chat-toggle");
+  const staffWindow = document.getElementById("staff-chat-window");
+  const staffClose = document.getElementById("staff-chat-close");
+  const staffForm = document.getElementById("staff-chat-form");
+  const staffInput = document.getElementById("staff-chat-input");
+
+  const aiToggle = document.getElementById("ai-chat-toggle");
+  const aiWindow = document.getElementById("ai-chat-window");
+  const aiClose = document.getElementById("ai-chat-close");
+  const aiForm = document.getElementById("ai-chat-form");
+  const aiInput = document.getElementById("ai-chat-input");
+
+  // Toggle Staff Chat
+  if (staffToggle && staffWindow) {
+    staffToggle.onclick = (e) => {
+      e.stopPropagation();
+      const isActive = staffWindow.classList.toggle("active");
+      if (isActive && aiWindow) {
+        aiWindow.classList.remove("active");
+      }
+    };
+  }
+
+  // Toggle AI Chat
+  if (aiToggle && aiWindow) {
+    aiToggle.onclick = (e) => {
+      e.stopPropagation();
+      const isActive = aiWindow.classList.toggle("active");
+      if (isActive && staffWindow) {
+        staffWindow.classList.remove("active");
+      }
+    };
+  }
+
+  // Close buttons
+  if (staffClose && staffWindow) {
+    staffClose.onclick = () => staffWindow.classList.remove("active");
+  }
+  if (aiClose && aiWindow) {
+    aiClose.onclick = () => aiWindow.classList.remove("active");
+  }
+
+  // Click outside to close windows
+  document.addEventListener("click", (e) => {
+    if (staffWindow && !staffWindow.contains(e.target) && e.target !== staffToggle && !staffToggle.contains(e.target)) {
+      staffWindow.classList.remove("active");
+    }
+    if (aiWindow && !aiWindow.contains(e.target) && e.target !== aiToggle && !aiToggle.contains(e.target)) {
+      aiWindow.classList.remove("active");
+    }
+  });
+
+  // Handle Staff Chat submit
+  if (staffForm) {
+    staffForm.onsubmit = (e) => {
+      e.preventDefault();
+      const text = staffInput.value.trim();
+      if (!text) return;
+
+      appendChatMessage("staff-chat-messages", "user", text);
+      staffInput.value = "";
+
+      // Delayed bot response simulating staff
+      setTimeout(() => {
+        appendChatMessage(
+          "staff-chat-messages",
+          "bot",
+          "Cảm ơn bạn đã nhắn tin. Bộ phận hỗ trợ của Nhà Xanh đã ghi nhận thông tin này. Nhân viên trực tổng đài sẽ liên hệ trực tiếp với bạn qua số điện thoại hoặc email trong vòng 15-30 phút tới. Trân trọng!"
+        );
+      }, 1000);
+    };
+  }
+
+  // Handle AI Chat submit
+  if (aiForm) {
+    aiForm.onsubmit = (e) => {
+      e.preventDefault();
+      const text = aiInput.value.trim();
+      if (!text) return;
+
+      appendChatMessage("ai-chat-messages", "user", text);
+      aiInput.value = "";
+
+      // Simulate AI bot thinking
+      setTimeout(() => {
+        // Parse Query
+        const parsed = parseAiQuery(text);
+        
+        // Check standard greeting
+        const greetings = ["hi", "hello", "xin chào", "chào", "chào robot", "chào bot", "chào ai"];
+        const lowerText = text.toLowerCase();
+        const isGreeting = greetings.some(g => lowerText === g || lowerText.startsWith(g + " "));
+
+        if (isGreeting) {
+          appendChatMessage(
+            "ai-chat-messages",
+            "bot",
+            "Chào bạn! Rất vui được hỗ trợ bạn. Mình là trợ lý AI thông minh của Nhà Xanh. 🤖<br><br>Hãy cho mình biết nhu cầu tìm phòng của bạn (ví dụ: loại phòng, khu vực quận/huyện, khoảng giá mong muốn...) để mình lọc ngay danh sách nhé!"
+          );
+          return;
+        }
+
+        // Execute search
+        const results = executeAiSearch(parsed);
+        
+        let responseText = "";
+        let cards = [];
+
+        if (results.length > 0) {
+          responseText = `Mình đã tìm thấy <strong>${results.length}</strong> phòng trọ phù hợp với yêu cầu của bạn ở khu vực này:`;
+          // Limit to top 3 matches to keep chat clean
+          cards = results.slice(0, 3);
+        } else {
+          // If no specific parsed parameters, or no matching items found
+          if (!parsed.type && !parsed.city && !parsed.district && !parsed.maxPrice) {
+            responseText = "Xin lỗi, mình chưa hiểu rõ yêu cầu của bạn. 😅 Bạn hãy thử nhập cụ thể hơn nhé! Ví dụ: <em>'Tìm phòng trọ ở Cầu Giấy dưới 4 triệu'</em>.";
+          } else {
+            responseText = "Hiện tại cơ sở dữ liệu của Nhà Xanh chưa có phòng trọ nào khớp hoàn toàn với bộ lọc của bạn. 😿<br><br>Bạn hãy thử mở rộng khoảng giá hoặc thay đổi tên Quận/Huyện tìm kiếm xem sao nhé!";
+          }
+        }
+
+        appendChatMessage("ai-chat-messages", "bot", responseText, cards);
+      }, 1200);
+    };
+  }
+}
+
+// AI Chatbot NLP Helper
+function parseAiQuery(query) {
+  query = query.toLowerCase();
+  let type = null;
+  let city = null;
+  let district = null;
+  let maxPrice = null;
+
+  // 1. Detect Type
+  if (query.includes("phòng trọ") || query.includes("phong tro") || query.includes("trọ")) {
+    type = "phong-tro";
+  } else if (query.includes("căn hộ") || query.includes("can ho") || query.includes("chung cư")) {
+    type = "can-ho";
+  } else if (query.includes("nhà nguyên căn") || query.includes("nha nguyen can") || query.includes("nhà riêng")) {
+    type = "nha-nguyen-can";
+  } else if (query.includes("ký túc xá") || query.includes("ky tuc xa") || query.includes("ktx")) {
+    type = "ky-tuc-xa";
+  }
+
+  // 2. Detect City / District
+  const cities = ["hà nội", "tp.hcm", "hồ chí minh", "đà nẵng", "hải phòng"];
+  const districts = [
+    "cầu giấy", "hai bà trưng", "bắc từ liêm", "đống đa", 
+    "bình thạnh", "quận 7", "thủ đức", "quận 1", 
+    "sơn trà", "hải châu", "thanh khê", 
+    "ngô quyền", "lê chân"
+  ];
+
+  for (const c of cities) {
+    if (query.includes(c)) {
+      city = c === "hồ chí minh" ? "TP.HCM" : (c === "hà nội" ? "Hà Nội" : (c === "đà nẵng" ? "Đà Nẵng" : (c === "hải phòng" ? "Hải Phòng" : c)));
+      break;
+    }
+  }
+
+  for (const d of districts) {
+    if (query.includes(d)) {
+      district = d;
+      break;
+    }
+  }
+
+  // 3. Detect Price Budget
+  // Regex to extract price numbers like "4 triệu", "3.5 tr", "3000000", "5tr"
+  const priceRegex = /(\d+(?:[.,]\d+)?)\s*(triệu|tr|trieu|t|đ|d|vnd|vnđ|m)/i;
+  const match = query.match(priceRegex);
+  if (match) {
+    let val = parseFloat(match[1].replace(",", "."));
+    if (val < 100) {
+      // e.g. "4 triệu" -> 4,000,000
+      maxPrice = val * 1000000;
+    } else {
+      maxPrice = val;
+    }
+  } else {
+    // Check verbal clues
+    if (query.includes("dưới 3 triệu") || query.includes("dưới 3tr")) maxPrice = 3000000;
+    else if (query.includes("dưới 4 triệu") || query.includes("dưới 4tr")) maxPrice = 4000000;
+    else if (query.includes("dưới 5 triệu") || query.includes("dưới 5tr")) maxPrice = 5000000;
+    else if (query.includes("dưới 6 triệu") || query.includes("dưới 6tr")) maxPrice = 6000000;
+    else if (query.includes("dưới 7 triệu") || query.includes("dưới 7tr")) maxPrice = 7000000;
+  }
+
+  return { type, city, district, maxPrice };
+}
+
+function executeAiSearch(parsed) {
+  return state.properties.filter(p => {
+    // Type match
+    if (parsed.type && p.type !== parsed.type) return false;
+    
+    // District match
+    if (parsed.district) {
+      const pDist = p.district.toLowerCase();
+      const qDist = parsed.district.toLowerCase();
+      if (!pDist.includes(qDist) && !qDist.includes(pDist)) return false;
+    }
+    
+    // City match
+    if (parsed.city && p.city.toLowerCase() !== parsed.city.toLowerCase()) return false;
+    
+    // Price budget match
+    if (parsed.maxPrice && p.price > parsed.maxPrice) return false;
+    
+    return true;
+  });
+}
+
+function appendChatMessage(containerId, sender, text, propertyCards = []) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  
+  const msgDiv = document.createElement("div");
+  msgDiv.className = `chat-msg ${sender === "user" ? "user-msg" : "bot-msg"}`;
+  
+  const bubbleDiv = document.createElement("div");
+  bubbleDiv.className = "msg-bubble";
+  bubbleDiv.innerHTML = text;
+  msgDiv.appendChild(bubbleDiv);
+  
+  if (propertyCards.length > 0) {
+    propertyCards.forEach(prop => {
+      const card = document.createElement("div");
+      card.className = "chat-property-card";
+      const imgUrl = prop.images && prop.images.length > 0 ? prop.images[0] : "https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=400&q=80";
+      
+      card.innerHTML = `
+        <img src="${imgUrl}" alt="${prop.title}">
+        <div class="chat-property-info">
+          <h5 class="chat-property-title">${prop.title}</h5>
+          <span class="chat-property-price">${formatPrice(prop.price)}/tháng</span>
+          <p class="chat-property-location"><i class="fa-solid fa-location-dot"></i> Q.${prop.district}, ${prop.city}</p>
+        </div>
+      `;
+      
+      card.onclick = () => {
+        // Close chat window
+        document.getElementById("ai-chat-window").classList.remove("active");
+        switchView("detail", { propertyId: prop.id });
+      };
+      
+      msgDiv.appendChild(card);
+    });
+  }
+  
+  const timeSpan = document.createElement("span");
+  timeSpan.className = "msg-time";
+  timeSpan.textContent = new Date().toLocaleTimeString("vi-VN", { hour: '2-digit', minute: '2-digit' });
+  msgDiv.appendChild(timeSpan);
+  
+  container.appendChild(msgDiv);
+  container.scrollTop = container.scrollHeight;
 }
 
 

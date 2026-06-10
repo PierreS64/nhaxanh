@@ -27,8 +27,6 @@
         <a href="#" class="nav-link" data-view="home" data-filter-type="can-ho">Căn hộ</a>
         <a href="#" class="nav-link" data-view="home" data-filter-type="ky-tuc-xa">Ký túc xá</a>
         <a href="#" class="nav-link" data-view="blog">Cộng đồng</a>
-        <a href="#" class="nav-link" data-view="contact">Liên hệ</a>
-        <a href="#" class="nav-link" data-view="about">Về chúng tôi</a>
       </nav>
 
       <div class="header-actions">
@@ -138,7 +136,7 @@
         <h2 class="section-title">Các thành phố phổ biến</h2>
         <div class="cities-grid">
           <div class="city-card" data-city="Hà Nội">
-            <img src="https://images.unsplash.com/photo-1509060464153-44667396260f?auto=format&fit=crop&w=400&q=80" alt="Hà Nội">
+            <img src="https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?auto=format&fit=crop&w=400&q=80" alt="Hà Nội">
             <div class="city-info">
               <h3>Hà Nội</h3>
             </div>
@@ -156,7 +154,7 @@
             </div>
           </div>
           <div class="city-card" data-city="Hải Phòng">
-            <img src="https://images.unsplash.com/photo-1509060464153-44667396260f?auto=format&fit=crop&w=400&q=80" alt="Hải Phòng" style="filter: saturate(1.5);">
+            <img src="https://images.unsplash.com/photo-1628126235206-5260b9ea6441?auto=format&fit=crop&w=400&q=80" alt="Hải Phòng" style="filter: saturate(1.5);">
             <div class="city-info">
               <h3>Hải Phòng</h3>
             </div>
@@ -164,8 +162,8 @@
         </div>
       </div>
 
-      <!-- Latest Properties Listings -->
-      <div class="container section-padding" style="padding-top: 0;">
+      <!-- Latest Properties Listings (Used for search & filters) -->
+      <div class="container section-padding" id="default-listings-section" style="padding-top: 0;">
         <div class="listings-header">
           <h2 class="section-title" id="listings-section-title">Tin đăng mới nhất</h2>
           <span class="text-muted" id="listings-count">6 kết quả được tìm thấy</span>
@@ -174,6 +172,55 @@
         <div class="listings-grid" id="home-listings-grid">
           <!-- Property Cards will be rendered dynamically here -->
         </div>
+      </div>
+
+      <!-- Categorized Listings Sections (Shown by default on home view) -->
+      <div id="categorized-listings-sections" style="display: none;">
+        
+        <!-- Section 1: Căn hộ -->
+        <div class="container section-padding" style="padding-top: 0; padding-bottom: 2rem;">
+          <div class="listings-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 class="section-title" style="margin-bottom: 0;"><i class="fa-solid fa-building text-primary" style="margin-right: 0.5rem;"></i> Căn hộ cao cấp & Mini</h2>
+            <a href="#" class="view-all-link" data-filter-type="can-ho" style="font-weight: 700; color: var(--primary); display: inline-flex; align-items: center; gap: 0.5rem; transition: var(--transition-fast);">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <div class="listings-grid" id="grid-can-ho">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Section 2: Phòng trọ -->
+        <div class="container section-padding" style="padding-top: 0; padding-bottom: 2rem;">
+          <div class="listings-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 class="section-title" style="margin-bottom: 0;"><i class="fa-solid fa-house-chimney text-secondary" style="margin-right: 0.5rem;"></i> Phòng trọ tiện ích</h2>
+            <a href="#" class="view-all-link" data-filter-type="phong-tro" style="font-weight: 700; color: var(--primary); display: inline-flex; align-items: center; gap: 0.5rem; transition: var(--transition-fast);">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <div class="listings-grid" id="grid-phong-tro">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Section 3: Ký túc xá -->
+        <div class="container section-padding" style="padding-top: 0; padding-bottom: 2rem;">
+          <div class="listings-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 class="section-title" style="margin-bottom: 0;"><i class="fa-solid fa-bed text-tertiary" style="margin-right: 0.5rem;"></i> Ký túc xá & Homestay</h2>
+            <a href="#" class="view-all-link" data-filter-type="ky-tuc-xa" style="font-weight: 700; color: var(--primary); display: inline-flex; align-items: center; gap: 0.5rem; transition: var(--transition-fast);">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <div class="listings-grid" id="grid-ky-tuc-xa">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- Section 4: Nhà nguyên căn -->
+        <div class="container section-padding" style="padding-top: 0; padding-bottom: 2rem;">
+          <div class="listings-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 class="section-title" style="margin-bottom: 0;"><i class="fa-solid fa-house-laptop" style="color: #a855f7; margin-right: 0.5rem;"></i> Nhà nguyên căn tiện nghi</h2>
+            <a href="#" class="view-all-link" data-filter-type="nha-nguyen-can" style="font-weight: 700; color: var(--primary); display: inline-flex; align-items: center; gap: 0.5rem; transition: var(--transition-fast);">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a>
+          </div>
+          <div class="listings-grid" id="grid-nha-nguyen-can">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -378,10 +425,10 @@
           <div class="social-auth" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
             <span class="social-title" style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); background: var(--bg-surface); padding: 0 0.75rem; position: relative; top: -2.15rem;">Hoặc đăng nhập với</span>
             <div class="social-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: -1rem;">
-              <button class="social-btn google" onclick="handleSocialAuth('Google'); return false;" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; background: white; transition: all 0.2s ease;">
+              <button class="social-btn google" onclick="handleSocialAuth('Google'); return false;">
                 <i class="fa-brands fa-google" style="color: #ea4335;"></i> Google
               </button>
-              <button class="social-btn facebook" onclick="handleSocialAuth('Facebook'); return false;" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; background: white; transition: all 0.2s ease;">
+              <button class="social-btn facebook" onclick="handleSocialAuth('Facebook'); return false;">
                 <i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook
               </button>
             </div>
@@ -457,10 +504,10 @@
           <div class="social-auth" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: center;">
             <span class="social-title" style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); background: var(--bg-surface); padding: 0 0.75rem; position: relative; top: -2.15rem;">Hoặc đăng ký bằng</span>
             <div class="social-buttons" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: -1rem;">
-              <button class="social-btn google" onclick="handleSocialAuth('Google'); return false;" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; background: white; transition: all 0.2s ease;">
+              <button class="social-btn google" onclick="handleSocialAuth('Google'); return false;">
                 <i class="fa-brands fa-google" style="color: #ea4335;"></i> Google
               </button>
-              <button class="social-btn facebook" onclick="handleSocialAuth('Facebook'); return false;" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem; border: 1.5px solid var(--border); border-radius: var(--radius-md); font-weight: 700; cursor: pointer; background: white; transition: all 0.2s ease;">
+              <button class="social-btn facebook" onclick="handleSocialAuth('Facebook'); return false;">
                 <i class="fa-brands fa-facebook" style="color: #1877f2;"></i> Facebook
               </button>
             </div>
@@ -1033,7 +1080,7 @@
                   <p>Nhóm dự án gồm 3 thành viên sáng lập bắt đầu phác thảo mô hình kết nối phòng trọ thông minh, loại bỏ trung gian môi giới lừa đảo.</p>
                 </div>
               </div>
-              
+
               <!-- Item 2 -->
               <div class="timeline-item">
                 <div class="timeline-year">2024</div>
@@ -1076,7 +1123,7 @@
             <!-- Member 1 -->
             <div class="team-card reveal-on-scroll">
               <div class="team-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Founder 1">
+                <img src="" alt="Founder 1">
               </div>
               <div class="team-info">
                 <h4>Hàn Minh Tùng</h4>
@@ -1092,7 +1139,7 @@
             <!-- Member 2 -->
             <div class="team-card reveal-on-scroll" style="transition-delay: 0.15s;">
               <div class="team-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Founder 2">
+                <img src="" alt="Founder 2">
               </div>
               <div class="team-info">
                 <h4>Nguyễn Thuận Phong</h4>
@@ -1108,7 +1155,7 @@
             <!-- Member 3 -->
             <div class="team-card reveal-on-scroll" style="transition-delay: 0.3s;">
               <div class="team-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80" alt="Founder 3">
+                <img src="" alt="Founder 3">
               </div>
               <div class="team-info">
                 <h4>Nguyễn Tiến Thành</h4>
@@ -1207,7 +1254,8 @@
           <a href="#" onclick="alert('Vui lòng đăng ký/đăng nhập tài khoản Chủ nhà để sử dụng tính năng này!'); return false;">Dành cho chủ trọ</a>
           <a href="#" onclick="switchView('blog'); return false;">Blog tin tức</a>
           <a href="#" onclick="alert('Vui lòng đăng nhập tài khoản Chủ nhà để đăng tin!'); return false;">Hướng dẫn đăng tin</a>
-          <a href="#" onclick="switchView('contact'); return false;">Liên hệ hỗ trợ</a>
+          <a href="#" onclick="switchView('contact'); return false;">Liên hệ</a>
+          <a href="#" onclick="switchView('about'); return false;">Về chúng tôi</a>
         </div>
       </div>
 
@@ -1343,6 +1391,76 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Floating Chat Bubbles -->
+  <div class="floating-chat-container">
+    <!-- Bubble 1: Contact Staff -->
+    <button class="chat-bubble staff-bubble" id="staff-chat-toggle" aria-label="Chat với nhân viên">
+      <i class="fa-solid fa-headset"></i>
+      <span class="bubble-tooltip">Hỗ trợ khách hàng</span>
+    </button>
+
+    <!-- Bubble 2: AI Chatbot -->
+    <button class="chat-bubble ai-bubble" id="ai-chat-toggle" aria-label="AI Chatbot">
+      <i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i>
+      <span class="bubble-tooltip">AI Trợ lý ảo</span>
+    </button>
+  </div>
+
+  <!-- Chat Panel 1: Staff Chat Window -->
+  <div class="chat-window" id="staff-chat-window">
+    <div class="chat-window-header bg-gradient-blue">
+      <div class="chat-window-title">
+        <i class="fa-solid fa-headset"></i>
+        <div>
+          <h4>Hỗ Trợ Nhân Viên</h4>
+          <span>Trực tuyến 24/7</span>
+        </div>
+      </div>
+      <button class="chat-window-close" id="staff-chat-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="chat-window-messages" id="staff-chat-messages">
+      <div class="chat-msg bot-msg">
+        <div class="msg-bubble">
+          Xin chào! Cảm ơn bạn đã liên hệ Nhà Xanh. Bạn cần nhân viên hỗ trợ vấn đề gì ạ? Vui lòng gửi tin nhắn tại đây.
+        </div>
+        <span class="msg-time">Vừa xong</span>
+      </div>
+    </div>
+    <form class="chat-window-input-area" id="staff-chat-form">
+      <input type="text" id="staff-chat-input" placeholder="Nhập tin nhắn..." required>
+      <button type="submit" class="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+    </form>
+  </div>
+
+  <!-- Chat Panel 2: AI Chatbot Window -->
+  <div class="chat-window" id="ai-chat-window">
+    <div class="chat-window-header bg-gradient-green">
+      <div class="chat-window-title">
+        <i class="fa-solid fa-robot"></i>
+        <div>
+          <h4>Trợ Lý Ảo AI</h4>
+          <span>Nhà Xanh SmartBot</span>
+        </div>
+      </div>
+      <button class="chat-window-close" id="ai-chat-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="chat-window-messages" id="ai-chat-messages">
+      <div class="chat-msg bot-msg">
+        <div class="msg-bubble">
+          Xin chào! Mình là Trợ lý ảo AI của Nhà Xanh. 🤖<br><br>
+          Mình có thể giúp bạn tìm phòng trọ, căn hộ cho thuê siêu nhanh! Bạn hãy thử nhập ví dụ:<br>
+          👉 <em>"Tìm phòng ở Cầu Giấy dưới 4 triệu"</em><br>
+          👉 <em>"Tìm căn hộ ở Bình Thạnh"</em>
+        </div>
+        <span class="msg-time">Vừa xong</span>
+      </div>
+    </div>
+    <form class="chat-window-input-area" id="ai-chat-form">
+      <input type="text" id="ai-chat-input" placeholder="Tìm phòng trọ Cầu Giấy dưới 4 triệu..." required>
+      <button type="submit" class="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+    </form>
   </div>
 
   <!-- App Script -->

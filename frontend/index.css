@@ -743,6 +743,7 @@ ul {
   border-radius: var(--radius-md);
   z-index: 2;
   box-shadow: var(--shadow-sm);
+  transition: top var(--transition-fast) cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .status-available {
@@ -768,19 +769,44 @@ ul {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition-fast);
-  z-index: 2;
+  transition: opacity var(--transition-fast) cubic-bezier(0.4, 0, 0.2, 1), 
+              transform var(--transition-fast) cubic-bezier(0.4, 0, 0.2, 1), 
+              background-color var(--transition-fast), 
+              color var(--transition-fast);
+  z-index: 3;
   border: 1px solid rgba(0,0,0,0.05);
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
 }
 
 .like-btn:hover {
   background-color: white;
   color: var(--secondary);
-  transform: scale(1.1);
+  transform: scale(1.1) !important;
 }
 
 .like-btn.liked {
   color: var(--secondary);
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* If liked, push the status-badge down so they don't overlap */
+.like-btn.liked + .status-badge {
+  top: 3.75rem;
+}
+
+/* Card hover transitions */
+.property-card:hover .like-btn {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.property-card:hover .status-badge {
+  top: 3.75rem;
 }
 
 .property-content {
@@ -1335,16 +1361,19 @@ ul {
 }
 
 .social-btn {
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   padding: 0.75rem;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
-  transition: var(--transition-fast);
+  cursor: pointer;
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  transition: all 0.2s ease;
 }
 
 .social-btn:hover {
@@ -2802,5 +2831,313 @@ body {
     align-items: flex-start;
     gap: 1.5rem;
   }
+}
+
+/* ==========================================================================
+   FLOATING CHAT BUBBLES & CHAT WINDOWS
+   ========================================================================== */
+.floating-chat-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chat-bubble {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.4rem;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.chat-bubble:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+}
+
+.staff-bubble {
+  background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+}
+
+.ai-bubble {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+}
+
+.bubble-tooltip {
+  position: absolute;
+  right: 70px;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  padding: 0.5rem 0.85rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.chat-bubble:hover .bubble-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.chat-window {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  width: 380px;
+  height: 560px;
+  max-height: calc(100vh - 140px);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  z-index: 1001;
+  display: none;
+  flex-direction: column;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  pointer-events: none;
+}
+
+.chat-window.active {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.chat-window-header {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+}
+
+.bg-gradient-blue {
+  background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+}
+
+.bg-gradient-green {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+}
+
+.chat-window-title {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.chat-window-title i {
+  font-size: 1.5rem;
+}
+
+.chat-window-title h4 {
+  font-weight: 800;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.chat-window-title span {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  font-weight: 500;
+  display: block;
+}
+
+.chat-window-close {
+  background: transparent;
+  color: white;
+  border: none;
+  font-size: 1.15rem;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.chat-window-close:hover {
+  opacity: 1;
+}
+
+.chat-window-messages {
+  flex-grow: 1;
+  padding: 1.25rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: var(--bg-main);
+}
+
+.chat-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  animation: messageSlideIn 0.3s ease-out forwards;
+}
+
+@keyframes messageSlideIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chat-msg.bot-msg {
+  align-self: flex-start;
+}
+
+.chat-msg.user-msg {
+  align-self: flex-end;
+}
+
+.msg-bubble {
+  padding: 0.85rem 1.15rem;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-weight: 550;
+  word-wrap: break-word;
+}
+
+.bot-msg .msg-bubble {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border-bottom-left-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.user-msg .msg-bubble {
+  background-color: var(--primary);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.msg-time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  font-weight: 500;
+  padding: 0 4px;
+}
+
+.bot-msg .msg-time {
+  align-self: flex-start;
+}
+
+.user-msg .msg-time {
+  align-self: flex-end;
+}
+
+.chat-window-input-area {
+  padding: 1rem;
+  background-color: var(--bg-surface);
+  border-top: 1.5px solid var(--border);
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.chat-window-input-area input {
+  flex-grow: 1;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 0.65rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 550;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: border-color 0.2s;
+}
+
+.chat-window-input-area input:focus {
+  border-color: var(--primary);
+}
+
+.chat-send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.chat-send-btn:hover {
+  background-color: var(--primary-hover);
+  transform: scale(1.05);
+}
+
+/* Simulated products in chat styles */
+.chat-property-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  margin-top: 0.75rem;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
+  max-width: 280px;
+}
+
+.chat-property-card:hover {
+  transform: translateY(-2px);
+}
+
+.chat-property-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.chat-property-info {
+  padding: 0.75rem;
+}
+
+.chat-property-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: 0.25rem;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-property-price {
+  font-size: 0.85rem;
+  font-weight: 850;
+  color: var(--primary);
+}
+
+.chat-property-location {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
