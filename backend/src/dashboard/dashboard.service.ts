@@ -8,9 +8,20 @@ export class DashboardService {
   async getLandlordMetrics(userId: string) {
     const now = new Date();
     
-    // Calculate the start of the current month and the start of the next month
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    // Calculate the start of the current month and the start of the next month strictly in Asia/Ho_Chi_Minh (UTC+7)
+    const tzOffset = 7 * 60 * 60 * 1000; // +7 hours in milliseconds
+    const nowUtc = now.getTime();
+    
+    // Create a date object that represents the local time in Vietnam as UTC
+    const nowVn = new Date(nowUtc + tzOffset);
+    
+    // Get start of month and start of next month in Vietnam (represented as UTC)
+    const startOfMonthVn = new Date(Date.UTC(nowVn.getUTCFullYear(), nowVn.getUTCMonth(), 1, 0, 0, 0));
+    const startOfNextMonthVn = new Date(Date.UTC(nowVn.getUTCFullYear(), nowVn.getUTCMonth() + 1, 1, 0, 0, 0));
+    
+    // Convert back to actual UTC time to use in Prisma query
+    const startOfMonth = new Date(startOfMonthVn.getTime() - tzOffset);
+    const startOfNextMonth = new Date(startOfNextMonthVn.getTime() - tzOffset);
 
     // Run queries concurrently for better performance
     const [revenueResult, unpaidInvoicesCount, activeContractsCount] = await Promise.all([
@@ -55,6 +66,10 @@ export class DashboardService {
       currentMonthRevenue: revenueResult._sum.totalAmount || 0,
       unpaidInvoicesCount,
       activeContractsCount,
+      meta: {
+        timezone: 'Asia/Ho_Chi_Minh',
+        calculatedAt: new Date().toISOString(),
+      },
     };
   }
 }
