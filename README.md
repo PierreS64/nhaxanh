@@ -1,9 +1,9 @@
 # 🏢 Smart Renting Hub - Website & Mobile App
 
-![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android-blue)
-![Tech Stack](https://img.shields.io/badge/Framework-React%20Native-61DAFB)
-![Backend](https://img.shields.io/badge/Backend-Node.js%20%7C%20Python-43853D)
-![Status](https://img.shields.io/badge/Status-In%20Development-orange)
+![Platform](https://img.shields.io/badge/Platform-Web%20%7C%20iOS%20%7C%20Android-4285F4?style=for-the-badge)
+![Tech Stack](https://img.shields.io/badge/Framework-React%20Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Backend](https://img.shields.io/badge/Backend-Node.js%20%7C%20Python-333333?style=for-the-badge&logo=nodedotjs&logoColor=43853D)
+![Status](https://img.shields.io/badge/Status-In%20Development-FF8C00?style=for-the-badge)
 
 ## 📖 Giới thiệu (Introduction)
 **Trọ Số** là ứng dụng di động "All-in-One" hỗ trợ Tìm kiếm và Quản lý các loại hình nhà cho thuê. Khác với các nền tảng rao vặt truyền thống, ứng dụng tập trung vào trải nghiệm người dùng bằng cách tích hợp Trí tuệ nhân tạo (AI), Tự động hóa và Dịch vụ định vị để giải quyết triệt để các "nỗi đau" (pain-points) của cả người đi thuê và chủ nhà.
