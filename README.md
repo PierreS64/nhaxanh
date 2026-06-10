@@ -6,7 +6,7 @@
 ![Status](https://img.shields.io/badge/Status-In%20Development-orange)
 
 ## 📖 Giới thiệu (Introduction)
-**Nhà Xanh** là ứng dụng di động "All-in-One" hỗ trợ Tìm kiếm và Quản lý các loại hình nhà cho thuê. Khác với các nền tảng rao vặt truyền thống, ứng dụng tập trung vào trải nghiệm người dùng bằng cách tích hợp Trí tuệ nhân tạo (AI), Tự động hóa và Dịch vụ định vị để giải quyết triệt để các "nỗi đau" (pain-points) của cả người đi thuê và chủ nhà.
+**Trọ Số** là ứng dụng di động "All-in-One" hỗ trợ Tìm kiếm và Quản lý các loại hình nhà cho thuê. Khác với các nền tảng rao vặt truyền thống, ứng dụng tập trung vào trải nghiệm người dùng bằng cách tích hợp Trí tuệ nhân tạo (AI), Tự động hóa và Dịch vụ định vị để giải quyết triệt để các "nỗi đau" (pain-points) của cả người đi thuê và chủ nhà.
 
 ---
 
