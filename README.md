@@ -1,4 +1,4 @@
-# 🏢 Smart Renting Hub - Mobile App
+# 🏢 Smart Renting Hub - Website & Mobile App
 
 ![Platform](https://img.shields.io/badge/Platform-iOS%20%7C%20Android-blue)
 ![Tech Stack](https://img.shields.io/badge/Framework-React%20Native-61DAFB)
