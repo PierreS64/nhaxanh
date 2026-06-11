@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  BadRequestException,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MaintenanceRequestsService } from './maintenance-requests.service';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
@@ -30,10 +42,10 @@ export class MaintenanceRequestsController {
     if (image) {
       imageUrl = await this.cloudinaryService.uploadImage(image);
     }
-    
+
     return this.maintenanceRequestsService.create(
       { ...createMaintenanceRequestDto, imageUrl },
-      user.id
+      user.id,
     );
   }
 
@@ -49,8 +61,17 @@ export class MaintenanceRequestsController {
 
   @Roles(Role.LANDLORD, Role.ADMIN)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMaintenanceRequestDto: UpdateMaintenanceRequestDto, @CurrentUser() user: any) {
-    return this.maintenanceRequestsService.update(id, updateMaintenanceRequestDto, user.id, user.role);
+  update(
+    @Param('id') id: string,
+    @Body() updateMaintenanceRequestDto: UpdateMaintenanceRequestDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.maintenanceRequestsService.update(
+      id,
+      updateMaintenanceRequestDto,
+      user.id,
+      user.role,
+    );
   }
 
   @Roles(Role.TENANT, Role.LANDLORD, Role.ADMIN)
@@ -61,7 +82,16 @@ export class MaintenanceRequestsController {
 
   @Roles(Role.LANDLORD, Role.ADMIN)
   @Patch(':id/status')
-  updateStatus(@Param('id') id: string, @Body('status') status: MaintenanceStatus, @CurrentUser() user: any) {
-    return this.maintenanceRequestsService.updateStatus(id, status, user.id, user.role);
+  updateStatus(
+    @Param('id') id: string,
+    @Body('status') status: MaintenanceStatus,
+    @CurrentUser() user: any,
+  ) {
+    return this.maintenanceRequestsService.updateStatus(
+      id,
+      status,
+      user.id,
+      user.role,
+    );
   }
 }

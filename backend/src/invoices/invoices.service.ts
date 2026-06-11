@@ -1,4 +1,10 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+  Logger,
+} from '@nestjs/common';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -11,13 +17,19 @@ export class InvoicesService {
 
   constructor(
     private prisma: PrismaService,
-    private payosService: PayosService
+    private payosService: PayosService,
   ) {}
 
-  async create(createInvoiceDto: CreateInvoiceDto, landlordId: string, role: string) {
+  async create(
+    createInvoiceDto: CreateInvoiceDto,
+    landlordId: string,
+    role: string,
+  ) {
     const { contractId, dueDate, ...rest } = createInvoiceDto;
 
-    const contract = await this.prisma.contract.findUnique({ where: { id: contractId } });
+    const contract = await this.prisma.contract.findUnique({
+      where: { id: contractId },
+    });
     if (!contract) throw new NotFoundException('Contract not found');
     if (role !== Role.ADMIN && contract.landlordId !== landlordId) {
       throw new ForbiddenException('Access denied');
@@ -43,11 +55,15 @@ export class InvoicesService {
         Contract: {
           include: {
             Property: true,
-            User_Contract_landlordIdToUser: { select: { id: true, fullName: true, email: true, phone: true } },
-            User_Contract_tenantIdToUser: { select: { id: true, fullName: true } }
-          }
-        }
-      }
+            User_Contract_landlordIdToUser: {
+              select: { id: true, fullName: true, email: true, phone: true },
+            },
+            User_Contract_tenantIdToUser: {
+              select: { id: true, fullName: true },
+            },
+          },
+        },
+      },
     });
   }
 
@@ -60,7 +76,16 @@ export class InvoicesService {
     } else if (role === Role.LANDLORD) {
       return this.prisma.invoice.findMany({
         where: { Contract: { landlordId: userId } },
-        include: { Contract: { include: { Property: true, User_Contract_tenantIdToUser: { select: { id: true, fullName: true } } } } },
+        include: {
+          Contract: {
+            include: {
+              Property: true,
+              User_Contract_tenantIdToUser: {
+                select: { id: true, fullName: true },
+              },
+            },
+          },
+        },
       });
     } else if (role === Role.ADMIN) {
       return this.prisma.invoice.findMany({ include: { Contract: true } });
@@ -75,15 +100,23 @@ export class InvoicesService {
     });
     if (!invoice) throw new NotFoundException('Invoice not found');
 
-    if (role === Role.TENANT && invoice.Contract.tenantId !== userId) throw new ForbiddenException('Access denied');
-    if (role === Role.LANDLORD && invoice.Contract.landlordId !== userId) throw new ForbiddenException('Access denied');
+    if (role === Role.TENANT && invoice.Contract.tenantId !== userId)
+      throw new ForbiddenException('Access denied');
+    if (role === Role.LANDLORD && invoice.Contract.landlordId !== userId)
+      throw new ForbiddenException('Access denied');
 
     return invoice;
   }
 
-  async update(id: string, updateInvoiceDto: UpdateInvoiceDto, userId: string, role: string) {
+  async update(
+    id: string,
+    updateInvoiceDto: UpdateInvoiceDto,
+    userId: string,
+    role: string,
+  ) {
     const invoice = await this.findOne(id, userId, role);
-    if (role !== Role.ADMIN && invoice.Contract.landlordId !== userId) throw new ForbiddenException('Access denied');
+    if (role !== Role.ADMIN && invoice.Contract.landlordId !== userId)
+      throw new ForbiddenException('Access denied');
 
     const data: any = { ...updateInvoiceDto };
     if (data.dueDate) data.dueDate = new Date(data.dueDate);
@@ -96,12 +129,18 @@ export class InvoicesService {
 
   async remove(id: string, userId: string, role: string) {
     const invoice = await this.findOne(id, userId, role);
-    if (role !== Role.ADMIN && invoice.Contract.landlordId !== userId) throw new ForbiddenException('Access denied');
+    if (role !== Role.ADMIN && invoice.Contract.landlordId !== userId)
+      throw new ForbiddenException('Access denied');
 
     return this.prisma.invoice.delete({ where: { id } });
   }
 
-  async payInvoice(id: string, paymentMethod: string, userId: string, role: string) {
+  async payInvoice(
+    id: string,
+    paymentMethod: string,
+    userId: string,
+    role: string,
+  ) {
     const invoice = await this.findOne(id, userId, role); // Tenant paying their invoice
     if (invoice.status === InvoiceStatus.PAID) {
       throw new ForbiddenException('Invoice is already paid');
@@ -119,7 +158,7 @@ export class InvoicesService {
 
   async generatePaymentLink(id: string, userId: string, role: string) {
     const invoice = await this.findOne(id, userId, role);
-    
+
     if (invoice.status === InvoiceStatus.PAID) {
       throw new BadRequestException('Invoice is already paid');
     }
@@ -139,7 +178,7 @@ export class InvoicesService {
         cancelUrl,
       );
 
-      // We explicitly store the PayOS order code in the paymentMethod field 
+      // We explicitly store the PayOS order code in the paymentMethod field
       // temporarily. So when the webhook fires, we can find exactly which invoice it was.
       await this.prisma.invoice.update({
         where: { id },
@@ -154,26 +193,29 @@ export class InvoicesService {
       };
     } catch (error) {
       this.logger.error('Failed to create payment link: ', error);
-      throw new BadRequestException('Failed to generate payment link via PayOS');
+      throw new BadRequestException(
+        'Failed to generate payment link via PayOS',
+      );
     }
   }
 
   async handlePayosWebhook(webhookBody: any) {
     try {
       // 1. Verify the webhook payload (signature checksum)
-      const data = await this.payosService.verifyPaymentWebhookData(webhookBody);
+      const data =
+        await this.payosService.verifyPaymentWebhookData(webhookBody);
 
       if (data) {
         const orderCode = data.orderCode;
-        
+
         // 2. Find the invoice that was linked to this PAYOS order code
         const invoice = await this.prisma.invoice.findFirst({
           where: {
             paymentMethod: `PAYOS_${orderCode}`,
             status: {
-              not: InvoiceStatus.PAID
-            }
-          }
+              not: InvoiceStatus.PAID,
+            },
+          },
         });
 
         if (invoice) {
@@ -183,33 +225,37 @@ export class InvoicesService {
             data: {
               status: InvoiceStatus.PAID,
               paidAt: new Date(),
-            }
+            },
           });
-          this.logger.log(`Invoice ${invoice.id} successfully updated to PAID from PayOS webhook.`);
+          this.logger.log(
+            `Invoice ${invoice.id} successfully updated to PAID from PayOS webhook.`,
+          );
         }
       }
       return { success: true };
     } catch (error) {
       this.logger.error('PayOS Webhook Error: ', error);
       // Even if there is an error, return a 200 so PayOS marks webhook as delivered
-      return { success: true }; 
+      return { success: true };
     }
   }
 
   async settleInvoice(id: string, role: string) {
     if (role !== Role.ADMIN) throw new ForbiddenException('Access denied');
-    
+
     const invoice = await this.prisma.invoice.findUnique({ where: { id } });
     if (!invoice) throw new NotFoundException('Invoice not found');
-    if (invoice.status !== InvoiceStatus.PAID) throw new BadRequestException('Only paid invoices can be settled');
-    if (invoice.isSettled) throw new BadRequestException('Invoice is already settled');
+    if (invoice.status !== InvoiceStatus.PAID)
+      throw new BadRequestException('Only paid invoices can be settled');
+    if (invoice.isSettled)
+      throw new BadRequestException('Invoice is already settled');
 
     return this.prisma.invoice.update({
       where: { id },
       data: {
         isSettled: true,
         settledAt: new Date(),
-      }
+      },
     });
   }
 }

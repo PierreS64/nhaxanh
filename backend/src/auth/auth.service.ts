@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { RegisterDto } from './dto/register.dto';
@@ -10,12 +14,12 @@ import { Role } from '@prisma/client';
 export class AuthService {
   constructor(
     private prisma: PrismaService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async register(registerDto: RegisterDto) {
     const existingUser = await this.prisma.user.findUnique({
-      where: { email: registerDto.email }
+      where: { email: registerDto.email },
     });
 
     if (existingUser) {
@@ -24,7 +28,7 @@ export class AuthService {
 
     if (registerDto.phone) {
       const existingPhone = await this.prisma.user.findUnique({
-        where: { phone: registerDto.phone }
+        where: { phone: registerDto.phone },
       });
       if (existingPhone) {
         throw new BadRequestException('Phone number already in use');
@@ -41,7 +45,7 @@ export class AuthService {
         phone: registerDto.phone,
         avatarUrl: registerDto.avatarUrl,
         role: registerDto.role || Role.TENANT,
-      }
+      },
     });
 
     const { password, ...result } = user;
@@ -50,14 +54,17 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const user = await this.prisma.user.findUnique({
-      where: { email: loginDto.email }
+      where: { email: loginDto.email },
     });
 
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
@@ -72,7 +79,7 @@ export class AuthService {
         email: user.email,
         fullName: user.fullName,
         role: user.role,
-      }
+      },
     };
   }
 }

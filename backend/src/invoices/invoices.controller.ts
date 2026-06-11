@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { InvoicesService } from './invoices.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
@@ -46,8 +56,17 @@ export class InvoicesController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.LANDLORD, Role.ADMIN)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInvoiceDto: UpdateInvoiceDto, @CurrentUser() user: any) {
-    return this.invoicesService.update(id, updateInvoiceDto, user.id, user.role);
+  update(
+    @Param('id') id: string,
+    @Body() updateInvoiceDto: UpdateInvoiceDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.invoicesService.update(
+      id,
+      updateInvoiceDto,
+      user.id,
+      user.role,
+    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -59,8 +78,17 @@ export class InvoicesController {
 
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch(':id/pay')
-  payInvoice(@Param('id') id: string, @Body('paymentMethod') paymentMethod: string, @CurrentUser() user: any) {
-    return this.invoicesService.payInvoice(id, paymentMethod, user.id, user.role);
+  payInvoice(
+    @Param('id') id: string,
+    @Body('paymentMethod') paymentMethod: string,
+    @CurrentUser() user: any,
+  ) {
+    return this.invoicesService.payInvoice(
+      id,
+      paymentMethod,
+      user.id,
+      user.role,
+    );
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)

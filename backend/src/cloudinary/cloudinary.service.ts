@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+
 const streamifier = require('streamifier');
 
 @Injectable()

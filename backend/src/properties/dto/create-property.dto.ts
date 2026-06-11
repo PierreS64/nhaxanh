@@ -1,12 +1,12 @@
-import { 
-  IsString, 
-  IsNumber, 
-  IsEnum, 
-  IsUUID, 
-  IsNotEmpty, 
-  Min, 
+import {
+  IsString,
+  IsNumber,
+  IsEnum,
+  IsUUID,
+  IsNotEmpty,
+  Min,
   IsOptional,
-  IsArray
+  IsArray,
 } from 'class-validator';
 import { PropertyType } from '@prisma/client';
 

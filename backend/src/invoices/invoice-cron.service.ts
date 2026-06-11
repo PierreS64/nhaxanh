@@ -30,7 +30,7 @@ export class InvoiceCronService {
       for (const contract of activeContracts) {
         // Here you could also calculate electricity/water, but for this basic task
         // we'll just set up the base rent invoice.
-        
+
         await this.prisma.invoice.create({
           data: {
             contractId: contract.id,
@@ -48,7 +48,9 @@ export class InvoiceCronService {
         });
       }
 
-      this.logger.log(`Successfully generated ${activeContracts.length} invoices.`);
+      this.logger.log(
+        `Successfully generated ${activeContracts.length} invoices.`,
+      );
     } catch (error) {
       this.logger.error('Error generating monthly invoices', error);
     }

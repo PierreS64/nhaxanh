@@ -8,6 +8,6 @@ import { PayosModule } from '../payos/payos.module';
 @Module({
   imports: [PrismaModule, PayosModule],
   controllers: [InvoicesController],
-  providers: [InvoicesService, InvoiceCronService]
+  providers: [InvoicesService, InvoiceCronService],
 })
 export class InvoicesModule {}
