@@ -24,11 +24,11 @@ async function main() {
 
   // 3. Create Users
   console.log('👤 Creating users...');
-  
+
   // ADMIN
   const admin = await prisma.user.create({
     data: {
-      email: 'admin@nhaxanh.com',
+      email: 'admin@troso.com',
       password: hashedPassword,
       fullName: 'Admin Hệ Thống',
       role: Role.ADMIN,
@@ -197,7 +197,7 @@ async function main() {
 
   // 5. Create Contracts
   console.log('📜 Creating contracts...');
-  
+
   const today = new Date();
   const nextYear = new Date(today);
   nextYear.setFullYear(today.getFullYear() + 1);
@@ -246,7 +246,7 @@ async function main() {
 
   // 6. Create Invoices
   console.log('💰 Creating invoices...');
-  
+
   // Paid invoice for Sinh Vien Cham Chi
   await prisma.invoice.create({
     data: {
