@@ -127,7 +127,7 @@ Cấu trúc Database:
       const answerPrompt = ChatPromptTemplate.fromMessages([
         [
           'system',
-          `Bạn là trợ lý tư vấn bất động sản NhaXanh. Dưới đây là câu hỏi của người dùng và kết quả truy vấn từ Database tương ứng.
+          `Bạn là trợ lý tư vấn bất động sản Trọ Số. Dưới đây là câu hỏi của người dùng và kết quả truy vấn từ Database tương ứng.
 Hãy trả lời người dùng bằng tiếng Việt, thân thiện và dễ hiểu.
 CHỈ DÙNG thông tin từ kết quả truy vấn, không tự bịa thông tin. Nếu kết quả lỗi hoặc trống, hãy xin lỗi người dùng.
 Không để lộ câu lệnh SQL hay chi tiết kỹ thuật.`,
