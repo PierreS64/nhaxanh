@@ -17,6 +17,7 @@ import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { PayosModule } from './payos/payos.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { RoommateMatchesModule } from './roommate-matches/roommate-matches.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     CloudinaryModule,
     PayosModule,
     DashboardModule,
+    RoommateMatchesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

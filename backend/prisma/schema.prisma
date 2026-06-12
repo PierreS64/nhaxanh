@@ -138,6 +138,21 @@ model TenantProfile {
   User        User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_tenant_user")
 }
 
+model RoommateMatch {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  senderId    String      @db.Uuid
+  receiverId  String      @db.Uuid
+  matchScore  Float?
+  status      MatchStatus @default(PENDING)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
+
+  Sender      User        @relation("SentMatches", fields: [senderId], references: [id], onDelete: Cascade)
+  Receiver    User        @relation("ReceivedMatches", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@unique([senderId, receiverId])
+}
+
 model User {
   id                                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email                              String               @unique @db.VarChar(255)
@@ -156,6 +171,8 @@ model User {
   Review_Review_revieweeIdToUser     Review[]             @relation("Review_revieweeIdToUser")
   Review_Review_reviewerIdToUser     Review[]             @relation("Review_reviewerIdToUser")
   TenantProfile                      TenantProfile?
+  SentMatches                        RoommateMatch[]      @relation("SentMatches")
+  ReceivedMatches                    RoommateMatch[]      @relation("ReceivedMatches")
 }
 
 enum ContractStatus {
@@ -194,4 +211,11 @@ enum Role {
   TENANT
   LANDLORD
   ADMIN
+}
+
+enum MatchStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+  ENDED
 }
