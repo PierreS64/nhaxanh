@@ -2,7 +2,6 @@ import {
   IsString,
   IsNumber,
   IsEnum,
-  IsUUID,
   IsNotEmpty,
   Min,
   IsOptional,
@@ -11,17 +10,13 @@ import {
 import { PropertyType } from '@prisma/client';
 
 export class CreatePropertyDto {
-  @IsUUID()
-  @IsOptional()
-  landlordId?: string;
-
   @IsString()
   @IsNotEmpty()
   title: string;
 
   @IsString()
-  @IsOptional()
-  description?: string;
+  @IsNotEmpty()
+  description: string;
 
   @IsString()
   @IsNotEmpty()
@@ -33,14 +28,17 @@ export class CreatePropertyDto {
 
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   price: number;
 
   @IsNumber()
   @Min(1)
+  @IsNotEmpty()
   area: number;
 
   @IsNumber()
   @Min(0)
+  @IsNotEmpty()
   depositAmount: number;
 
   @IsNumber()
