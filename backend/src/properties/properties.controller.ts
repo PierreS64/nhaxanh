@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   UseGuards,
   Query,
+  Request,
 } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
 import { PropertyQueryDto } from './dto/property-query.dto';
@@ -18,6 +19,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { VerifiedLandlordGuard } from '../auth/guards/verified-landlord.guard';
 import { Role } from '@prisma/client';
 
 @Controller('properties')
@@ -25,15 +27,14 @@ export class PropertiesController {
   constructor(private readonly propertiesService: PropertiesService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard, VerifiedLandlordGuard)
   @Roles(Role.LANDLORD, Role.ADMIN)
   create(
     @Body() createPropertyDto: CreatePropertyDto,
-    @CurrentUser() user: { id: string },
+    @Request() req: any,
   ) {
-    // Automatically attach landlordId from the JWT payload
-    createPropertyDto.landlordId = user.id;
-    return this.propertiesService.create(createPropertyDto);
+    const userId = req.user?.userId || req.user?.id;
+    return this.propertiesService.create(userId, createPropertyDto);
   }
 
   @Get()

@@ -9,12 +9,12 @@ import { PropertyQueryDto } from './dto/property-query.dto';
 export class PropertiesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createPropertyDto: CreatePropertyDto) {
+  async create(landlordId: string, createPropertyDto: CreatePropertyDto) {
     return this.prisma.property.create({
       data: {
-        landlordId: createPropertyDto.landlordId!,
+        landlordId: landlordId,
         title: createPropertyDto.title,
-        description: createPropertyDto.description || '',
+        description: createPropertyDto.description,
         address: createPropertyDto.address,
         type: createPropertyDto.type,
         price: createPropertyDto.price,

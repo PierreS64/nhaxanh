@@ -45,6 +45,9 @@ async function main() {
       role: Role.LANDLORD,
       phone: '0988111111',
       isKycVerified: true,
+      idNumber: "001090123456",
+      dob: "01/01/1985",
+      address: "123 Đường Cầu Giấy, Hà Nội",
     },
   });
 

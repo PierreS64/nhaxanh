@@ -142,8 +142,11 @@ model User {
   id                                 String               @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email                              String               @unique @db.VarChar(255)
   password                           String               @db.VarChar(255)
-  fullName                           String               @db.VarChar(255)
+  fullName                           String?              @db.VarChar(255)
+  idNumber                           String?              @unique @db.VarChar(20)
   phone                              String?              @unique @db.VarChar(20)
+  dob                                String?              @db.VarChar(20)
+  address                            String?              @db.VarChar(255)
   avatarUrl                          String?
   role                               Role                 @default(TENANT)
   isKycVerified                      Boolean              @default(false)
