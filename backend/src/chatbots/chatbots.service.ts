@@ -57,6 +57,9 @@ export class ChatbotsService implements OnModuleInit {
         SELECT table_name, column_name, data_type 
         FROM information_schema.columns 
         WHERE table_schema = 'public'
+        AND table_name NOT IN ('User', 'Role', 'Invoice')
+        AND column_name NOT ILIKE '%password%' 
+        AND column_name NOT ILIKE '%token%'
         ORDER BY table_name, ordinal_position;
       `);
 
@@ -94,6 +97,7 @@ export class ChatbotsService implements OnModuleInit {
           `Bạn là một chuyên gia PostgreSQL. Nhiệm vụ của bạn là viết một câu lệnh SQL chính xác để trả lời câu hỏi của người dùng dựa trên cấu trúc Database sau đây.
 CHỈ TRẢ VỀ CÂU LỆNH SQL, không kèm theo giải thích hay định dạng markdown \`\`\`sql.
 QUAN TRỌNG: Tất cả các tên bảng (table) và tên cột (column) PHẢI được đặt trong dấu ngoặc kép (") để tránh lỗi phân biệt hoa thường trong PostgreSQL (ví dụ: "Contract", "User", "monthlyPrice").
+LUÔN LUÔN thêm 'LIMIT 10' vào cuối mọi câu lệnh SELECT để tránh quá tải bộ nhớ hệ thống.
 Cấu trúc Database:
 {schema}`,
         ],
