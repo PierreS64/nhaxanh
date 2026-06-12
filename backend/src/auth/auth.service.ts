@@ -53,33 +53,33 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
+
     const user = await this.prisma.user.findUnique({
-      where: { email: loginDto.email },
+      where: { email },
     });
 
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Sai email hoặc mật khẩu!');
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      loginDto.password,
-      user.password,
-    );
+    console.log('User found:', user.email);
 
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    console.log('Password match:', isMatch);
+
+    if (!isMatch) {
+      throw new UnauthorizedException('Sai email hoặc mật khẩu!');
     }
 
     const payload = { sub: user.id, email: user.email, role: user.role };
 
+    const { password: userPassword, ...userData } = user;
+
     return {
-      accessToken: this.jwtService.sign(payload),
-      user: {
-        id: user.id,
-        email: user.email,
-        fullName: user.fullName,
-        role: user.role,
-      },
+      token: this.jwtService.sign(payload),
+      user: userData,
     };
   }
 }
